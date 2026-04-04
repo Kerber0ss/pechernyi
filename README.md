@@ -62,7 +62,14 @@ Based on the viral observation that caveman-speak dramatically reduces LLM token
 ## Install
 
 ```bash
-claude install-skill JuliusBrussee/caveman
+npx skills add JuliusBrussee/caveman
+```
+
+Or with Claude Code plugin system:
+
+```bash
+claude plugin marketplace add JuliusBrussee/caveman
+claude plugin install caveman@caveman
 ```
 
 One rock. That it.
