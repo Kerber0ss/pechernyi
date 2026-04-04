@@ -18,7 +18,7 @@
 
 A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill that makes Claude talk like a caveman — cutting **~75% of tokens** while keeping full technical accuracy.
 
-Based on the [viral observation](https://x.com/goodside/status/1922279423968583859) that caveman-speak dramatically reduces LLM token usage without losing technical substance. So we made it a one-line install.
+Based on the viral observation that caveman-speak dramatically reduces LLM token usage without losing technical substance. So we made it a one-line install.
 
 ## Before / After
 
