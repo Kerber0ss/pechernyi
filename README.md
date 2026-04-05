@@ -16,7 +16,7 @@
 
 ---
 
-A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill that makes Claude talk like a caveman — cutting **~75% of tokens** while keeping full technical accuracy.
+A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill/plugin and Codex plugin that makes agent talk like caveman — cutting **~75% of tokens** while keeping full technical accuracy.
 
 Based on the viral observation that caveman-speak dramatically reduces LLM token usage without losing technical substance. So we made it a one-line install.
 
@@ -72,12 +72,22 @@ claude plugin marketplace add JuliusBrussee/caveman
 claude plugin install caveman@caveman
 ```
 
+Codex:
+
+1. Clone repo
+2. Open Codex in repo
+3. Run `/plugins`
+4. Search `Caveman`
+5. Install plugin
+
+Install once. Use in all sessions after that.
+
 One rock. That it.
 
 ## Usage
 
 Trigger with:
-- `/caveman`
+- `/caveman` or Codex `$caveman`
 - "talk like caveman"
 - "caveman mode"
 - "less tokens please"
