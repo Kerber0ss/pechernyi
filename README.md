@@ -130,6 +130,18 @@ Trigger with:
 
 Stop with: "stop caveman" or "normal mode"
 
+### Intensity Levels
+
+Sometimes full caveman too much. Sometimes not enough. Now you pick:
+
+| Level | Trigger | What it do |
+|-------|---------|------------|
+| **Lite** | `/caveman lite` or `$caveman lite` | Drop filler, keep grammar. Professional but no fluff |
+| **Full** | `/caveman full` or `$caveman full` | Default caveman. Drop articles, fragments, full grunt |
+| **Ultra** | `/caveman ultra` or `$caveman ultra` | Maximum compression. Telegraphic. Abbreviate everything |
+
+Level stick until you change it or session end.
+
 ## What Caveman Do
 
 | Thing | Caveman Do? |
