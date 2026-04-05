@@ -66,6 +66,74 @@ Based on the viral observation that caveman-speak dramatically reduces LLM token
 
 **Same fix. 75% less word. Brain still big.**
 
+### Now with intensity levels
+
+Same examples, you pick the grunt level:
+
+<table>
+<tr>
+<th>Level</th>
+<th>React re-render question</th>
+</tr>
+<tr>
+<td>🪶 <strong>Lite</strong></td>
+<td>
+
+> "Your component re-renders because you create a new object reference each render. Inline object props fail shallow comparison every time. Wrap it in `useMemo`."
+
+</td>
+</tr>
+<tr>
+<td>🪨 <strong>Full</strong></td>
+<td>
+
+> "New object ref each render. Inline object prop = new ref = re-render. Wrap in `useMemo`."
+
+</td>
+</tr>
+<tr>
+<td>🔥 <strong>Ultra</strong></td>
+<td>
+
+> "Inline obj prop → new ref → re-render. `useMemo`."
+
+</td>
+</tr>
+</table>
+
+<table>
+<tr>
+<th>Level</th>
+<th>Auth middleware bug</th>
+</tr>
+<tr>
+<td>🪶 <strong>Lite</strong></td>
+<td>
+
+> "Your auth middleware has a bug. The token expiry check uses `<` instead of `<=`. Here's the fix:"
+
+</td>
+</tr>
+<tr>
+<td>🪨 <strong>Full</strong></td>
+<td>
+
+> "Bug in auth middleware. Token expiry check use `<` not `<=`. Fix:"
+
+</td>
+</tr>
+<tr>
+<td>🔥 <strong>Ultra</strong></td>
+<td>
+
+> "Auth bug. Expiry: `<` → `<=`. Fix:"
+
+</td>
+</tr>
+</table>
+
+**Same fix. Three grunt level. Pick your rock size.**
+
 ## Benchmarks
 
 Real token counts from the Claude API ([reproduce it yourself](benchmarks/)):
