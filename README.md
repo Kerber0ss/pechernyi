@@ -129,6 +129,8 @@ Caveman say what need saying. Then stop.
 
 If caveman save you mass token, mass money — leave mass star. ⭐
 
+[![Star History Chart](https://api.star-history.com/svg?repos=JuliusBrussee/caveman&type=Date)](https://star-history.com/#JuliusBrussee/caveman&Date)
+
 ## License
 
 MIT — free like mass mammoth on open plain.
