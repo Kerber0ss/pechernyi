@@ -9,7 +9,14 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/JuliusBrussee/caveman/stargazers"><img src="https://img.shields.io/github/stars/JuliusBrussee/caveman?style=flat&color=yellow" alt="Stars"></a>
+  <a href="https://github.com/JuliusBrussee/caveman/commits/main"><img src="https://img.shields.io/github/last-commit/JuliusBrussee/caveman?style=flat" alt="Last Commit"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/JuliusBrussee/caveman?style=flat" alt="License"></a>
+</p>
+
+<p align="center">
   <a href="#install">Install</a> •
+  <a href="#benchmarks">Benchmarks</a> •
   <a href="#before--after">Before/After</a> •
   <a href="#why">Why</a>
 </p>
@@ -58,6 +65,35 @@ Based on the viral observation that caveman-speak dramatically reduces LLM token
 </table>
 
 **Same fix. 75% less word. Brain still big.**
+
+## Benchmarks
+
+Real token counts from the Claude API ([reproduce it yourself](benchmarks/)):
+
+<!-- BENCHMARK-TABLE-START -->
+| Task | Normal (tokens) | Caveman (tokens) | Saved |
+|------|---------------:|----------------:|------:|
+| Explain React re-render bug | 1180 | 159 | 87% |
+| Fix auth middleware token expiry | 704 | 121 | 83% |
+| Set up PostgreSQL connection pool | 2347 | 380 | 84% |
+| Explain git rebase vs merge | 702 | 292 | 58% |
+| Refactor callback to async/await | 387 | 301 | 22% |
+| Architecture: microservices vs monolith | 446 | 310 | 30% |
+| Review PR for security issues | 678 | 398 | 41% |
+| Docker multi-stage build | 1042 | 290 | 72% |
+| Debug PostgreSQL race condition | 1200 | 232 | 81% |
+| Implement React error boundary | 3454 | 456 | 87% |
+| **Average** | **1214** | **294** | **65%** |
+
+*Range: 22%–87% savings across prompts.*
+<!-- BENCHMARK-TABLE-END -->
+
+> [!IMPORTANT]
+> Caveman only affects output tokens — thinking/reasoning tokens are untouched. Caveman no make brain smaller. Caveman make *mouth* smaller. Biggest win is **readability and speed**, cost savings are a bonus.
+
+### Science back caveman up
+
+A March 2026 paper ["Brevity Constraints Reverse Performance Hierarchies in Language Models"](https://arxiv.org/abs/2604.00025) found that constraining large models to brief responses **improved accuracy by 26 percentage points** on certain benchmarks and completely reversed performance hierarchies. Verbose not always better. Sometimes less word = more correct.
 
 ## Install
 
@@ -118,9 +154,10 @@ Stop with: "stop caveman" or "normal mode"
 └─────────────────────────────────────┘
 ```
 
-- **Save money** — 75% less token = 75% less cost on output
 - **Faster response** — less token to generate = speed go brrr
-- **Same accuracy** — all technical info kept, only fluff removed
+- **Easier to read** — no wall of text, just the answer
+- **Same accuracy** — all technical info kept, only fluff removed ([science say so](https://arxiv.org/abs/2604.00025))
+- **Save money** — ~71% less output token = less cost
 - **Fun** — every code review become comedy
 
 ## How It Work
@@ -140,6 +177,11 @@ Caveman say what need saying. Then stop.
 If caveman save you mass token, mass money — leave mass star. ⭐
 
 [![Star History Chart](https://api.star-history.com/svg?repos=JuliusBrussee/caveman&type=Date)](https://star-history.com/#JuliusBrussee/caveman&Date)
+
+## Also by Julius Brussee
+
+- **[Blueprint](https://github.com/JuliusBrussee/blueprint)** — specification-driven development for Claude Code. Natural language → blueprints → parallel builds → working software.
+- **[Revu](https://github.com/JuliusBrussee/revu-swift)** — local-first macOS study app with FSRS spaced repetition, decks, exams, and study guides. [revu.cards](https://revu.cards)
 
 ## License
 
