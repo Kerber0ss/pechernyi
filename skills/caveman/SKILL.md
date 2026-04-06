@@ -4,7 +4,8 @@ description: >
   Ultra-compressed communication mode. Cuts token usage ~75% by speaking like caveman
   while keeping full technical accuracy. Supports intensity levels: lite, full (default), ultra.
   Use when user says "caveman mode", "talk like caveman", "use caveman", "less tokens",
-  "be brief", or invokes /caveman. Also auto-triggers when token efficiency is requested.
+  "be brief", or invokes /caveman. Trigger specific level with /caveman lite, /caveman full,
+  or /caveman ultra. Also auto-triggers when token efficiency is requested.
 ---
 
 # Caveman Mode
@@ -72,8 +73,8 @@ max = concurrent connections. Keep under DB limit. idleTimeout kill stale conn.
 
 Professional tone, just no fluff. Grammar stays intact.
 
-- Drop filler and pleasantries (same list as full)
-- Drop hedging
+- Drop filler (just, really, basically, actually, simply) and pleasantries (sure, certainly, of course, happy to)
+- Drop hedging (skip "it might be worth considering")
 - Keep articles, keep full sentences
 - Prefer short synonyms where natural
 

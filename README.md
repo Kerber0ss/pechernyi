@@ -18,6 +18,7 @@
   <a href="#install">Install</a> •
   <a href="#benchmarks">Benchmarks</a> •
   <a href="#before--after">Before/After</a> •
+  <a href="#intensity-levels">Intensity Levels</a> •
   <a href="#why">Why</a>
 </p>
 
