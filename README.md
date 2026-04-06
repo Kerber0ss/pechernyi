@@ -133,6 +133,15 @@ A March 2026 paper ["Brevity Constraints Reverse Performance Hierarchies in Lang
 npx skills add JuliusBrussee/caveman
 ```
 
+`npx skills` supports 40+ agents — Claude Code, GitHub Copilot, Cursor, Windsurf, Cline, and more. To install for a specific agent:
+
+```bash
+npx skills add JuliusBrussee/caveman -a cursor
+npx skills add JuliusBrussee/caveman -a copilot
+npx skills add JuliusBrussee/caveman -a cline
+npx skills add JuliusBrussee/caveman -a windsurf
+```
+
 Or with Claude Code plugin system:
 
 ```bash
