@@ -19,12 +19,13 @@
   <a href="#benchmarks">Benchmarks</a> •
   <a href="#before--after">Before/After</a> •
   <a href="#intensity-levels">Intensity Levels</a> •
+  <a href="#caveman-compress">Compress</a> •
   <a href="#why">Why</a>
 </p>
 
 ---
 
-A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill/plugin and Codex plugin that makes agent talk like caveman — cutting **~75% of tokens** while keeping full technical accuracy.
+A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill/plugin and Codex plugin that makes agent talk like caveman — cutting **~75% of output tokens** while keeping full technical accuracy. Plus a companion tool that compresses your memory files to cut **~45% of input tokens** every session.
 
 Based on the viral observation that caveman-speak dramatically reduces LLM token usage without losing technical substance. So we made it a one-line install.
 
@@ -214,6 +215,58 @@ Normal LLM waste token on:
 - "Sure, let me take a look at that for you" (10 wasted tokens)
 
 Caveman say what need saying. Then stop.
+
+## Caveman Compress
+
+Caveman makes Claude *speak* with fewer tokens. **Caveman Compress** makes Claude *read* fewer tokens.
+
+Your `CLAUDE.md` loads on **every session start**. A 1000-token project memory file costs you tokens every single time you open a project. Caveman Compress rewrites those files into caveman-speak so Claude reads less — without you losing the human-readable original.
+
+```
+/caveman-compress CLAUDE.md
+```
+
+```
+CLAUDE.md          ← compressed (Claude reads this every session — fewer tokens)
+CLAUDE.original.md ← human-readable backup (you read and edit this)
+```
+
+### How it works
+
+A Python pipeline that shells out to `claude --print` for the actual compression, then validates the result locally — no tokens wasted on checking.
+
+```
+detect file type (local)  →  compress with Claude (1 call)  →  validate (local)
+                                                                    ↓
+                                                              if errors: targeted fix (1 call, cherry-pick only)
+                                                                    ↓
+                                                              retry up to 2×, restore original on failure
+```
+
+### What's preserved exactly
+
+Code blocks, inline code, URLs, file paths, commands, headings, table structure, dates, version numbers — anything technical passes through untouched. Only natural language prose gets compressed.
+
+### Compress benchmarks
+
+| File | Original | Compressed | Saved |
+|------|----------:|----------:|------:|
+| `claude-md-preferences.md` | 706 | 285 | **59.6%** |
+| `project-notes.md` | 1145 | 535 | **53.3%** |
+| `claude-md-project.md` | 1122 | 687 | **38.8%** |
+| `todo-list.md` | 627 | 388 | **38.1%** |
+| `mixed-with-code.md` | 888 | 574 | **35.4%** |
+| **Average** | **898** | **494** | **45%** |
+
+### Full-circle token savings
+
+| Tool | What it cuts | Savings |
+|------|-------------|---------|
+| **caveman** | Output tokens (Claude's responses) | ~65% |
+| **caveman-compress** | Input tokens (memory files loaded per session) | ~45% |
+| **Both together** | The whole conversation | Output + input both shrunk |
+
+See the full [caveman-compress README](caveman-compress/README.md) for install, usage, and validation details.
 
 ## Star This Repo
 
