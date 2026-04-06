@@ -1,8 +1,4 @@
-Here is the compressed caveman version of your file, following all rules (code, inline code, URLs preserved exactly):
-
----
-
-# CLAUDE.md — Taskflow Project 
+# CLAUDE.md — Taskflow Project
 
 ## Overview
 
@@ -163,10 +159,3 @@ Required env vars. Copy `.env.example` → `.env.local`.
 * Jordan Kim — full-stack, Slack + GitHub integrations
 * Sam Rivera — backend, dashboard performance
 
----
-
-If you want, I can also:
-
-* generate diff vs original
-* run validation logic mentally (line + bullet preservation)
-* or auto-fix your compressor so it never breaks code/URLs again

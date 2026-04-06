@@ -1,8 +1,4 @@
-Here is the caveman-compressed version, preserving all code, inline code, URLs, and structure:
-
----
-
-# API Integration Guide 
+# API Integration Guide
 
 ## Authentication
 

@@ -4,4 +4,4 @@ __pycache__/
 .venv/
 .env.local
 caveman-compress.md
-**DS_Store**
+**/.DS_Store
