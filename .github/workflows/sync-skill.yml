@@ -20,6 +20,12 @@ jobs:
         with:
           ref: main
 
+      - name: Pull latest before making changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin main
+
       - name: Copy to duplicate locations
         run: |
           cp skills/caveman/SKILL.md caveman/SKILL.md
@@ -29,12 +35,9 @@ jobs:
         run: |
           cd skills && zip -r ../caveman.skill caveman/
 
-      - name: Commit if changed
+      - name: Commit and push if changed
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
           git diff --quiet && exit 0
           git add caveman/SKILL.md plugins/caveman/skills/caveman/SKILL.md caveman.skill
-          git pull --rebase origin main
           git commit -m "chore: sync SKILL.md copies and caveman.skill [skip ci]"
           git push
