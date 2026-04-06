@@ -66,6 +66,36 @@ Based on the viral observation that caveman-speak dramatically reduces LLM token
 
 **Same fix. 75% less word. Brain still big.**
 
+**Sometimes too much caveman. Sometimes not enough:**
+
+<table>
+<tr>
+<td width="33%">
+
+#### 🪶 Lite
+
+> "Your component re-renders because you create a new object reference each render. Inline object props fail shallow comparison every time. Wrap it in `useMemo`."
+
+</td>
+<td width="33%">
+
+#### 🪨 Full
+
+> "New object ref each render. Inline object prop = new ref = re-render. Wrap in `useMemo`."
+
+</td>
+<td width="33%">
+
+#### 🔥 Ultra
+
+> "Inline obj prop → new ref → re-render. `useMemo`."
+
+</td>
+</tr>
+</table>
+
+**Same answer. You pick how many word.**
+
 ## Benchmarks
 
 Real token counts from the Claude API ([reproduce it yourself](benchmarks/)):
@@ -129,6 +159,18 @@ Trigger with:
 - "less tokens please"
 
 Stop with: "stop caveman" or "normal mode"
+
+### Intensity Levels
+
+Sometimes full caveman too much. Sometimes not enough. Now you pick:
+
+| Level | Trigger | What it do |
+|-------|---------|------------|
+| **Lite** | `/caveman lite` or `$caveman lite` | Drop filler, keep grammar. Professional but no fluff |
+| **Full** | `/caveman full` or `$caveman full` | Default caveman. Drop articles, fragments, full grunt |
+| **Ultra** | `/caveman ultra` or `$caveman ultra` | Maximum compression. Telegraphic. Abbreviate everything |
+
+Level stick until you change it or session end.
 
 ## What Caveman Do
 
