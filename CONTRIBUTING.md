@@ -5,11 +5,13 @@ Improvements to the SKILL.md prompt are welcome — open a PR with before/after 
 ## How
 
 1. Fork repo
-2. Edit `skills/caveman/SKILL.md`
+2. Edit `skills/caveman/SKILL.md` — this is the only copy you need to touch
 3. Open PR with:
    - **Before:** what caveman say now
    - **After:** what caveman say with change
    - One sentence why change better
+
+> **Note:** `caveman/SKILL.md`, `plugins/caveman/skills/caveman/SKILL.md`, and `caveman.skill` are auto-synced by CI after merge. Do not edit them directly.
 
 Small focused change > big rewrite. Caveman like simple.
 
