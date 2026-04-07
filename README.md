@@ -140,6 +140,7 @@ npx skills add JuliusBrussee/caveman -a cursor
 npx skills add JuliusBrussee/caveman -a copilot
 npx skills add JuliusBrussee/caveman -a cline
 npx skills add JuliusBrussee/caveman -a windsurf
+npx skills add JuliusBrussee/caveman -a codex
 ```
 
 Or with Claude Code plugin system:
@@ -148,18 +149,6 @@ Or with Claude Code plugin system:
 claude plugin marketplace add JuliusBrussee/caveman
 claude plugin install caveman@caveman
 ```
-
-Codex:
-
-1. Clone repo
-2. Open Codex in repo
-3. Run `/plugins`
-4. Search `Caveman`
-5. Install plugin
-
-Install once. Use in all sessions after that.
-
-One rock. That it.
 
 ## Usage
 
