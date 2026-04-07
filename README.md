@@ -137,7 +137,7 @@ npx skills add JuliusBrussee/caveman
 
 ```bash
 npx skills add JuliusBrussee/caveman -a cursor
-npx skills add JuliusBrussee/caveman -a copilot
+npx skills add JuliusBrussee/caveman -a github-copilot
 npx skills add JuliusBrussee/caveman -a cline
 npx skills add JuliusBrussee/caveman -a windsurf
 ```
