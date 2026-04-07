@@ -137,9 +137,10 @@ npx skills add JuliusBrussee/caveman
 
 ```bash
 npx skills add JuliusBrussee/caveman -a cursor
-npx skills add JuliusBrussee/caveman -a copilot
+npx skills add JuliusBrussee/caveman -a github-copilot
 npx skills add JuliusBrussee/caveman -a cline
 npx skills add JuliusBrussee/caveman -a windsurf
+npx skills add JuliusBrussee/caveman -a codex
 ```
 
 Or with Claude Code plugin system:
@@ -163,7 +164,6 @@ One rock. That it.
 
 > [!NOTE]
 > **Windows users:** This repo uses symlinks. On Windows, enable `git config core.symlinks true` before cloning (requires developer mode or admin). The plugin installer resolves symlinks to real files at install time, so symlinks work transparently after installation.
-
 ## Usage
 
 Trigger with:
