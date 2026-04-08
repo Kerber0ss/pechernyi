@@ -69,14 +69,23 @@ def main() -> None:
     q1s = [r["q1"] for r in rows]
     q3s = [r["q3"] for r in rows]
 
+    # vertical orientation: best skill on the left, x = skill, y = % shorter
+    rows.sort(key=lambda r: -r["median"])  # descending so best is leftmost
+    names = [r["skill"] for r in rows]
+    medians = [r["median"] for r in rows]
+    mins = [r["min"] for r in rows]
+    maxs = [r["max"] for r in rows]
+    q1s = [r["q1"] for r in rows]
+    q3s = [r["q3"] for r in rows]
+
     fig = go.Figure()
 
     # min/max thin whisker (full range, faded)
     for name, lo, hi in zip(names, mins, maxs):
         fig.add_trace(
             go.Scatter(
-                x=[lo, hi],
-                y=[name, name],
+                x=[name, name],
+                y=[lo, hi],
                 mode="lines",
                 line=dict(color="rgba(80,80,80,0.35)", width=2),
                 showlegend=False,
@@ -84,56 +93,43 @@ def main() -> None:
             )
         )
 
-    # IQR thicker whisker (q1 to q3, where the middle half lives)
+    # IQR thicker whisker (q1 to q3)
     for name, lo, hi in zip(names, q1s, q3s):
         fig.add_trace(
             go.Scatter(
-                x=[lo, hi],
-                y=[name, name],
+                x=[name, name],
+                y=[lo, hi],
                 mode="lines",
-                line=dict(color="#2c3e50", width=6),
+                line=dict(color="#2c3e50", width=8),
                 showlegend=False,
                 hoverinfo="skip",
             )
         )
 
-    # median dot
+    # median dot with label on top
     fig.add_trace(
         go.Scatter(
-            x=medians,
-            y=names,
-            mode="markers",
+            x=names,
+            y=medians,
+            mode="markers+text",
             marker=dict(
                 symbol="circle",
-                size=14,
+                size=18,
                 color="#2ca02c",
                 line=dict(color="white", width=2),
             ),
+            cliponaxis=False,
             name="median",
-            hovertemplate="<b>%{y}</b><br>median: %{x:.1f}%<extra></extra>",
-        )
-    )
-
-    # right-aligned label column outside the data area
-    fig.add_trace(
-        go.Scatter(
-            x=[105] * len(names),
-            y=names,
-            mode="text",
-            text=[f"<b>{m:+.0f}%</b>" for m in medians],
-            textposition="middle left",
-            textfont=dict(size=14, color="#2c3e50"),
-            showlegend=False,
-            hoverinfo="skip",
+            hovertemplate="<b>%{x}</b><br>median: %{y:.1f}%<extra></extra>",
         )
     )
 
     # zero line — "no effect"
-    fig.add_vline(
-        x=0,
+    fig.add_hline(
+        y=0,
         line=dict(color="black", width=1.5, dash="dash"),
-        annotation_text="  no effect",
-        annotation_position="top",
+        annotation_text="no effect",
+        annotation_position="right",
         annotation_font=dict(size=11, color="black"),
     )
 
@@ -148,17 +144,19 @@ def main() -> None:
             xanchor="center",
         ),
         xaxis=dict(
-            title="← longer  ·  output tokens vs control  ·  shorter →",
+            title="", automargin=True, categoryorder="array", categoryarray=names
+        ),
+        yaxis=dict(
+            title="↑ shorter  ·  output tokens vs control  ·  longer ↓",
             ticksuffix="%",
             zeroline=False,
             gridcolor="rgba(0,0,0,0.08)",
             range=[-30, 110],
         ),
-        yaxis=dict(title="", automargin=True),
         plot_bgcolor="white",
-        height=440,
-        width=950,
-        margin=dict(l=120, r=80, t=120, b=110),
+        height=560,
+        width=980,
+        margin=dict(l=140, r=120, t=120, b=130),
         showlegend=False,
         annotations=[
             dict(
@@ -176,6 +174,18 @@ def main() -> None:
             )
         ],
     )
+
+    # value labels above each whisker top, added AFTER update_layout so they
+    # don't get overwritten by the layout-level annotations list
+    for name, m, hi in zip(names, medians, maxs):
+        fig.add_annotation(
+            x=name,
+            y=hi,
+            text=f"<b>{m:+.0f}%</b>",
+            showarrow=False,
+            yshift=18,
+            font=dict(size=16, color="#2c3e50"),
+        )
 
     fig.write_html(HTML_OUT)
     print(f"Wrote {HTML_OUT}")
