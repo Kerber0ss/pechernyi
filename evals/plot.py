@@ -1,6 +1,6 @@
 """
-Generate a dot plot with whiskers showing how much shorter each skill
-makes Claude's answers compared to a plain "Answer concisely." control.
+Generate a boxplot showing the distribution of token compression per
+skill, compared against a plain "Answer concisely." control.
 
 Reads evals/snapshots/results.json and writes:
   - evals/snapshots/results.html  (interactive plotly)
@@ -40,150 +40,103 @@ def main() -> None:
         if skill in ("__baseline__", "__terse__"):
             continue
         skill_tokens = [count(o) for o in outputs]
-        # positive % = shorter than control (good)
         savings = [
             (1 - (s / t)) * 100 if t else 0.0
             for s, t in zip(skill_tokens, terse_tokens)
         ]
-        savings_sorted = sorted(savings)
-        n = len(savings_sorted)
-        q1 = savings_sorted[n // 4]
-        q3 = savings_sorted[(3 * n) // 4]
         rows.append(
-            {
-                "skill": skill,
-                "median": statistics.median(savings),
-                "mean": statistics.mean(savings),
-                "min": min(savings),
-                "max": max(savings),
-                "q1": q1,
-                "q3": q3,
-            }
+            {"skill": skill, "savings": savings, "median": statistics.median(savings)}
         )
 
-    rows.sort(key=lambda r: r["median"])  # ascending → best at top in horizontal
-    names = [r["skill"] for r in rows]
-    medians = [r["median"] for r in rows]
-    mins = [r["min"] for r in rows]
-    maxs = [r["max"] for r in rows]
-    q1s = [r["q1"] for r in rows]
-    q3s = [r["q3"] for r in rows]
-
-    # vertical orientation: best skill on the left, x = skill, y = % shorter
-    rows.sort(key=lambda r: -r["median"])  # descending so best is leftmost
-    names = [r["skill"] for r in rows]
-    medians = [r["median"] for r in rows]
-    mins = [r["min"] for r in rows]
-    maxs = [r["max"] for r in rows]
-    q1s = [r["q1"] for r in rows]
-    q3s = [r["q3"] for r in rows]
+    rows.sort(key=lambda r: -r["median"])  # best first
 
     fig = go.Figure()
 
-    # min/max thin whisker (full range, faded)
-    for name, lo, hi in zip(names, mins, maxs):
+    for row in rows:
         fig.add_trace(
-            go.Scatter(
-                x=[name, name],
-                y=[lo, hi],
-                mode="lines",
-                line=dict(color="rgba(80,80,80,0.35)", width=2),
-                showlegend=False,
-                hoverinfo="skip",
+            go.Box(
+                y=row["savings"],
+                name=row["skill"],
+                boxpoints="all",
+                jitter=0.4,
+                pointpos=0,
+                marker=dict(color="#2ca02c", size=7, opacity=0.7),
+                line=dict(color="#2c3e50", width=2),
+                fillcolor="rgba(76, 120, 168, 0.25)",
+                boxmean=True,
+                hovertemplate="<b>%{x}</b><br>%{y:.1f}%<extra></extra>",
             )
         )
-
-    # IQR thicker whisker (q1 to q3)
-    for name, lo, hi in zip(names, q1s, q3s):
-        fig.add_trace(
-            go.Scatter(
-                x=[name, name],
-                y=[lo, hi],
-                mode="lines",
-                line=dict(color="#2c3e50", width=8),
-                showlegend=False,
-                hoverinfo="skip",
-            )
-        )
-
-    # median dot with label on top
-    fig.add_trace(
-        go.Scatter(
-            x=names,
-            y=medians,
-            mode="markers+text",
-            marker=dict(
-                symbol="circle",
-                size=18,
-                color="#2ca02c",
-                line=dict(color="white", width=2),
-            ),
-            cliponaxis=False,
-            name="median",
-            hovertemplate="<b>%{x}</b><br>median: %{y:.1f}%<extra></extra>",
-        )
-    )
 
     # zero line — "no effect"
     fig.add_hline(
         y=0,
         line=dict(color="black", width=1.5, dash="dash"),
-        annotation_text="no effect",
-        annotation_position="right",
+        annotation_text="no effect (= same length as control)",
+        annotation_position="top right",
         annotation_font=dict(size=11, color="black"),
     )
+
+    # median labels above each box
+    for row in rows:
+        fig.add_annotation(
+            x=row["skill"],
+            y=max(row["savings"]),
+            text=f"<b>{row['median']:+.0f}%</b>",
+            showarrow=False,
+            yshift=22,
+            font=dict(size=16, color="#2c3e50"),
+        )
 
     fig.update_layout(
         title=dict(
             text=f"<b>How much shorter does each skill make Claude's answers?</b><br>"
-            f"<sub>Compared against the same model with system prompt = "
+            f"<sub>Distribution of per-prompt savings vs system prompt = "
             f"<i>'Answer concisely.'</i><br>"
             f"{meta.get('model', '?')} · n={meta.get('n_prompts', '?')} prompts · "
             f"single run per arm</sub>",
             x=0.5,
             xanchor="center",
         ),
-        xaxis=dict(
-            title="", automargin=True, categoryorder="array", categoryarray=names
-        ),
+        xaxis=dict(title="", automargin=True),
         yaxis=dict(
-            title="↑ shorter  ·  output tokens vs control  ·  longer ↓",
+            title="↑ shorter  ·  vs control  ·  longer ↓",
             ticksuffix="%",
             zeroline=False,
             gridcolor="rgba(0,0,0,0.08)",
-            range=[-30, 110],
+            range=[-30, 115],
         ),
         plot_bgcolor="white",
         height=560,
         width=980,
-        margin=dict(l=140, r=120, t=120, b=130),
+        margin=dict(l=140, r=80, t=120, b=120),
         showlegend=False,
         annotations=[
             dict(
                 x=0.5,
-                y=-0.28,
+                y=-0.22,
                 xref="paper",
                 yref="paper",
                 showarrow=False,
                 font=dict(size=11, color="#555"),
                 text=(
-                    "<b>green dot</b> = median across prompts · "
-                    "<b>thick bar</b> = IQR (middle 50%) · "
-                    "<b>thin line</b> = min / max"
+                    "<b>box</b> = IQR (middle 50%) · "
+                    "<b>line in box</b> = median · "
+                    "<b>dashed line</b> = mean · "
+                    "<b>green dots</b> = individual prompts"
                 ),
             )
         ],
     )
 
-    # value labels above each whisker top, added AFTER update_layout so they
-    # don't get overwritten by the layout-level annotations list
-    for name, m, hi in zip(names, medians, maxs):
+    # re-add labels after update_layout (which would otherwise wipe them)
+    for row in rows:
         fig.add_annotation(
-            x=name,
-            y=hi,
-            text=f"<b>{m:+.0f}%</b>",
+            x=row["skill"],
+            y=max(row["savings"]),
+            text=f"<b>{row['median']:+.0f}%</b>",
             showarrow=False,
-            yshift=18,
+            yshift=22,
             font=dict(size=16, color="#2c3e50"),
         )
 
