@@ -19,19 +19,18 @@ Compress natural language files (CLAUDE.md, todos, preferences) into caveman-spe
 
 ## Process
 
-1. This SKILL.md lives alongside `memory/` in the same directory. Find that directory.
+1. This SKILL.md lives alongside `scripts/` in the same directory. Find that directory.
 
 2. Run:
-   ```
-   cd <directory_containing_this_SKILL.md> && python3 -m scripts <absolute_filepath>
-   ```
+
+cd <directory_containing_this_SKILL.md> && python3 -m scripts <absolute_filepath>
 
 3. The CLI will:
-   - detect file type (no tokens)
-   - call Claude to compress
-   - validate output (no tokens)
-   - if errors: cherry-pick fix with Claude (targeted fixes only, no recompression)
-   - retry up to 2 times
+- detect file type (no tokens)
+- call Claude to compress
+- validate output (no tokens)
+- if errors: cherry-pick fix with Claude (targeted fixes only, no recompression)
+- retry up to 2 times
 
 4. Return result to user
 

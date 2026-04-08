@@ -1,1 +1,1 @@
-../../caveman-compress/SKILL.md
+../caveman-compress/SKILL.md

@@ -150,14 +150,6 @@ claude plugin marketplace add JuliusBrussee/caveman
 claude plugin install caveman@caveman
 ```
 
-Codex:
-
-1. Clone repo
-2. Open Codex in repo
-3. Run `/plugins`
-4. Search `Caveman`
-5. Install plugin
-
 Install once. Use in all sessions after that.
 
 One rock. That it.
@@ -275,10 +267,13 @@ Code blocks, inline code, URLs, file paths, commands, headings, table structure,
 | Tool | What it cuts | Savings |
 |------|-------------|---------|
 | **caveman** | Output tokens (Claude's responses) | ~65% |
-| **caveman-compress** | Input tokens (memory files loaded per session) | ~45% |
+| **compress (/caveman:compress)** | Input tokens (memory files loaded per session) | ~45% |
 | **Both together** | The whole conversation | Output + input both shrunk |
 
-Compress is now built-in with the caveman plugin — no separate install needed. Both `/caveman` and `/caveman:compress` work once you install caveman.
+Compress is built in with the caveman plugin — no separate install needed.
+
+- Use `/caveman` for caveman mode
+- Use `/caveman:compress <filepath>` for memory-file compression
 
 ## Star This Repo
 
