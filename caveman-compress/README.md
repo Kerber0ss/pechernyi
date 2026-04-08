@@ -65,6 +65,10 @@ All validations passed ✅ — headings, code blocks, URLs, file paths preserved
 
 **Same instructions. 60% fewer tokens. Every. Single. Session.**
 
+## Security
+
+`caveman-compress` is flagged as Snyk High Risk due to subprocess and file I/O patterns detected by static analysis. This is a false positive — see [SECURITY.md](./SECURITY.md) for a full explanation of what the skill does and does not do.
+
 ## Install
 
 Compress is built in with the `caveman` plugin. Install `caveman` once, then use `/caveman:compress`.
@@ -143,12 +147,12 @@ Caveman compress natural language. It never touch:
 Caveman cut that by ~45% on average. Same instructions. Same accuracy. Less waste.
 
 ```
-┌──────────────────────────────────────────┐
-│  TOKEN SAVINGS PER FILE    ████████  45% │
-│  SESSIONS THAT BENEFIT     ████████ 100% │
-│  INFORMATION PRESERVED     ████████ 100% │
-│  SETUP TIME                █         1x  │
-└──────────────────────────────────────────┘
+┌────────────────────────────────────────────┐
+│  TOKEN SAVINGS PER FILE    █████       45% │
+│  SESSIONS THAT BENEFIT     ██████████ 100% │
+│  INFORMATION PRESERVED     ██████████ 100% │
+│  SETUP TIME                █            1x │
+└────────────────────────────────────────────┘
 ```
 
 ## Part of Caveman
