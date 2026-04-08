@@ -150,6 +150,28 @@ claude plugin marketplace add JuliusBrussee/caveman
 claude plugin install caveman@caveman
 ```
 
+Codex:
+
+1. Clone repo
+2. Open Codex in repo
+3. Run `/plugins`
+4. Search `Caveman`
+5. Install plugin
+
+### Windows (VS Code Codex)
+
+If you are using the VS Code Codex extension on Windows:
+
+1. Clone this repo locally
+2. Open the cloned repo in VS Code
+3. Open Codex Settings → Plugins
+4. Look under the repo/local marketplace for `Caveman`
+5. Click `Install`
+6. Run `Developer: Reload Window`
+7. Verify `Caveman` appears under installed plugins
+
+This repo includes a repo-local marketplace entry at `.agents/plugins/marketplace.json`, so the plugin can be discovered directly from the cloned repository without adding personal machine-specific paths to the repo.
+
 Install once. Use in all sessions after that.
 
 One rock. That it.
