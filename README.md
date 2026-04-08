@@ -72,25 +72,32 @@ Based on the viral observation that caveman-speak dramatically reduces LLM token
 
 <table>
 <tr>
-<td width="33%">
+<td width="25%">
 
 #### 🪶 Lite
 
 > "Your component re-renders because you create a new object reference each render. Inline object props fail shallow comparison every time. Wrap it in `useMemo`."
 
 </td>
-<td width="33%">
+<td width="25%">
 
 #### 🪨 Full
 
 > "New object ref each render. Inline object prop = new ref = re-render. Wrap in `useMemo`."
 
 </td>
-<td width="33%">
+<td width="25%">
 
 #### 🔥 Ultra
 
 > "Inline obj prop → new ref → re-render. `useMemo`."
+
+</td>
+<td width="25%">
+
+#### 📜 Wenyan-Full
+
+> "物出新參照，致重繪。useMemo .Wrap之。"
 
 </td>
 </tr>
@@ -197,6 +204,9 @@ Sometimes full caveman too much. Sometimes not enough. Now you pick:
 | **Lite** | `/caveman lite` or `$caveman lite` | Drop filler, keep grammar. Professional but no fluff |
 | **Full** | `/caveman full` or `$caveman full` | Default caveman. Drop articles, fragments, full grunt |
 | **Ultra** | `/caveman ultra` or `$caveman ultra` | Maximum compression. Telegraphic. Abbreviate everything |
+| **Wenyan-Lite** | `/caveman wenyan-lite` or `$caveman wenyan-lite` | Semi-classical 文言文. Less intense, grammar intact |
+| **Wenyan-Full** | `/caveman wenyan` or `/caveman wenyan-full` | Full 文言文. Maximum classical terseness |
+| **Wenyan-Ultra** | `/caveman wenyan-ultra` or `$caveman wenyan-ultra` | Extreme abbreviation, classical Chinese feel |
 
 Level stick until you change it or session end.
 
