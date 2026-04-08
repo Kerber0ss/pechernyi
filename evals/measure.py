@@ -41,7 +41,7 @@ def stats(savings: list[float]) -> tuple[float, float, float, float, float]:
 
 
 def fmt_pct(x: float) -> str:
-    sign = "−" if x >= 0 else "+"
+    sign = "−" if x < 0 else "+"
     return f"{sign}{abs(x) * 100:.0f}%"
 
 
