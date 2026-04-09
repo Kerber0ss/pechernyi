@@ -156,6 +156,57 @@ Codex:
 
 Install once. Use in all sessions after that. One rock. That it.
 
+### Optional: SessionStart Hook + Visible Mode Badge
+
+If you want Claude Code to auto-load caveman rules at session start **and** show a persistent `[CAVEMAN]` badge in your statusline (so you can see at a glance that caveman mode is loaded), wire up the hook in `hooks/caveman-activate.js`.
+
+> [!NOTE]
+> This is a **Claude Code-only** optional addition. The core skill install above works fine without it. Skip this section if you're using Cursor, Codex, or another agent.
+
+**1. Install the hook** — copy `hooks/caveman-activate.js` to `~/.claude/hooks/caveman-activate.js`, then add it to `~/.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"~/.claude/hooks/caveman-activate.js\"",
+            "statusMessage": "Loading caveman mode..."
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+The hook writes a flag file at `~/.claude/.caveman-active` and emits the caveman ruleset reminder as SessionStart context.
+
+**2. Add the badge to your statusline** — in your Claude Code statusline script, check for the flag file and prepend a badge:
+
+```js
+const fs = require('fs');
+const path = require('path');
+const os = require('os');
+
+// ...existing statusline logic...
+
+let cavemanBadge = '';
+const cavemanFlag = path.join(os.homedir(), '.claude', '.caveman-active');
+if (fs.existsSync(cavemanFlag)) {
+  cavemanBadge = '\x1b[1;38;5;208m[CAVEMAN]\x1b[0m │ ';
+}
+
+process.stdout.write(`${cavemanBadge}${rest_of_your_statusline}`);
+```
+
+Restart Claude Code and an orange `[CAVEMAN]` badge sits in your statusline for the entire session.
+
+**Why a flag file?** `SessionStart` hook stdout is injected as hidden system-reminder context — useful for Claude, invisible to users. The statusline runs as a separate process and can't see that context. A flag file is the simplest bridge between "the hook ran" and "the statusline can prove it."
+
 ## Usage
 
 Trigger with:
