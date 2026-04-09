@@ -124,7 +124,7 @@ Based on the viral observation that caveman-speak dramatically reduces LLM token
 
 ### Claude Code (recommended)
 
-Install as a plugin to get auto-loading hooks (caveman activates every session, mode badge tracks `/caveman ultra` etc.):
+Install as a plugin — includes skills + auto-loading hooks (caveman activates every session, mode badge tracks `/caveman ultra` etc.):
 
 ```bash
 claude plugin marketplace add JuliusBrussee/caveman
@@ -140,7 +140,7 @@ npx skills add JuliusBrussee/caveman
 For a specific agent: `npx skills add JuliusBrussee/caveman -a cursor`
 
 > [!NOTE]
-> `npx skills` installs the skill only. For Claude Code auto-loading hooks, use the plugin install above or run `bash hooks/install.sh`.
+> `npx skills` installs skills only (no hooks). For Claude Code auto-loading hooks, use the plugin install above or run `bash hooks/install.sh`.
 
 ### Codex
 
