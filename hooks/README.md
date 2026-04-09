@@ -18,10 +18,10 @@ Or from a cloned repo: `bash hooks/install.sh`
 - Writes `full` to `~/.claude/.caveman-active` (flag file)
 - Emits caveman rules as hidden SessionStart context
 
-### `caveman-mode-tracker.js` — PostToolUse hook
+### `caveman-mode-tracker.js` — UserPromptSubmit hook
 
-- Fires after any Skill tool invocation
-- Detects caveman-related skills and writes the active mode to the flag file
+- Fires on every user prompt, checks for `/caveman` commands
+- Writes the active mode to the flag file when a caveman command is detected
 - Supports: `full`, `lite`, `ultra`, `wenyan`, `wenyan-lite`, `wenyan-ultra`, `commit`, `review`, `compress`
 
 ## Statusline Badge
@@ -52,7 +52,7 @@ Badge examples:
 ## How It Works
 
 ```
-SessionStart hook ──writes "full"──▶ ~/.claude/.caveman-active ◀──writes mode── PostToolUse hook
+SessionStart hook ──writes "full"──▶ ~/.claude/.caveman-active ◀──writes mode── UserPromptSubmit hook
                                               │
                                            reads
                                               ▼

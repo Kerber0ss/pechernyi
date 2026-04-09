@@ -13,7 +13,7 @@ process.stdin.on('data', chunk => { input += chunk; });
 process.stdin.on('end', () => {
   try {
     const data = JSON.parse(input);
-    const prompt = (data.user_prompt || data.prompt || '').trim().toLowerCase();
+    const prompt = (data.prompt || '').trim().toLowerCase();
 
     // Match /caveman commands
     if (prompt.startsWith('/caveman')) {
