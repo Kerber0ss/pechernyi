@@ -1,16 +1,10 @@
 # Caveman Hooks
 
-Optional Claude Code hooks that auto-load caveman rules and track which mode is active in your statusline.
+These hooks are **bundled with the caveman plugin** and activate automatically when the plugin is installed. No manual setup required.
 
-## Quick Install
+If you installed caveman standalone (without the plugin), you can use `bash hooks/install.sh` to wire them into your settings.json manually.
 
-```bash
-bash <(curl -s https://raw.githubusercontent.com/JuliusBrussee/caveman/main/hooks/install.sh)
-```
-
-Or from a cloned repo: `bash hooks/install.sh`
-
-## What Gets Installed
+## What's Included
 
 ### `caveman-activate.js` — SessionStart hook
 
@@ -24,7 +18,7 @@ Or from a cloned repo: `bash hooks/install.sh`
 - Writes the active mode to the flag file when a caveman command is detected
 - Supports: `full`, `lite`, `ultra`, `wenyan`, `wenyan-lite`, `wenyan-ultra`, `commit`, `review`, `compress`
 
-## Statusline Badge
+## Optional: Statusline Badge
 
 The flag file bridges the gap between hooks (which Claude sees) and your statusline (which you see). Add this to your statusline script to show which mode is active:
 
@@ -64,6 +58,9 @@ SessionStart stdout is injected as hidden system context — Claude sees it, use
 
 ## Uninstall
 
+If installed via plugin: disable the plugin — hooks deactivate automatically.
+
+If installed via `install.sh`:
 1. Remove `~/.claude/hooks/caveman-activate.js` and `~/.claude/hooks/caveman-mode-tracker.js`
-2. Remove the SessionStart and PostToolUse entries from `~/.claude/settings.json`
+2. Remove the SessionStart and UserPromptSubmit entries from `~/.claude/settings.json`
 3. Delete `~/.claude/.caveman-active`

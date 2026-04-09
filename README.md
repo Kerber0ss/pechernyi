@@ -156,21 +156,13 @@ Codex:
 
 Install once. Use in all sessions after that. One rock. That it.
 
-### Optional: Auto-Load Hook (Claude Code only)
+### Auto-Load Hooks (Claude Code only)
 
-Auto-load caveman rules every session with a one-command install:
-
-```bash
-bash <(curl -s https://raw.githubusercontent.com/JuliusBrussee/caveman/main/hooks/install.sh)
-```
-
-Or from a cloned repo: `bash hooks/install.sh`
-
-This installs two hooks — restart Claude Code and caveman loads automatically:
+When installed as a plugin, caveman automatically loads two hooks — no extra setup:
 - **SessionStart**: auto-loads caveman rules every session
-- **Mode tracker**: shows active mode (`[CAVEMAN:ULTRA]`, `[CAVEMAN:COMMIT]`, etc.) in your statusline
+- **Mode tracker**: detects `/caveman ultra`, `/caveman-commit`, etc. and writes the active mode to `~/.claude/.caveman-active`
 
-See [`hooks/README.md`](hooks/README.md) for the statusline badge snippet and details.
+**Optional statusline badge:** Add a `[CAVEMAN:ULTRA]` badge to your statusline. See [`hooks/README.md`](hooks/README.md) for the snippet.
 
 ## Usage
 
