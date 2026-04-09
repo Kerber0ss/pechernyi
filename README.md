@@ -122,47 +122,38 @@ Based on the viral observation that caveman-speak dramatically reduces LLM token
 
 ## Install
 
-```bash
-npx skills add JuliusBrussee/caveman
-```
+### Claude Code (recommended)
 
-`npx skills` supports 40+ agents — Claude Code, GitHub Copilot, Cursor, Windsurf, Cline, and more. To install for a specific agent:
-
-```bash
-npx skills add JuliusBrussee/caveman -a cursor
-npx skills add JuliusBrussee/caveman -a github-copilot
-npx skills add JuliusBrussee/caveman -a cline
-npx skills add JuliusBrussee/caveman -a windsurf
-npx skills add JuliusBrussee/caveman -a codex
-```
-
-Or with Claude Code plugin system:
+Install as a plugin to get auto-loading hooks (caveman activates every session, mode badge tracks `/caveman ultra` etc.):
 
 ```bash
 claude plugin marketplace add JuliusBrussee/caveman
 claude plugin install caveman@caveman
 ```
 
-Codex:
+### Any agent (Claude Code, Cursor, Copilot, Windsurf, Cline, Codex)
 
-1. Clone repo
-2. Open Codex in repo
-3. Run `/plugins`
-4. Search `Caveman`
-5. Install plugin
+```bash
+npx skills add JuliusBrussee/caveman
+```
+
+For a specific agent: `npx skills add JuliusBrussee/caveman -a cursor`
+
+> [!NOTE]
+> `npx skills` installs the skill only. For Claude Code auto-loading hooks, use the plugin install above or run `bash hooks/install.sh`.
+
+### Codex
+
+1. Clone repo → Open Codex in repo → `/plugins` → Search `Caveman` → Install
 
 > [!NOTE]
 > **Windows Codex users:** Clone repo → VS Code → Codex Settings → Plugins → find `Caveman` under local marketplace → Install → Reload Window. Also enable `git config core.symlinks true` before cloning (requires developer mode or admin).
 
 Install once. Use in all sessions after that. One rock. That it.
 
-### Auto-Load Hooks (Claude Code only)
+### Optional: Statusline Badge
 
-When installed as a plugin, caveman automatically loads two hooks — no extra setup:
-- **SessionStart**: auto-loads caveman rules every session
-- **Mode tracker**: detects `/caveman ultra`, `/caveman-commit`, etc. and writes the active mode to `~/.claude/.caveman-active`
-
-**Optional statusline badge:** Add a `[CAVEMAN:ULTRA]` badge to your statusline. See [`hooks/README.md`](hooks/README.md) for the snippet.
+Add a `[CAVEMAN:ULTRA]` badge to your statusline showing which mode is active. See [`hooks/README.md`](hooks/README.md) for the snippet.
 
 ## Usage
 
