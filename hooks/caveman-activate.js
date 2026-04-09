@@ -19,7 +19,7 @@ const flagPath = path.join(os.homedir(), '.claude', '.caveman-active');
 
 try {
   fs.mkdirSync(path.dirname(flagPath), { recursive: true });
-  fs.writeFileSync(flagPath, String(Date.now()));
+  fs.writeFileSync(flagPath, 'full');
 } catch (e) {
   // Silent fail -- flag is best-effort, don't block the hook
 }

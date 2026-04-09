@@ -166,7 +166,11 @@ bash <(curl -s https://raw.githubusercontent.com/JuliusBrussee/caveman/main/hook
 
 Or from a cloned repo: `bash hooks/install.sh`
 
-This installs a SessionStart hook — restart Claude Code and caveman loads automatically. See [`hooks/README.md`](hooks/README.md) for details and the optional statusline badge.
+This installs two hooks — restart Claude Code and caveman loads automatically:
+- **SessionStart**: auto-loads caveman rules every session
+- **Mode tracker**: shows active mode (`[CAVEMAN:ULTRA]`, `[CAVEMAN:COMMIT]`, etc.) in your statusline
+
+See [`hooks/README.md`](hooks/README.md) for the statusline badge snippet and details.
 
 ## Usage
 

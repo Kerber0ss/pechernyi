@@ -1,6 +1,6 @@
-# Caveman SessionStart Hook
+# Caveman Hooks
 
-Optional Claude Code hook that auto-loads caveman rules at session start.
+Optional Claude Code hooks that auto-load caveman rules and track which mode is active in your statusline.
 
 ## Quick Install
 
@@ -10,64 +10,60 @@ bash <(curl -s https://raw.githubusercontent.com/JuliusBrussee/caveman/main/hook
 
 Or from a cloned repo: `bash hooks/install.sh`
 
-## What It Does
+## What Gets Installed
 
-1. **Writes a flag file** at `~/.claude/.caveman-active` (timestamp only)
-2. **Emits caveman rules** as SessionStart context so Claude sees them automatically
+### `caveman-activate.js` — SessionStart hook
 
-## How It Works
+- Runs once when Claude Code starts
+- Writes `full` to `~/.claude/.caveman-active` (flag file)
+- Emits caveman rules as hidden SessionStart context
 
-The `caveman-activate.js` hook is wired into `~/.claude/settings.json`:
+### `caveman-mode-tracker.js` — PostToolUse hook
 
-```json
-{
-  "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node ~/.claude/hooks/caveman-activate.js",
-            "statusMessage": "Loading caveman mode..."
-          }
-        ]
-      }
-    ]
-  }
-}
-```
+- Fires after any Skill tool invocation
+- Detects caveman-related skills and writes the active mode to the flag file
+- Supports: `full`, `lite`, `ultra`, `wenyan`, `wenyan-lite`, `wenyan-ultra`, `commit`, `review`, `compress`
 
-## Optional: Statusline Badge
+## Statusline Badge
 
-SessionStart hook stdout is hidden system context — Claude sees it, but you don't. The flag file bridges that gap so a statusline script can show a `[CAVEMAN]` badge.
-
-Add this to your statusline script:
+The flag file bridges the gap between hooks (which Claude sees) and your statusline (which you see). Add this to your statusline script to show which mode is active:
 
 ```bash
-# Caveman mode badge
 caveman_text=""
 caveman_flag="$HOME/.claude/.caveman-active"
 if [ -f "$caveman_flag" ]; then
-  caveman_text="\033[38;5;172m[CAVEMAN]\033[0m"
+  caveman_mode=$(cat "$caveman_flag" 2>/dev/null)
+  if [ "$caveman_mode" = "full" ] || [ -z "$caveman_mode" ]; then
+    caveman_text="\033[38;5;172m[CAVEMAN]\033[0m"
+  else
+    caveman_suffix=$(echo "$caveman_mode" | tr '[:lower:]' '[:upper:]')
+    caveman_text="\033[38;5;172m[CAVEMAN:${caveman_suffix}]\033[0m"
+  fi
 fi
 ```
 
-Or in Node:
+Badge examples:
+- `/caveman` → `[CAVEMAN]`
+- `/caveman ultra` → `[CAVEMAN:ULTRA]`
+- `/caveman wenyan` → `[CAVEMAN:WENYAN]`
+- `/caveman-commit` → `[CAVEMAN:COMMIT]`
+- `/caveman-review` → `[CAVEMAN:REVIEW]`
 
-```js
-const fs = require('fs');
-const path = require('path');
-const os = require('os');
+## How It Works
 
-let cavemanBadge = '';
-const cavemanFlag = path.join(os.homedir(), '.claude', '.caveman-active');
-if (fs.existsSync(cavemanFlag)) {
-  cavemanBadge = '\x1b[1;38;5;208m[CAVEMAN]\x1b[0m | ';
-}
 ```
+SessionStart hook ──writes "full"──▶ ~/.claude/.caveman-active ◀──writes mode── PostToolUse hook
+                                              │
+                                           reads
+                                              ▼
+                                     Statusline script
+                                    [CAVEMAN:ULTRA] │ ...
+```
+
+SessionStart stdout is injected as hidden system context — Claude sees it, users don't. The statusline runs as a separate process. The flag file is the bridge.
 
 ## Uninstall
 
-1. Remove `~/.claude/hooks/caveman-activate.js`
-2. Remove the SessionStart entry from `~/.claude/settings.json`
+1. Remove `~/.claude/hooks/caveman-activate.js` and `~/.claude/hooks/caveman-mode-tracker.js`
+2. Remove the SessionStart and PostToolUse entries from `~/.claude/settings.json`
 3. Delete `~/.claude/.caveman-active`
