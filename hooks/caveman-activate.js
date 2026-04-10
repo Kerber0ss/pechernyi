@@ -19,7 +19,23 @@ const flagPath = path.join(os.homedir(), '.claude', '.caveman-active');
 
 try {
   fs.mkdirSync(path.dirname(flagPath), { recursive: true });
-  fs.writeFileSync(flagPath, 'full');
+  try {
+    if (fs.lstatSync(flagPath).isSymbolicLink()) {
+      throw new Error('Symlink flag path');
+    }
+  } catch (e) {
+    if (e.code !== 'ENOENT') throw e;
+  }
+
+  const flags = fs.constants.O_WRONLY | fs.constants.O_CREAT | fs.constants.O_TRUNC |
+    (typeof fs.constants.O_NOFOLLOW === 'number' ? fs.constants.O_NOFOLLOW : 0);
+  const fd = fs.openSync(flagPath, flags, 0o600);
+  try {
+    fs.writeSync(fd, 'full');
+    fs.fchmodSync(fd, 0o600);
+  } finally {
+    fs.closeSync(fd);
+  }
 } catch (e) {
   // Silent fail -- flag is best-effort, don't block the hook
 }
