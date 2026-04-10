@@ -40,7 +40,23 @@ process.stdin.on('end', () => {
 
       if (mode) {
         fs.mkdirSync(path.dirname(flagPath), { recursive: true });
-        fs.writeFileSync(flagPath, mode);
+        try {
+          if (fs.lstatSync(flagPath).isSymbolicLink()) {
+            throw new Error('Symlink flag path');
+          }
+        } catch (e) {
+          if (e.code !== 'ENOENT') throw e;
+        }
+
+        const flags = fs.constants.O_WRONLY | fs.constants.O_CREAT | fs.constants.O_TRUNC |
+          (typeof fs.constants.O_NOFOLLOW === 'number' ? fs.constants.O_NOFOLLOW : 0);
+        const fd = fs.openSync(flagPath, flags, 0o600);
+        try {
+          fs.writeSync(fd, mode);
+          fs.fchmodSync(fd, 0o600);
+        } finally {
+          fs.closeSync(fd);
+        }
       }
     }
 
