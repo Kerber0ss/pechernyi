@@ -8,6 +8,26 @@ const os = require('os');
 
 const flagPath = path.join(os.homedir(), '.claude', '.caveman-active');
 
+function assertNoSymlink(targetPath) {
+  const resolved = path.resolve(targetPath);
+  const parsed = path.parse(resolved);
+  let current = parsed.root;
+  const parts = resolved.slice(parsed.root.length).split(path.sep).filter(Boolean);
+
+  for (const part of parts) {
+    current = path.join(current, part);
+    try {
+      const stat = fs.lstatSync(current);
+      if (stat.isSymbolicLink()) {
+        throw new Error('symlink');
+      }
+    } catch (e) {
+      if (e.code === 'ENOENT') continue;
+      throw e;
+    }
+  }
+}
+
 let input = '';
 process.stdin.on('data', chunk => { input += chunk; });
 process.stdin.on('end', () => {
@@ -39,8 +59,14 @@ process.stdin.on('end', () => {
       }
 
       if (mode) {
-        fs.mkdirSync(path.dirname(flagPath), { recursive: true });
-        fs.writeFileSync(flagPath, mode);
+        const flagDir = path.dirname(flagPath);
+        assertNoSymlink(flagDir);
+        fs.mkdirSync(flagDir, { recursive: true, mode: 0o700 });
+        assertNoSymlink(flagDir);
+        assertNoSymlink(flagPath);
+        const tempPath = path.join(flagDir, `.caveman-active.${process.pid}.${Date.now()}`);
+        fs.writeFileSync(tempPath, mode, { mode: 0o600 });
+        fs.renameSync(tempPath, flagPath);
       }
     }
 
