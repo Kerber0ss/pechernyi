@@ -42,12 +42,14 @@ if (-not $Force) {
     }
 
     $HooksWired = $false
+    $HasStatusLine = $false
     if ($AllFilesPresent -and (Test-Path $Settings)) {
         try {
-            $settingsObj = Get-Content $Settings -Raw | ConvertFrom-Json -AsHashtable
+            $settingsObj = Get-Content $Settings -Raw | ConvertFrom-Json
             $hasCavemanHook = {
                 param([string]$eventName)
-                $entries = $settingsObj.hooks[$eventName]
+                if (-not $settingsObj.hooks) { return $false }
+                $entries = $settingsObj.hooks.$eventName
                 if (-not $entries) { return $false }
                 foreach ($entry in $entries) {
                     if ($entry.hooks) {
@@ -61,12 +63,14 @@ if (-not $Force) {
                 return $false
             }
             $HooksWired = (& $hasCavemanHook "SessionStart") -and (& $hasCavemanHook "UserPromptSubmit")
+            $HasStatusLine = $null -ne $settingsObj.statusLine
         } catch {
             $HooksWired = $false
+            $HasStatusLine = $false
         }
     }
 
-    if ($AllFilesPresent -and $HooksWired) {
+    if ($AllFilesPresent -and $HooksWired -and $HasStatusLine) {
         Write-Host "Caveman hooks already installed in $HooksDir"
         Write-Host "  Re-run with -Force to overwrite: powershell -File hooks\install.ps1 -Force"
         Write-Host ""

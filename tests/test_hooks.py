@@ -41,6 +41,50 @@ class HookScriptTests(unittest.TestCase):
             self.assertIn("statusLine", settings)
             self.assertIn(str(statusline), settings["statusLine"]["command"])
 
+    def test_install_reconfigures_missing_statusline(self):
+        with tempfile.TemporaryDirectory(prefix="caveman-hooks-statusline-") as tmp:
+            home = Path(tmp)
+            claude_dir = home / ".claude"
+            hooks_dir = claude_dir / "hooks"
+            hooks_dir.mkdir(parents=True)
+
+            for name in ("caveman-activate.js", "caveman-mode-tracker.js", "caveman-statusline.sh"):
+                (hooks_dir / name).write_text("")
+
+            settings = {
+                "hooks": {
+                    "SessionStart": [
+                        {
+                            "hooks": [
+                                {
+                                    "type": "command",
+                                    "command": f'node "{hooks_dir / "caveman-activate.js"}"',
+                                }
+                            ]
+                        }
+                    ],
+                    "UserPromptSubmit": [
+                        {
+                            "hooks": [
+                                {
+                                    "type": "command",
+                                    "command": f'node "{hooks_dir / "caveman-mode-tracker.js"}"',
+                                }
+                            ]
+                        }
+                    ],
+                }
+            }
+            (claude_dir / "settings.json").write_text(json.dumps(settings, indent=2) + "\n")
+
+            result = self.run_cmd(["bash", "hooks/install.sh"], home)
+
+            self.assertNotIn("Nothing to do", result.stdout)
+
+            updated = json.loads((claude_dir / "settings.json").read_text())
+            self.assertIn("statusLine", updated)
+            self.assertIn(str(hooks_dir / "caveman-statusline.sh"), updated["statusLine"]["command"])
+
     def test_uninstall_preserves_custom_statusline(self):
         with tempfile.TemporaryDirectory(prefix="caveman-hooks-uninstall-") as tmp:
             home = Path(tmp)

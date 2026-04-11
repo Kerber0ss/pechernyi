@@ -95,6 +95,7 @@ def verify_manifests_and_syntax() -> None:
     section("Manifests And Syntax")
 
     manifest_paths = [
+        ROOT / ".agents/plugins/marketplace.json",
         ROOT / ".claude-plugin/plugin.json",
         ROOT / ".claude-plugin/marketplace.json",
         ROOT / ".codex/hooks.json",
@@ -121,6 +122,7 @@ def verify_powershell_static() -> None:
 
     ensure("caveman-statusline.ps1" in install_text, "install.ps1 missing statusline.ps1")
     ensure("caveman-statusline.ps1" in uninstall_text, "uninstall.ps1 missing statusline.ps1")
+    ensure("-AsHashtable" not in install_text, "install.ps1 should stay compatible with Windows PowerShell 5.1")
     ensure(
         "powershell -ExecutionPolicy Bypass -File" in install_text,
         "install.ps1 missing PowerShell statusline command",

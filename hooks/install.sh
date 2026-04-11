@@ -59,6 +59,7 @@ if [ "$FORCE" -eq 0 ]; then
   done
 
   HOOKS_WIRED=0
+  HAS_STATUSLINE=0
   if [ "$ALL_FILES_PRESENT" -eq 1 ] && [ -f "$SETTINGS" ]; then
     if CAVEMAN_SETTINGS="$SETTINGS" node -e "
       const fs = require('fs');
@@ -68,13 +69,20 @@ if [ "$FORCE" -eq 0 ]; then
         settings.hooks[event].some(e =>
           e.hooks && e.hooks.some(h => h.command && h.command.includes('caveman'))
         );
-      process.exit(hasCavemanHook('SessionStart') && hasCavemanHook('UserPromptSubmit') ? 0 : 1);
+      process.exit(
+        hasCavemanHook('SessionStart') &&
+        hasCavemanHook('UserPromptSubmit') &&
+        !!settings.statusLine
+          ? 0
+          : 1
+      );
     " >/dev/null 2>&1; then
       HOOKS_WIRED=1
+      HAS_STATUSLINE=1
     fi
   fi
 
-  if [ "$ALL_FILES_PRESENT" -eq 1 ] && [ "$HOOKS_WIRED" -eq 1 ]; then
+  if [ "$ALL_FILES_PRESENT" -eq 1 ] && [ "$HOOKS_WIRED" -eq 1 ] && [ "$HAS_STATUSLINE" -eq 1 ]; then
     ALREADY_INSTALLED=1
     echo "Caveman hooks already installed in $HOOKS_DIR"
     echo "  Re-run with --force to overwrite: bash hooks/install.sh --force"
