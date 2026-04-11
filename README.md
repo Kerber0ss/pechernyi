@@ -139,29 +139,31 @@ Install once. Use in every session for that install target after that. One rock.
 
 ### What You Get
 
-Auto-activation is built in for Claude Code, Gemini CLI, Cursor, Windsurf, Cline, Copilot, and the repo-local Codex setup below. Generic `npx skills add` installs for other agents do **not** auto-start caveman.
+Auto-activation is built in for Claude Code, Gemini CLI, and the repo-local Codex setup below. `npx skills add` installs the skill for other agents, but does **not** install repo rule/instruction files, so Caveman does not auto-start there unless you add the always-on snippet below.
 
 | Feature | Claude Code | Codex | Gemini CLI | Cursor | Windsurf | Cline | Copilot |
 |---------|:-----------:|:-----:|:----------:|:------:|:--------:|:-----:|:-------:|
 | Caveman mode | Y | Y | Y | Y | Y | Y | Y |
-| Auto-activate every session | Y | Y¹ | Y | Y | Y | Y | Y |
+| Auto-activate every session | Y | Y¹ | Y | —² | —² | —² | —² |
 | `/caveman` command | Y | Y¹ | Y | — | — | — | — |
-| Mode switching (lite/full/ultra) | Y | Y¹ | Y | Y² | Y² | — | — |
-| Statusline badge | Y | — | — | — | — | — | — |
+| Mode switching (lite/full/ultra) | Y | Y¹ | Y | Y³ | Y³ | — | — |
+| Statusline badge | Y⁴ | — | — | — | — | — | — |
 | caveman-commit | Y | — | Y | Y | Y | Y | Y |
 | caveman-review | Y | — | Y | Y | Y | Y | Y |
 | caveman-compress | Y | Y | Y | Y | Y | Y | Y |
 
 > [!NOTE]
-> Auto-activation works differently per agent: Claude Code uses SessionStart hooks, this repo's Codex dogfood setup uses `.codex/hooks.json`, Gemini uses context files, Cursor/Windsurf use always-on rules, Cline uses auto-discovered rules, Copilot uses repo instructions.
+> Auto-activation works differently per agent: Claude Code uses SessionStart hooks, this repo's Codex dogfood setup uses `.codex/hooks.json`, Gemini uses context files. Cursor/Windsurf/Cline/Copilot can be made always-on, but `npx skills add` installs only the skill, not the repo rule/instruction files.
 >
 > ¹ Codex uses `$caveman` syntax, not `/caveman`. This repo ships `.codex/hooks.json`, so caveman auto-starts when you run Codex inside this repo. The installed plugin itself gives you `$caveman`; copy the same hook into another repo if you want always-on behavior there too. caveman-commit and caveman-review are not in the Codex plugin bundle — use the SKILL.md files directly.
-> ² Cursor and Windsurf receive the full SKILL.md with all intensity levels. Mode switching works on-demand via the skill; no slash command.
+> ² Add the "Want it always on?" snippet below to those agents' system prompt or rule file if you want session-start activation.
+> ³ Cursor and Windsurf receive the full SKILL.md with all intensity levels. Mode switching works on-demand via the skill; no slash command.
+> ⁴ Available in Claude Code, but plugin install only nudges setup. Standalone `install.sh` / `install.ps1` configures it automatically when no custom `statusLine` exists.
 
 <details>
 <summary><strong>Claude Code — full details</strong></summary>
 
-The plugin install gives you everything: skills + auto-loading hooks + statusline badge.
+The plugin install gives you skills + auto-loading hooks. If no custom `statusLine` is configured, Caveman nudges Claude to offer badge setup on first session.
 
 ```bash
 claude plugin marketplace add JuliusBrussee/caveman
@@ -183,7 +185,7 @@ Uninstall: `bash hooks/uninstall.sh` or `powershell -File hooks\uninstall.ps1`
 
 **Statusline badge:** Shows `[CAVEMAN]`, `[CAVEMAN:ULTRA]`, etc. in your Claude Code status bar.
 
-- **Plugin install:** If you do not already have a custom `statusLine`, Claude offers to configure it on first session
+- **Plugin install:** If you do not already have a custom `statusLine`, Claude should offer to configure it on first session
 - **Standalone install:** Configured automatically by `install.sh` / `install.ps1` unless you already have a custom statusline
 - **Custom statusline:** Installer leaves your existing statusline alone. See [`hooks/README.md`](hooks/README.md) for the merge snippet
 
@@ -226,9 +228,9 @@ Auto-activates via `GEMINI.md` context file. Also ships custom Gemini commands:
 npx skills add JuliusBrussee/caveman -a cursor
 ```
 
-Auto-activates via `.cursor/rules/caveman.mdc` (`alwaysApply: true`). Caveman rules load every session without any trigger.
+`npx skills add` installs the skill file for Cursor. It does **not** install `.cursor/rules/caveman.mdc`, so caveman does not auto-start from this command alone.
 
-The skill file (`.cursor/skills/caveman/SKILL.md`) provides full intensity levels and mode switching when invoked on-demand.
+The skill file provides full intensity levels and mode switching when invoked on-demand. If you want always-on behavior, add the "Want it always on?" snippet below to your Cursor rules.
 
 Uninstall: `npx skills remove caveman`
 
@@ -241,9 +243,9 @@ Uninstall: `npx skills remove caveman`
 npx skills add JuliusBrussee/caveman -a windsurf
 ```
 
-Auto-activates via `.windsurf/rules/caveman.md` (`trigger: always_on`). Caveman rules load every Cascade interaction.
+`npx skills add` installs the skill file for Windsurf. It does **not** install `.windsurf/rules/caveman.md`, so caveman does not auto-start from this command alone.
 
-The skill file (`.windsurf/skills/caveman/SKILL.md`) provides full intensity levels and mode switching when invoked on-demand.
+The skill file provides full intensity levels and mode switching when invoked on-demand. If you want always-on behavior, add the "Want it always on?" snippet below to your Windsurf rules.
 
 Uninstall: `npx skills remove caveman`
 
@@ -256,7 +258,9 @@ Uninstall: `npx skills remove caveman`
 npx skills add JuliusBrussee/caveman -a cline
 ```
 
-Auto-activates via `.clinerules/caveman.md` (auto-discovered, injected every prompt). No configuration needed — Cline finds the rule file automatically.
+`npx skills add` installs the skill for Cline. It does **not** install `.clinerules/caveman.md`, so caveman does not auto-start from this command alone.
+
+If you want always-on behavior, add the "Want it always on?" snippet below to your Cline rules or system prompt.
 
 Uninstall: `npx skills remove caveman`
 
@@ -269,7 +273,9 @@ Uninstall: `npx skills remove caveman`
 npx skills add JuliusBrussee/caveman -a github-copilot
 ```
 
-Auto-activates via `.github/copilot-instructions.md` (repo-wide instructions) + `AGENTS.md` (agent instructions). Both load automatically for every Copilot interaction in the repo.
+`npx skills add` installs the skill for Copilot. It does **not** install `.github/copilot-instructions.md` or `AGENTS.md`, so caveman does not auto-start from this command alone.
+
+If you want always-on behavior, add the "Want it always on?" snippet below to your Copilot custom instructions.
 
 Works with Copilot Chat, Copilot Edits, and Copilot Coding Agent.
 
