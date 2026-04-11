@@ -139,17 +139,21 @@ Install once. Use in all sessions after that. One rock. That it.
 
 ### What You Get
 
-Not all install paths are equal. Claude Code plugin is the richest experience:
+Every agent auto-activates caveman on session start. No manual trigger needed.
 
-| Feature | Claude Code (plugin) | Codex | Gemini CLI | npx skills |
-|---------|:-------------------:|:-----:|:----------:|:----------:|
-| Caveman mode | Y | Y | Y | Y |
-| Auto-activate every session | Y | — | Y | — |
-| Statusline badge `[CAVEMAN:ULTRA]` | Y | — | — | — |
-| Mode tracking (`/caveman ultra`) | Y | — | — | — |
-| caveman-commit | Y | Y | Y | Y |
-| caveman-review | Y | Y | Y | Y |
-| caveman-compress | Y | Y | Y | Y |
+| Feature | Claude Code | Codex | Gemini CLI | Cursor | Windsurf | Cline | Copilot |
+|---------|:-----------:|:-----:|:----------:|:------:|:--------:|:-----:|:-------:|
+| Caveman mode | Y | Y | Y | Y | Y | Y | Y |
+| Auto-activate every session | Y | Y | Y | Y | Y | Y | Y |
+| `/caveman` command | Y | Y | Y | — | — | — | — |
+| Mode switching (lite/full/ultra) | Y | Y | Y | — | — | — | — |
+| Statusline badge | Y | — | — | — | — | — | — |
+| caveman-commit | Y | Y | Y | Y | Y | Y | Y |
+| caveman-review | Y | Y | Y | Y | Y | Y | Y |
+| caveman-compress | Y | Y | Y | Y | Y | Y | Y |
+
+> [!NOTE]
+> Auto-activation works differently per agent: Claude Code uses SessionStart hooks, Codex uses hooks.json, Gemini uses context files, Cursor/Windsurf use always-on rules, Cline uses auto-discovered rules, Copilot uses repo instructions. Same result: caveman active from first prompt.
 
 <details>
 <summary><strong>Claude Code — full details</strong></summary>
@@ -174,7 +178,7 @@ Or from a local clone: `bash hooks/install.sh` / `powershell -File hooks\install
 
 Uninstall: `bash hooks/uninstall.sh` or `powershell -File hooks\uninstall.ps1`
 
-**Statusline badge:** The plugin ships a statusline script that shows `[CAVEMAN]`, `[CAVEMAN:ULTRA]`, etc. in your Claude Code status bar.
+**Statusline badge:** Shows `[CAVEMAN]`, `[CAVEMAN:ULTRA]`, etc. in your Claude Code status bar.
 
 - **Plugin install:** Claude offers to configure it on first session (auto-detected)
 - **Standalone install:** Configured automatically by `install.sh` / `install.ps1`
@@ -192,6 +196,8 @@ Uninstall: `bash hooks/uninstall.sh` or `powershell -File hooks\uninstall.ps1`
 1. Enable symlinks first: `git config --global core.symlinks true` (requires Developer Mode or admin)
 2. Clone repo → Open VS Code → Codex Settings → Plugins → find "Caveman" under local marketplace → Install → Reload Window
 
+Auto-activates via `.codex/hooks.json` (SessionStart hook). Skills available via `$caveman`.
+
 </details>
 
 <details>
@@ -203,28 +209,110 @@ gemini extensions install https://github.com/JuliusBrussee/caveman
 
 Update: `gemini extensions update caveman` · Uninstall: `gemini extensions uninstall caveman`
 
-Gemini loads the skill via `GEMINI.md` + `gemini-extension.json`. Auto-activates every session through the context file.
+Auto-activates via `GEMINI.md` context file. Also ships custom Gemini commands:
+- `/caveman` — switch intensity level (lite/full/ultra/wenyan)
+- `/caveman-commit` — generate terse commit message
+- `/caveman-review` — one-line code review
 
 </details>
 
 <details>
-<summary><strong>Cursor / Windsurf / Cline / Copilot / others</strong></summary>
-
-All use [npx skills](https://github.com/vercel-labs/skills) (supports 40+ agents):
+<summary><strong>Cursor — full details</strong></summary>
 
 ```bash
 npx skills add JuliusBrussee/caveman -a cursor
+```
+
+Auto-activates via `.cursor/rules/caveman.mdc` (`alwaysApply: true`). Caveman rules load every session without any trigger.
+
+The skill file (`.cursor/skills/caveman/SKILL.md`) provides full intensity levels and mode switching when invoked on-demand.
+
+Uninstall: `npx skills remove caveman`
+
+</details>
+
+<details>
+<summary><strong>Windsurf — full details</strong></summary>
+
+```bash
 npx skills add JuliusBrussee/caveman -a windsurf
+```
+
+Auto-activates via `.windsurf/rules/caveman.md` (`trigger: always_on`). Caveman rules load every Cascade interaction.
+
+The skill file (`.windsurf/skills/caveman/SKILL.md`) provides full intensity levels and mode switching when invoked on-demand.
+
+Uninstall: `npx skills remove caveman`
+
+</details>
+
+<details>
+<summary><strong>Cline — full details</strong></summary>
+
+```bash
 npx skills add JuliusBrussee/caveman -a cline
+```
+
+Auto-activates via `.clinerules/caveman.md` (auto-discovered, injected every prompt). No configuration needed — Cline finds the rule file automatically.
+
+Uninstall: `npx skills remove caveman`
+
+</details>
+
+<details>
+<summary><strong>Copilot — full details</strong></summary>
+
+```bash
 npx skills add JuliusBrussee/caveman -a github-copilot
+```
+
+Auto-activates via `.github/copilot-instructions.md` (repo-wide instructions) + `AGENTS.md` (agent instructions). Both load automatically for every Copilot interaction in the repo.
+
+Works with Copilot Chat, Copilot Edits, and Copilot Coding Agent.
+
+Uninstall: `npx skills remove caveman`
+
+</details>
+
+<details>
+<summary><strong>Any other agent (opencode, Roo, Amp, Goose, Kiro, and 40+ more)</strong></summary>
+
+[npx skills](https://github.com/vercel-labs/skills) supports 40+ agents:
+
+```bash
 npx skills add JuliusBrussee/caveman           # auto-detect agent
+npx skills add JuliusBrussee/caveman -a amp
+npx skills add JuliusBrussee/caveman -a augment
+npx skills add JuliusBrussee/caveman -a goose
+npx skills add JuliusBrussee/caveman -a kiro-cli
+npx skills add JuliusBrussee/caveman -a roo
+# ... and many more
 ```
 
 Uninstall: `npx skills remove caveman`
 
-> **Note:** `npx skills` installs skills only (no hooks or auto-activation). You'll trigger caveman manually with `/caveman` or "talk like caveman" each session.
-
 > **Windows note:** `npx skills` uses symlinks by default. If symlinks fail, add `--copy`: `npx skills add JuliusBrussee/caveman --copy`
+
+**Important:** These agents don't have a hook system, so caveman won't auto-start. Say `/caveman` or "talk like caveman" to activate each session.
+
+**Want it always on?** Paste this into your agent's system prompt or rules file — caveman will be active from the first message, every session:
+
+```
+Terse like caveman. Technical substance exact. Only fluff die.
+Drop: articles, filler (just/really/basically), pleasantries, hedging.
+Fragments OK. Short synonyms. Code unchanged.
+Pattern: [thing] [action] [reason]. [next step].
+ACTIVE EVERY RESPONSE. No revert after many turns. No filler drift.
+Code/commits/PRs: normal. Off: "stop caveman" / "normal mode".
+```
+
+Where to put it:
+| Agent | File |
+|-------|------|
+| opencode | `.config/opencode/AGENTS.md` |
+| Roo | `.roo/rules/caveman.md` |
+| Amp | your workspace system prompt |
+| Others | your agent's system prompt or rules file |
 
 </details>
 
