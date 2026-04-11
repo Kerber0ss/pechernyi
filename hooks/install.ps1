@@ -24,24 +24,58 @@ $HooksDir = Join-Path $ClaudeDir "hooks"
 $Settings = Join-Path $ClaudeDir "settings.json"
 $RepoUrl = "https://raw.githubusercontent.com/JuliusBrussee/caveman/main/hooks"
 
-$HookFiles = @("caveman-activate.js", "caveman-mode-tracker.js", "caveman-statusline.sh")
+$HookFiles = @("caveman-activate.js", "caveman-mode-tracker.js", "caveman-statusline.sh", "caveman-statusline.ps1")
 
 # Resolve source — works from repo clone or remote
 $ScriptDir = if ($PSScriptRoot) { $PSScriptRoot } else { $null }
 
-# Check if already installed (unless -Force)
-$ActivateExists = Test-Path (Join-Path $HooksDir "caveman-activate.js")
-$TrackerExists = Test-Path (Join-Path $HooksDir "caveman-mode-tracker.js")
+# Check if already installed (unless -Force). Older installs only had two hook
+# files, so require the full current set plus the hook registrations before we
+# short-circuit.
+if (-not $Force) {
+    $AllFilesPresent = $true
+    foreach ($hook in $HookFiles) {
+        if (-not (Test-Path (Join-Path $HooksDir $hook))) {
+            $AllFilesPresent = $false
+            break
+        }
+    }
 
-if (-not $Force -and $ActivateExists -and $TrackerExists) {
-    Write-Host "Caveman hooks already installed in $HooksDir"
-    Write-Host "  Re-run with -Force to overwrite: powershell -File hooks\install.ps1 -Force"
-    Write-Host ""
-    Write-Host "Nothing to do. Hooks are already in place."
-    exit 0
+    $HooksWired = $false
+    if ($AllFilesPresent -and (Test-Path $Settings)) {
+        try {
+            $settingsObj = Get-Content $Settings -Raw | ConvertFrom-Json -AsHashtable
+            $hasCavemanHook = {
+                param([string]$eventName)
+                $entries = $settingsObj.hooks[$eventName]
+                if (-not $entries) { return $false }
+                foreach ($entry in $entries) {
+                    if ($entry.hooks) {
+                        foreach ($hookDef in $entry.hooks) {
+                            if ($hookDef.command -and $hookDef.command.Contains("caveman")) {
+                                return $true
+                            }
+                        }
+                    }
+                }
+                return $false
+            }
+            $HooksWired = (& $hasCavemanHook "SessionStart") -and (& $hasCavemanHook "UserPromptSubmit")
+        } catch {
+            $HooksWired = $false
+        }
+    }
+
+    if ($AllFilesPresent -and $HooksWired) {
+        Write-Host "Caveman hooks already installed in $HooksDir"
+        Write-Host "  Re-run with -Force to overwrite: powershell -File hooks\install.ps1 -Force"
+        Write-Host ""
+        Write-Host "Nothing to do. Hooks are already in place."
+        exit 0
+    }
 }
 
-if ($Force -and $ActivateExists) {
+if ($Force -and (Test-Path (Join-Path $HooksDir "caveman-activate.js"))) {
     Write-Host "Reinstalling caveman hooks (-Force)..."
 } else {
     Write-Host "Installing caveman hooks..."
@@ -83,6 +117,7 @@ $nodeScript = @'
 const fs = require('fs');
 const settingsPath = process.env.CAVEMAN_SETTINGS;
 const hooksDir = process.env.CAVEMAN_HOOKS_DIR;
+const managedStatusLinePath = hooksDir + '/caveman-statusline.ps1';
 const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
 if (!settings.hooks) settings.hooks = {};
 
@@ -122,18 +157,18 @@ if (!hasPrompt) {
 if (!settings.statusLine) {
   settings.statusLine = {
     type: 'command',
-    command: 'bash "' + hooksDir + '/caveman-statusline.sh"'
+    command: 'powershell -ExecutionPolicy Bypass -File "' + managedStatusLinePath + '"'
   };
   console.log('  Statusline badge configured.');
 } else {
   const cmd = typeof settings.statusLine === 'string'
     ? settings.statusLine
     : (settings.statusLine.command || '');
-  if (!cmd.includes('caveman')) {
+  if (cmd.includes(managedStatusLinePath)) {
+    console.log('  Statusline badge already configured.');
+  } else {
     console.log('  NOTE: Existing statusline detected - caveman badge NOT added.');
     console.log('        See hooks/README.md to add the badge to your existing statusline.');
-  } else {
-    console.log('  Statusline badge already configured.');
   }
 }
 

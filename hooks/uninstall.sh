@@ -58,10 +58,12 @@ if [ -f "$SETTINGS" ]; then
     # Back up before editing, same policy as install.sh
     cp "$SETTINGS" "$SETTINGS.bak"
 
-    # Pass path via env var — avoids shell injection if $HOME contains single quotes
-    CAVEMAN_SETTINGS="$SETTINGS" node -e "
+    # Pass paths via env vars — avoids shell injection if $HOME contains single quotes
+    CAVEMAN_SETTINGS="$SETTINGS" CAVEMAN_HOOKS_DIR="$HOOKS_DIR" node -e "
       const fs = require('fs');
       const settingsPath = process.env.CAVEMAN_SETTINGS;
+      const hooksDir = process.env.CAVEMAN_HOOKS_DIR;
+      const managedStatusLinePath = hooksDir + '/caveman-statusline.sh';
       const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
 
       const isCavemanEntry = (entry) =>
@@ -93,7 +95,7 @@ if [ -f "$SETTINGS" ]; then
         const cmd = typeof settings.statusLine === 'string'
           ? settings.statusLine
           : (settings.statusLine.command || '');
-        if (cmd.includes('caveman')) {
+        if (cmd.includes(managedStatusLinePath)) {
           delete settings.statusLine;
           console.log('  Removed caveman statusLine from settings.json');
         }

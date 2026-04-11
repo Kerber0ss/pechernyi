@@ -25,7 +25,7 @@
 
 ---
 
-A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill/plugin and Codex plugin that makes agent talk like caveman — cutting **~75% of output tokens** while keeping full technical accuracy. Now with [文言文 mode](#文言文-wenyan-mode), [terse commits](#caveman-commit), [one-line code reviews](#caveman-review), and a [compression tool](#caveman-compress) that cuts **~45% of input tokens** every session.
+A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill/plugin and Codex plugin that makes agent talk like caveman — cutting **~75% of output tokens** while keeping full technical accuracy. Now with [文言文 mode](#文言文-wenyan-mode), [terse commits](#caveman-commit), [one-line code reviews](#caveman-review), and a [compression tool](#caveman-compress) that cuts **~46% of input tokens** every session.
 
 Based on the viral observation that caveman-speak dramatically reduces LLM token usage without losing technical substance. So we made it a one-line install.
 
@@ -135,16 +135,16 @@ Pick your agent. One command. Done.
 | **Cline** | `npx skills add JuliusBrussee/caveman -a cline` |
 | **Any other** | `npx skills add JuliusBrussee/caveman` |
 
-Install once. Use in all sessions after that. One rock. That it.
+Install once. Use in every session for that install target after that. One rock. That it.
 
 ### What You Get
 
-Every agent auto-activates caveman on session start. No manual trigger needed.
+Auto-activation is built in for Claude Code, Gemini CLI, Cursor, Windsurf, Cline, Copilot, and the repo-local Codex setup below. Generic `npx skills add` installs for other agents do **not** auto-start caveman.
 
 | Feature | Claude Code | Codex | Gemini CLI | Cursor | Windsurf | Cline | Copilot |
 |---------|:-----------:|:-----:|:----------:|:------:|:--------:|:-----:|:-------:|
 | Caveman mode | Y | Y | Y | Y | Y | Y | Y |
-| Auto-activate every session | Y | Y | Y | Y | Y | Y | Y |
+| Auto-activate every session | Y | Y¹ | Y | Y | Y | Y | Y |
 | `/caveman` command | Y | Y¹ | Y | — | — | — | — |
 | Mode switching (lite/full/ultra) | Y | Y¹ | Y | Y² | Y² | — | — |
 | Statusline badge | Y | — | — | — | — | — | — |
@@ -153,9 +153,9 @@ Every agent auto-activates caveman on session start. No manual trigger needed.
 | caveman-compress | Y | Y | Y | Y | Y | Y | Y |
 
 > [!NOTE]
-> Auto-activation works differently per agent: Claude Code uses SessionStart hooks, Codex uses hooks.json, Gemini uses context files, Cursor/Windsurf use always-on rules, Cline uses auto-discovered rules, Copilot uses repo instructions. Same result: caveman active from first prompt.
+> Auto-activation works differently per agent: Claude Code uses SessionStart hooks, this repo's Codex dogfood setup uses `.codex/hooks.json`, Gemini uses context files, Cursor/Windsurf use always-on rules, Cline uses auto-discovered rules, Copilot uses repo instructions.
 >
-> ¹ Codex uses `$caveman` syntax, not `/caveman`. caveman-commit and caveman-review are not in the Codex plugin bundle — use the SKILL.md files directly.
+> ¹ Codex uses `$caveman` syntax, not `/caveman`. This repo ships `.codex/hooks.json`, so caveman auto-starts when you run Codex inside this repo. The installed plugin itself gives you `$caveman`; copy the same hook into another repo if you want always-on behavior there too. caveman-commit and caveman-review are not in the Codex plugin bundle — use the SKILL.md files directly.
 > ² Cursor and Windsurf receive the full SKILL.md with all intensity levels. Mode switching works on-demand via the skill; no slash command.
 
 <details>
@@ -183,9 +183,9 @@ Uninstall: `bash hooks/uninstall.sh` or `powershell -File hooks\uninstall.ps1`
 
 **Statusline badge:** Shows `[CAVEMAN]`, `[CAVEMAN:ULTRA]`, etc. in your Claude Code status bar.
 
-- **Plugin install:** Claude offers to configure it on first session (auto-detected)
-- **Standalone install:** Configured automatically by `install.sh` / `install.ps1`
-- **Custom statusline:** See [`hooks/README.md`](hooks/README.md) for the snippet to add to your existing script
+- **Plugin install:** If you do not already have a custom `statusLine`, Claude offers to configure it on first session
+- **Standalone install:** Configured automatically by `install.sh` / `install.ps1` unless you already have a custom statusline
+- **Custom statusline:** Installer leaves your existing statusline alone. See [`hooks/README.md`](hooks/README.md) for the merge snippet
 
 </details>
 
@@ -199,7 +199,7 @@ Uninstall: `bash hooks/uninstall.sh` or `powershell -File hooks\uninstall.ps1`
 1. Enable symlinks first: `git config --global core.symlinks true` (requires Developer Mode or admin)
 2. Clone repo → Open VS Code → Codex Settings → Plugins → find "Caveman" under local marketplace → Install → Reload Window
 
-Auto-activates via `.codex/hooks.json` (SessionStart hook). Skills available via `$caveman`.
+This repo also ships `.codex/hooks.json`, so caveman auto-activates while you run Codex inside this repo. The installed plugin gives you `$caveman`; if you want always-on behavior in other repos too, add the same SessionStart hook there.
 
 </details>
 
@@ -375,10 +375,10 @@ CLAUDE.original.md ← human-readable backup (you read and edit this)
 |------|----------:|----------:|------:|
 | `claude-md-preferences.md` | 706 | 285 | **59.6%** |
 | `project-notes.md` | 1145 | 535 | **53.3%** |
-| `claude-md-project.md` | 1122 | 687 | **38.8%** |
+| `claude-md-project.md` | 1122 | 636 | **43.3%** |
 | `todo-list.md` | 627 | 388 | **38.1%** |
-| `mixed-with-code.md` | 888 | 574 | **35.4%** |
-| **Average** | **898** | **494** | **45%** |
+| `mixed-with-code.md` | 888 | 560 | **36.9%** |
+| **Average** | **898** | **481** | **46%** |
 
 Code blocks, URLs, file paths, commands, headings, dates, version numbers — anything technical passes through untouched. Only prose gets compressed. See the full [caveman-compress README](caveman-compress/README.md) for details. [Security note](./caveman-compress/SECURITY.md): Snyk flags this as High Risk due to subprocess/file patterns — it's a false positive.
 
@@ -424,6 +424,16 @@ uv run --with tiktoken python evals/measure.py
 ```
 
 Snapshots committed to git. CI runs free. Every number change reviewable as diff. Add a skill, add a prompt — harness pick it up automatically.
+
+## Local Verification
+
+Run repo sanity sweep before ship:
+
+```bash
+python3 tests/verify_repo.py
+```
+
+Checks synced install artifacts, hook install/uninstall flow, manifests, syntax, and caveman-compress fixtures.
 
 ## Star This Repo
 

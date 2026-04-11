@@ -45,13 +45,41 @@ if [ -n "${BASH_SOURCE[0]:-}" ] && [ -f "${BASH_SOURCE[0]}" ]; then
   SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd)"
 fi
 
-# Check if already installed (unless --force)
+# Check if already installed (unless --force). Older installs only had two hook
+# files, so require the full current set plus the hook registrations before we
+# short-circuit.
 ALREADY_INSTALLED=0
-if [ "$FORCE" -eq 0 ] && [ -f "$HOOKS_DIR/caveman-activate.js" ] && [ -f "$HOOKS_DIR/caveman-mode-tracker.js" ]; then
-  ALREADY_INSTALLED=1
-  echo "Caveman hooks already installed in $HOOKS_DIR"
-  echo "  Re-run with --force to overwrite: bash hooks/install.sh --force"
-  echo ""
+if [ "$FORCE" -eq 0 ]; then
+  ALL_FILES_PRESENT=1
+  for hook in "${HOOK_FILES[@]}"; do
+    if [ ! -f "$HOOKS_DIR/$hook" ]; then
+      ALL_FILES_PRESENT=0
+      break
+    fi
+  done
+
+  HOOKS_WIRED=0
+  if [ "$ALL_FILES_PRESENT" -eq 1 ] && [ -f "$SETTINGS" ]; then
+    if CAVEMAN_SETTINGS="$SETTINGS" node -e "
+      const fs = require('fs');
+      const settings = JSON.parse(fs.readFileSync(process.env.CAVEMAN_SETTINGS, 'utf8'));
+      const hasCavemanHook = (event) =>
+        Array.isArray(settings.hooks?.[event]) &&
+        settings.hooks[event].some(e =>
+          e.hooks && e.hooks.some(h => h.command && h.command.includes('caveman'))
+        );
+      process.exit(hasCavemanHook('SessionStart') && hasCavemanHook('UserPromptSubmit') ? 0 : 1);
+    " >/dev/null 2>&1; then
+      HOOKS_WIRED=1
+    fi
+  fi
+
+  if [ "$ALL_FILES_PRESENT" -eq 1 ] && [ "$HOOKS_WIRED" -eq 1 ]; then
+    ALREADY_INSTALLED=1
+    echo "Caveman hooks already installed in $HOOKS_DIR"
+    echo "  Re-run with --force to overwrite: bash hooks/install.sh --force"
+    echo ""
+  fi
 fi
 
 if [ "$ALREADY_INSTALLED" -eq 1 ] && [ "$FORCE" -eq 0 ]; then
@@ -94,6 +122,7 @@ CAVEMAN_SETTINGS="$SETTINGS" CAVEMAN_HOOKS_DIR="$HOOKS_DIR" node -e "
   const fs = require('fs');
   const settingsPath = process.env.CAVEMAN_SETTINGS;
   const hooksDir = process.env.CAVEMAN_HOOKS_DIR;
+  const managedStatusLinePath = hooksDir + '/caveman-statusline.sh';
   const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
   if (!settings.hooks) settings.hooks = {};
 
@@ -133,18 +162,18 @@ CAVEMAN_SETTINGS="$SETTINGS" CAVEMAN_HOOKS_DIR="$HOOKS_DIR" node -e "
   if (!settings.statusLine) {
     settings.statusLine = {
       type: 'command',
-      command: 'bash \"' + hooksDir + '/caveman-statusline.sh\"'
+      command: 'bash \"' + managedStatusLinePath + '\"'
     };
     console.log('  Statusline badge configured.');
   } else {
     const cmd = typeof settings.statusLine === 'string'
       ? settings.statusLine
       : (settings.statusLine.command || '');
-    if (!cmd.includes('caveman')) {
+    if (cmd.includes(managedStatusLinePath)) {
+      console.log('  Statusline badge already configured.');
+    } else {
       console.log('  NOTE: Existing statusline detected — caveman badge NOT added.');
       console.log('        See hooks/README.md to add the badge to your existing statusline.');
-    } else {
-      console.log('  Statusline badge already configured.');
     }
   }
 

@@ -11,7 +11,7 @@ $HooksDir = Join-Path $ClaudeDir "hooks"
 $Settings = Join-Path $ClaudeDir "settings.json"
 $FlagFile = Join-Path $ClaudeDir ".caveman-active"
 
-$HookFiles = @("caveman-activate.js", "caveman-mode-tracker.js", "caveman-statusline.sh")
+$HookFiles = @("caveman-activate.js", "caveman-mode-tracker.js", "caveman-statusline.sh", "caveman-statusline.ps1")
 
 # Detect if caveman is installed as a plugin
 $PluginInstalled = $false
@@ -63,10 +63,13 @@ if (Test-Path $Settings) {
         # Pass path via env var — avoids injection if username contains a single quote.
         # Use a single-quote here-string so PowerShell does NOT expand $variables inside.
         $env:CAVEMAN_SETTINGS = $Settings -replace '\\', '/'
+        $env:CAVEMAN_HOOKS_DIR = $HooksDir -replace '\\', '/'
 
         $nodeScript = @'
 const fs = require('fs');
 const settingsPath = process.env.CAVEMAN_SETTINGS;
+const hooksDir = process.env.CAVEMAN_HOOKS_DIR;
+const managedStatusLinePath = hooksDir + '/caveman-statusline.ps1';
 const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
 
 const isCavemanEntry = (entry) =>
@@ -95,7 +98,7 @@ if (settings.statusLine) {
   const cmd = typeof settings.statusLine === 'string'
     ? settings.statusLine
     : (settings.statusLine.command || '');
-  if (cmd.includes('caveman')) {
+  if (cmd.includes(managedStatusLinePath)) {
     delete settings.statusLine;
     console.log('  Removed caveman statusLine from settings.json');
   }

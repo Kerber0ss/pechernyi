@@ -19,7 +19,7 @@ If you installed caveman standalone (without the plugin), you can use `bash hook
 - Writes the active mode to the flag file when a caveman command is detected
 - Supports: `full`, `lite`, `ultra`, `wenyan`, `wenyan-lite`, `wenyan-ultra`, `commit`, `review`, `compress`
 
-### `caveman-statusline.sh` — Statusline badge script
+### `caveman-statusline.sh` / `caveman-statusline.ps1` — Statusline badge script
 
 - Reads `~/.claude/.caveman-active` and outputs a colored badge
 - Shows `[CAVEMAN]`, `[CAVEMAN:ULTRA]`, `[CAVEMAN:WENYAN]`, etc.
@@ -28,11 +28,13 @@ If you installed caveman standalone (without the plugin), you can use `bash hook
 
 The statusline badge shows which caveman mode is active directly in your Claude Code status bar.
 
-**Plugin users:** On your first session after install, Claude will detect the missing statusline config and offer to set it up for you. Accept and you're done.
+**Plugin users:** If you do not already have a `statusLine` configured, Claude will detect that on your first session after install and offer to set it up for you. Accept and you're done.
 
-**Standalone users:** `install.sh` wires the statusline automatically — no manual step needed.
+If you already have a custom statusline, caveman does not overwrite it and Claude stays quiet. Add the badge snippet to your existing script instead.
 
-**Manual setup:** If you need to configure it yourself, add this to `~/.claude/settings.json`:
+**Standalone users:** `install.sh` / `install.ps1` wires the statusline automatically if you do not already have a custom statusline. If you do, the installer leaves it alone and prints the merge note.
+
+**Manual setup:** If you need to configure it yourself, add one of these to `~/.claude/settings.json`:
 
 ```json
 {
@@ -43,7 +45,16 @@ The statusline badge shows which caveman mode is active directly in your Claude 
 }
 ```
 
-Replace `/path/to/` with the actual path to the script (e.g. `~/.claude/hooks/` for standalone installs, or the plugin install directory for plugin installs).
+```json
+{
+  "statusLine": {
+    "type": "command",
+    "command": "powershell -ExecutionPolicy Bypass -File C:\\path\\to\\caveman-statusline.ps1"
+  }
+}
+```
+
+Replace the path with the actual script location (e.g. `~/.claude/hooks/` for standalone installs, or the plugin install directory for plugin installs).
 
 **Custom statusline:** If you already have a statusline script, add this snippet to it:
 
@@ -91,6 +102,6 @@ bash hooks/uninstall.sh
 ```
 
 Or manually:
-1. Remove `~/.claude/hooks/caveman-activate.js`, `~/.claude/hooks/caveman-mode-tracker.js`, and `~/.claude/hooks/caveman-statusline.sh`
+1. Remove `~/.claude/hooks/caveman-activate.js`, `~/.claude/hooks/caveman-mode-tracker.js`, and the matching statusline script (`caveman-statusline.sh` on macOS/Linux or `caveman-statusline.ps1` on Windows)
 2. Remove the SessionStart, UserPromptSubmit, and statusLine entries from `~/.claude/settings.json`
 3. Delete `~/.claude/.caveman-active`
