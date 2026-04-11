@@ -429,18 +429,6 @@ uv run python evals/llm_run.py
 uv run --with tiktoken python evals/measure.py
 ```
 
-Snapshots committed to git. CI runs free. Every number change reviewable as diff. Add a skill, add a prompt — harness pick it up automatically.
-
-## Local Verification
-
-Run repo sanity sweep before ship:
-
-```bash
-python3 tests/verify_repo.py
-```
-
-Checks synced install artifacts, hook install/uninstall flow, manifests, syntax, and caveman-compress fixtures.
-
 ## Star This Repo
 
 If caveman save you mass token, mass money — leave mass star. ⭐
