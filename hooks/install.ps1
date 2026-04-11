@@ -1,8 +1,10 @@
 # caveman — one-command hook installer for Claude Code (Windows PowerShell)
 # Installs: SessionStart hook (auto-load rules) + UserPromptSubmit hook (mode tracking)
 # Usage: powershell -ExecutionPolicy Bypass -File hooks\install.ps1
-#   or:  irm https://raw.githubusercontent.com/JuliusBrussee/caveman/main/hooks/install.ps1 | iex
 #   or:  powershell -ExecutionPolicy Bypass -File hooks\install.ps1 -Force
+#   or (remote, no -Force support via pipe):
+#        irm https://raw.githubusercontent.com/JuliusBrussee/caveman/main/hooks/install.ps1 | iex
+#   Note: irm ... | iex cannot pass -Force. For force reinstall, save the file and run with -File.
 param(
     [switch]$Force
 )
@@ -71,12 +73,17 @@ if (-not (Test-Path $Settings)) {
 # Back up existing settings.json before touching it
 Copy-Item $Settings "$Settings.bak" -Force
 
-# Use node for safe JSON merging (same approach as bash version)
-$HooksDirEscaped = $HooksDir -replace '\\', '/'
+# Use node for safe JSON merging — pass paths via env vars to avoid injection
+# if the username contains a single quote (e.g., O'Brien).
+# Use a single-quote here-string so PowerShell does NOT expand $variables inside.
+$env:CAVEMAN_SETTINGS = $Settings -replace '\\', '/'
+$env:CAVEMAN_HOOKS_DIR = $HooksDir -replace '\\', '/'
 
-$nodeScript = @"
+$nodeScript = @'
 const fs = require('fs');
-const settings = JSON.parse(fs.readFileSync('$($Settings -replace '\\', '/')', 'utf8'));
+const settingsPath = process.env.CAVEMAN_SETTINGS;
+const hooksDir = process.env.CAVEMAN_HOOKS_DIR;
+const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
 if (!settings.hooks) settings.hooks = {};
 
 // SessionStart
@@ -88,7 +95,7 @@ if (!hasStart) {
   settings.hooks.SessionStart.push({
     hooks: [{
       type: 'command',
-      command: 'node $HooksDirEscaped/caveman-activate.js',
+      command: 'node "' + hooksDir + '/caveman-activate.js"',
       timeout: 5,
       statusMessage: 'Loading caveman mode...'
     }]
@@ -104,7 +111,7 @@ if (!hasPrompt) {
   settings.hooks.UserPromptSubmit.push({
     hooks: [{
       type: 'command',
-      command: 'node $HooksDirEscaped/caveman-mode-tracker.js',
+      command: 'node "' + hooksDir + '/caveman-mode-tracker.js"',
       timeout: 5,
       statusMessage: 'Tracking caveman mode...'
     }]
@@ -115,7 +122,7 @@ if (!hasPrompt) {
 if (!settings.statusLine) {
   settings.statusLine = {
     type: 'command',
-    command: 'bash $HooksDirEscaped/caveman-statusline.sh'
+    command: 'bash "' + hooksDir + '/caveman-statusline.sh"'
   };
   console.log('  Statusline badge configured.');
 } else {
@@ -130,9 +137,9 @@ if (!settings.statusLine) {
   }
 }
 
-fs.writeFileSync('$($Settings -replace '\\', '/')', JSON.stringify(settings, null, 2) + '\n');
+fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2) + '\n');
 console.log('  Hooks wired in settings.json');
-"@
+'@
 
 node -e $nodeScript
 

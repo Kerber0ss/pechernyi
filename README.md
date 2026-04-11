@@ -145,15 +145,18 @@ Every agent auto-activates caveman on session start. No manual trigger needed.
 |---------|:-----------:|:-----:|:----------:|:------:|:--------:|:-----:|:-------:|
 | Caveman mode | Y | Y | Y | Y | Y | Y | Y |
 | Auto-activate every session | Y | Y | Y | Y | Y | Y | Y |
-| `/caveman` command | Y | Y | Y | — | — | — | — |
-| Mode switching (lite/full/ultra) | Y | Y | Y | — | — | — | — |
+| `/caveman` command | Y | Y¹ | Y | — | — | — | — |
+| Mode switching (lite/full/ultra) | Y | Y¹ | Y | Y² | Y² | — | — |
 | Statusline badge | Y | — | — | — | — | — | — |
-| caveman-commit | Y | Y | Y | Y | Y | Y | Y |
-| caveman-review | Y | Y | Y | Y | Y | Y | Y |
+| caveman-commit | Y | — | Y | Y | Y | Y | Y |
+| caveman-review | Y | — | Y | Y | Y | Y | Y |
 | caveman-compress | Y | Y | Y | Y | Y | Y | Y |
 
 > [!NOTE]
 > Auto-activation works differently per agent: Claude Code uses SessionStart hooks, Codex uses hooks.json, Gemini uses context files, Cursor/Windsurf use always-on rules, Cline uses auto-discovered rules, Copilot uses repo instructions. Same result: caveman active from first prompt.
+>
+> ¹ Codex uses `$caveman` syntax, not `/caveman`. caveman-commit and caveman-review are not in the Codex plugin bundle — use the SKILL.md files directly.
+> ² Cursor and Windsurf receive the full SKILL.md with all intensity levels. Mode switching works on-demand via the skill; no slash command.
 
 <details>
 <summary><strong>Claude Code — full details</strong></summary>

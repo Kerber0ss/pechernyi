@@ -89,9 +89,12 @@ fi
 # Back up existing settings.json before touching it
 cp "$SETTINGS" "$SETTINGS.bak"
 
-node -e "
+# Pass paths via env vars — avoids shell injection if $HOME contains single quotes
+CAVEMAN_SETTINGS="$SETTINGS" CAVEMAN_HOOKS_DIR="$HOOKS_DIR" node -e "
   const fs = require('fs');
-  const settings = JSON.parse(fs.readFileSync('$SETTINGS', 'utf8'));
+  const settingsPath = process.env.CAVEMAN_SETTINGS;
+  const hooksDir = process.env.CAVEMAN_HOOKS_DIR;
+  const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
   if (!settings.hooks) settings.hooks = {};
 
   // SessionStart — auto-load caveman rules
@@ -103,7 +106,7 @@ node -e "
     settings.hooks.SessionStart.push({
       hooks: [{
         type: 'command',
-        command: 'node $HOOKS_DIR/caveman-activate.js',
+        command: 'node \"' + hooksDir + '/caveman-activate.js\"',
         timeout: 5,
         statusMessage: 'Loading caveman mode...'
       }]
@@ -119,7 +122,7 @@ node -e "
     settings.hooks.UserPromptSubmit.push({
       hooks: [{
         type: 'command',
-        command: 'node $HOOKS_DIR/caveman-mode-tracker.js',
+        command: 'node \"' + hooksDir + '/caveman-mode-tracker.js\"',
         timeout: 5,
         statusMessage: 'Tracking caveman mode...'
       }]
@@ -130,7 +133,7 @@ node -e "
   if (!settings.statusLine) {
     settings.statusLine = {
       type: 'command',
-      command: 'bash $HOOKS_DIR/caveman-statusline.sh'
+      command: 'bash \"' + hooksDir + '/caveman-statusline.sh\"'
     };
     console.log('  Statusline badge configured.');
   } else {
@@ -145,7 +148,7 @@ node -e "
     }
   }
 
-  fs.writeFileSync('$SETTINGS', JSON.stringify(settings, null, 2) + '\n');
+  fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2) + '\n');
   console.log('  Hooks wired in settings.json');
 "
 

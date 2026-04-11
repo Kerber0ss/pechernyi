@@ -58,9 +58,11 @@ if [ -f "$SETTINGS" ]; then
     # Back up before editing, same policy as install.sh
     cp "$SETTINGS" "$SETTINGS.bak"
 
-    node -e "
+    # Pass path via env var — avoids shell injection if $HOME contains single quotes
+    CAVEMAN_SETTINGS="$SETTINGS" node -e "
       const fs = require('fs');
-      const settings = JSON.parse(fs.readFileSync('$SETTINGS', 'utf8'));
+      const settingsPath = process.env.CAVEMAN_SETTINGS;
+      const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
 
       const isCavemanEntry = (entry) =>
         entry && entry.hooks && entry.hooks.some(h =>
@@ -97,10 +99,16 @@ if [ -f "$SETTINGS" ]; then
         }
       }
 
-      fs.writeFileSync('$SETTINGS', JSON.stringify(settings, null, 2) + '\n');
+      fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2) + '\n');
       console.log('  Removed ' + removed + ' caveman hook entries from settings.json');
     "
   fi
+fi
+
+# 4. Clean up backup file left by installer
+if [ -f "$SETTINGS.bak" ]; then
+  rm "$SETTINGS.bak"
+  echo "  Removed: $SETTINGS.bak"
 fi
 
 # 3. Remove flag file

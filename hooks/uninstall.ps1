@@ -60,9 +60,14 @@ if (Test-Path $Settings) {
         # Back up before editing
         Copy-Item $Settings "$Settings.bak" -Force
 
-        $nodeScript = @"
+        # Pass path via env var — avoids injection if username contains a single quote.
+        # Use a single-quote here-string so PowerShell does NOT expand $variables inside.
+        $env:CAVEMAN_SETTINGS = $Settings -replace '\\', '/'
+
+        $nodeScript = @'
 const fs = require('fs');
-const settings = JSON.parse(fs.readFileSync('$($Settings -replace '\\', '/')', 'utf8'));
+const settingsPath = process.env.CAVEMAN_SETTINGS;
+const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
 
 const isCavemanEntry = (entry) =>
   entry && entry.hooks && entry.hooks.some(h =>
@@ -96,11 +101,17 @@ if (settings.statusLine) {
   }
 }
 
-fs.writeFileSync('$($Settings -replace '\\', '/')', JSON.stringify(settings, null, 2) + '\n');
+fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2) + '\n');
 console.log('  Removed ' + removed + ' caveman hook entries from settings.json');
-"@
+'@
 
         node -e $nodeScript
+
+        # Clean up backup file left by installer
+        if (Test-Path "$Settings.bak") {
+            Remove-Item "$Settings.bak" -Force
+            Write-Host "  Removed: $Settings.bak"
+        }
     }
 }
 

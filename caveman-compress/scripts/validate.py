@@ -74,7 +74,10 @@ def extract_code_blocks(text):
                 break
             block_lines.append(lines[i])
             i += 1
-        blocks.append("\n".join(block_lines))
+        if closed:
+            blocks.append("\n".join(block_lines))
+        # Unclosed fences are silently skipped — they indicate malformed markdown
+        # and including them would cause false-positive validation failures.
     return blocks
 
 
