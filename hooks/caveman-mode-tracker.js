@@ -22,8 +22,11 @@ process.stdin.on('end', () => {
     if (/\b(activate|enable|turn on|start|talk like)\b.*\bcaveman\b/i.test(prompt) ||
         /\bcaveman\b.*\b(mode|activate|enable|turn on|start)\b/i.test(prompt)) {
       if (!/\b(stop|disable|turn off|deactivate)\b/i.test(prompt)) {
-        fs.mkdirSync(path.dirname(flagPath), { recursive: true });
-        fs.writeFileSync(flagPath, getDefaultMode());
+        const mode = getDefaultMode();
+        if (mode !== 'off') {
+          fs.mkdirSync(path.dirname(flagPath), { recursive: true });
+          fs.writeFileSync(flagPath, mode);
+        }
       }
     }
 
