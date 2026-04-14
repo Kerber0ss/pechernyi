@@ -7,7 +7,8 @@ const path = require('path');
 const os = require('os');
 const { getDefaultMode } = require('./caveman-config');
 
-const flagPath = path.join(os.homedir(), '.claude', '.caveman-active');
+const claudeDir = process.env.CLAUDE_CONFIG_DIR || path.join(os.homedir(), '.claude');
+const flagPath = path.join(claudeDir, '.caveman-active');
 
 let input = '';
 process.stdin.on('data', chunk => { input += chunk; });

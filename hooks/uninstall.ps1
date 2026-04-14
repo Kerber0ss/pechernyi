@@ -6,7 +6,7 @@ param()
 
 $ErrorActionPreference = "Stop"
 
-$ClaudeDir = Join-Path $env:USERPROFILE ".claude"
+$ClaudeDir = if ($env:CLAUDE_CONFIG_DIR) { $env:CLAUDE_CONFIG_DIR } else { Join-Path $env:USERPROFILE ".claude" }
 $HooksDir = Join-Path $ClaudeDir "hooks"
 $Settings = Join-Path $ClaudeDir "settings.json"
 $FlagFile = Join-Path $ClaudeDir ".caveman-active"

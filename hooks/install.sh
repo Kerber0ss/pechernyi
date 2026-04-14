@@ -32,7 +32,7 @@ if ! command -v node >/dev/null 2>&1; then
   exit 1
 fi
 
-CLAUDE_DIR="$HOME/.claude"
+CLAUDE_DIR="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
 HOOKS_DIR="$CLAUDE_DIR/hooks"
 SETTINGS="$CLAUDE_DIR/settings.json"
 REPO_URL="https://raw.githubusercontent.com/JuliusBrussee/caveman/main/hooks"
