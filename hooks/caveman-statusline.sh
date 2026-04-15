@@ -8,7 +8,7 @@
 # Plugin users: Claude will offer to set this up on first session.
 # Standalone users: install.sh wires this automatically.
 
-FLAG="$HOME/.claude/.caveman-active"
+FLAG="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/.caveman-active"
 [ ! -f "$FLAG" ] && exit 0
 
 MODE=$(cat "$FLAG" 2>/dev/null)

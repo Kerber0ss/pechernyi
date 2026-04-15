@@ -1,4 +1,5 @@
-$Flag = Join-Path $HOME ".claude/.caveman-active"
+$ClaudeDir = if ($env:CLAUDE_CONFIG_DIR) { $env:CLAUDE_CONFIG_DIR } else { Join-Path $HOME ".claude" }
+$Flag = Join-Path $ClaudeDir ".caveman-active"
 if (-not (Test-Path $Flag)) {
     exit 0
 }
