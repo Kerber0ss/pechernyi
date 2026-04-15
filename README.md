@@ -321,15 +321,21 @@ Level stick until you change it or session end.
 
 ## Caveman Skills
 
-| Skill | What it do | Trigger |
-|-------|-----------|---------|
-| **caveman-commit** | Terse commit messages. Conventional Commits. ≤50 char subject. Why over what. | `/caveman-commit` |
-| **caveman-review** | One-line PR comments: `L42: 🔴 bug: user null. Add guard.` No throat-clearing. | `/caveman-review` |
-| **caveman-help** | Quick-reference card. All modes, skills, commands, one command away. | `/caveman-help` |
+### caveman-commit
+
+`/caveman-commit` — terse commit messages. Conventional Commits. ≤50 char subject. Why over what.
+
+### caveman-review
+
+`/caveman-review` — one-line PR comments: `L42: 🔴 bug: user null. Add guard.` No throat-clearing.
+
+### caveman-help
+
+`/caveman-help` — quick-reference card. All modes, skills, commands, one command away.
 
 ### caveman-compress
 
-Caveman make Claude *speak* with fewer tokens. **Compress** make Claude *read* fewer tokens.
+`/caveman:compress <filepath>` — caveman make Claude *speak* with fewer tokens. **Compress** make Claude *read* fewer tokens.
 
 Your `CLAUDE.md` loads on **every session start**. Caveman Compress rewrites memory files into caveman-speak so Claude reads less — without you losing the human-readable original.
 
