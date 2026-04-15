@@ -58,34 +58,57 @@ function getDefaultMode() {
   return 'full';
 }
 
+// Walk every ancestor component of p and refuse if any is a symlink.
+// Protects against a parent-dir symlink redirecting the final write.
+function hasSymlinkInPath(p) {
+  const resolved = path.resolve(p);
+  const parsed = path.parse(resolved);
+  let current = parsed.root;
+  const parts = resolved.slice(parsed.root.length).split(path.sep).filter(Boolean);
+  for (const part of parts) {
+    current = path.join(current, part);
+    try {
+      if (fs.lstatSync(current).isSymbolicLink()) return true;
+    } catch (e) {
+      if (e.code === 'ENOENT') continue;
+      return true;
+    }
+  }
+  return false;
+}
+
 // Symlink-safe flag file write.
-// Refuses to follow symlinks at the target, creates with 0600, uses O_NOFOLLOW
-// where available. Protects against local attackers replacing the predictable
-// flag path (~/.claude/.caveman-active) with a symlink to clobber other files.
+// Refuses symlinks at the target and in any parent component, creates with
+// 0600, uses O_NOFOLLOW where available, writes atomically via temp + rename.
+// Protects against local attackers replacing the predictable flag path
+// (~/.claude/.caveman-active) with a symlink to clobber other files.
 // Silent-fails on any filesystem error — the flag is best-effort.
 function safeWriteFlag(flagPath, content) {
   try {
     const flagDir = path.dirname(flagPath);
-    fs.mkdirSync(flagDir, { recursive: true });
+    if (hasSymlinkInPath(flagDir)) return;
+    fs.mkdirSync(flagDir, { recursive: true, mode: 0o700 });
+    if (hasSymlinkInPath(flagDir)) return;
 
     // Refuse if the target already exists as a symlink.
     try {
-      const st = fs.lstatSync(flagPath);
-      if (st.isSymbolicLink()) return;
+      if (fs.lstatSync(flagPath).isSymbolicLink()) return;
     } catch (e) {
       if (e.code !== 'ENOENT') return;
     }
 
+    const tempPath = path.join(flagDir, `.caveman-active.${process.pid}.${Date.now()}`);
     const O_NOFOLLOW = typeof fs.constants.O_NOFOLLOW === 'number' ? fs.constants.O_NOFOLLOW : 0;
-    const flags = fs.constants.O_WRONLY | fs.constants.O_CREAT | fs.constants.O_TRUNC | O_NOFOLLOW;
+    const flags = fs.constants.O_WRONLY | fs.constants.O_CREAT | fs.constants.O_EXCL | O_NOFOLLOW;
     let fd;
     try {
-      fd = fs.openSync(flagPath, flags, 0o600);
+      fd = fs.openSync(tempPath, flags, 0o600);
       fs.writeSync(fd, String(content));
       try { fs.fchmodSync(fd, 0o600); } catch (e) { /* best-effort on Windows */ }
     } finally {
       if (fd !== undefined) fs.closeSync(fd);
     }
+    fs.renameSync(tempPath, flagPath);
   } catch (e) {
     // Silent fail — flag is best-effort
   }
