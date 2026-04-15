@@ -5,7 +5,7 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
-const { getDefaultMode, safeWriteFlag } = require('./caveman-config');
+const { getDefaultMode, safeWriteFlag, readFlag } = require('./caveman-config');
 
 const claudeDir = process.env.CLAUDE_CONFIG_DIR || path.join(os.homedir(), '.claude');
 const flagPath = path.join(claudeDir, '.caveman-active');
@@ -74,23 +74,21 @@ process.stdin.on('end', () => {
     //
     // Skip independent modes (commit, review, compress) — they have their own
     // skill behavior and the base caveman rules would conflict.
+    // readFlag enforces symlink-safe read + size cap + VALID_MODES whitelist.
+    // If the flag is missing, corrupted, oversized, or a symlink pointing at
+    // something like ~/.ssh/id_rsa, readFlag returns null and we emit nothing
+    // — never inject untrusted bytes into model context.
     const INDEPENDENT_MODES = new Set(['commit', 'review', 'compress']);
-    try {
-      if (fs.existsSync(flagPath)) {
-        const activeMode = fs.readFileSync(flagPath, 'utf8').trim() || 'full';
-        if (!INDEPENDENT_MODES.has(activeMode)) {
-          process.stdout.write(JSON.stringify({
-            hookSpecificOutput: {
-              hookEventName: "UserPromptSubmit",
-              additionalContext: "CAVEMAN MODE ACTIVE (" + activeMode + "). " +
-                "Drop articles/filler/pleasantries/hedging. Fragments OK. " +
-                "Code/commits/security: write normal."
-            }
-          }));
+    const activeMode = readFlag(flagPath);
+    if (activeMode && !INDEPENDENT_MODES.has(activeMode)) {
+      process.stdout.write(JSON.stringify({
+        hookSpecificOutput: {
+          hookEventName: "UserPromptSubmit",
+          additionalContext: "CAVEMAN MODE ACTIVE (" + activeMode + "). " +
+            "Drop articles/filler/pleasantries/hedging. Fragments OK. " +
+            "Code/commits/security: write normal."
         }
-      }
-    } catch (e) {
-      // Silent fail — reinforcement is best-effort
+      }));
     }
   } catch (e) {
     // Silent fail
