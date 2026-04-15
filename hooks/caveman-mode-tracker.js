@@ -17,6 +17,20 @@ process.stdin.on('end', () => {
     const data = JSON.parse(input);
     const prompt = (data.prompt || '').trim().toLowerCase();
 
+    // Natural language activation (e.g. "activate caveman", "turn on caveman mode",
+    // "talk like caveman"). README tells users they can say these, but the hook
+    // only matched /caveman commands — flag file and statusline stayed out of sync.
+    if (/\b(activate|enable|turn on|start|talk like)\b.*\bcaveman\b/i.test(prompt) ||
+        /\bcaveman\b.*\b(mode|activate|enable|turn on|start)\b/i.test(prompt)) {
+      if (!/\b(stop|disable|turn off|deactivate)\b/i.test(prompt)) {
+        const mode = getDefaultMode();
+        if (mode !== 'off') {
+          fs.mkdirSync(path.dirname(flagPath), { recursive: true });
+          fs.writeFileSync(flagPath, mode);
+        }
+      }
+    }
+
     // Match /caveman commands
     if (prompt.startsWith('/caveman')) {
       const parts = prompt.split(/\s+/);
@@ -48,8 +62,10 @@ process.stdin.on('end', () => {
       }
     }
 
-    // Detect deactivation
-    if (/\b(stop caveman|normal mode)\b/i.test(prompt)) {
+    // Detect deactivation — natural language and slash commands
+    if (/\b(stop|disable|deactivate|turn off)\b.*\bcaveman\b/i.test(prompt) ||
+        /\bcaveman\b.*\b(stop|disable|deactivate|turn off)\b/i.test(prompt) ||
+        /\bnormal mode\b/i.test(prompt)) {
       try { fs.unlinkSync(flagPath); } catch (e) {}
     }
   } catch (e) {
