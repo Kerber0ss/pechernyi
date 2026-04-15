@@ -197,12 +197,19 @@ Uninstall: `bash hooks/uninstall.sh` or `powershell -File hooks\uninstall.ps1`
 
 **macOS / Linux:**
 1. Clone repo → Open Codex in the repo directory → `/plugins` → Search "Caveman" → Install
+2. Repo-local auto-start is already wired by `.codex/hooks.json` + `.codex/config.toml`
 
 **Windows:**
 1. Enable symlinks first: `git config --global core.symlinks true` (requires Developer Mode or admin)
 2. Clone repo → Open VS Code → Codex Settings → Plugins → find "Caveman" under local marketplace → Install → Reload Window
+3. Codex hooks are currently disabled on Windows, so use `$caveman` to start manually
 
-This repo also ships `.codex/hooks.json`, so caveman auto-activates while you run Codex inside this repo. The installed plugin gives you `$caveman`; if you want always-on behavior in other repos too, add the same SessionStart hook there.
+This repo also ships `.codex/hooks.json` and enables hooks in `.codex/config.toml`, so caveman auto-activates while you run Codex inside this repo on macOS/Linux. The installed plugin gives you `$caveman`; if you want always-on behavior in other repos too, copy the same `SessionStart` hook there and enable:
+
+```toml
+[features]
+codex_hooks = true
+```
 
 </details>
 
