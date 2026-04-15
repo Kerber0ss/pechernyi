@@ -58,4 +58,37 @@ function getDefaultMode() {
   return 'full';
 }
 
-module.exports = { getDefaultMode, getConfigDir, getConfigPath, VALID_MODES };
+// Symlink-safe flag file write.
+// Refuses to follow symlinks at the target, creates with 0600, uses O_NOFOLLOW
+// where available. Protects against local attackers replacing the predictable
+// flag path (~/.claude/.caveman-active) with a symlink to clobber other files.
+// Silent-fails on any filesystem error — the flag is best-effort.
+function safeWriteFlag(flagPath, content) {
+  try {
+    const flagDir = path.dirname(flagPath);
+    fs.mkdirSync(flagDir, { recursive: true });
+
+    // Refuse if the target already exists as a symlink.
+    try {
+      const st = fs.lstatSync(flagPath);
+      if (st.isSymbolicLink()) return;
+    } catch (e) {
+      if (e.code !== 'ENOENT') return;
+    }
+
+    const O_NOFOLLOW = typeof fs.constants.O_NOFOLLOW === 'number' ? fs.constants.O_NOFOLLOW : 0;
+    const flags = fs.constants.O_WRONLY | fs.constants.O_CREAT | fs.constants.O_TRUNC | O_NOFOLLOW;
+    let fd;
+    try {
+      fd = fs.openSync(flagPath, flags, 0o600);
+      fs.writeSync(fd, String(content));
+      try { fs.fchmodSync(fd, 0o600); } catch (e) { /* best-effort on Windows */ }
+    } finally {
+      if (fd !== undefined) fs.closeSync(fd);
+    }
+  } catch (e) {
+    // Silent fail — flag is best-effort
+  }
+}
+
+module.exports = { getDefaultMode, getConfigDir, getConfigPath, VALID_MODES, safeWriteFlag };

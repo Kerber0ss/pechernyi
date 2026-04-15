@@ -5,7 +5,7 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
-const { getDefaultMode } = require('./caveman-config');
+const { getDefaultMode, safeWriteFlag } = require('./caveman-config');
 
 const claudeDir = process.env.CLAUDE_CONFIG_DIR || path.join(os.homedir(), '.claude');
 const flagPath = path.join(claudeDir, '.caveman-active');
@@ -25,8 +25,7 @@ process.stdin.on('end', () => {
       if (!/\b(stop|disable|turn off|deactivate)\b/i.test(prompt)) {
         const mode = getDefaultMode();
         if (mode !== 'off') {
-          fs.mkdirSync(path.dirname(flagPath), { recursive: true });
-          fs.writeFileSync(flagPath, mode);
+          safeWriteFlag(flagPath, mode);
         }
       }
     }
@@ -55,8 +54,7 @@ process.stdin.on('end', () => {
       }
 
       if (mode && mode !== 'off') {
-        fs.mkdirSync(path.dirname(flagPath), { recursive: true });
-        fs.writeFileSync(flagPath, mode);
+        safeWriteFlag(flagPath, mode);
       } else if (mode === 'off') {
         try { fs.unlinkSync(flagPath); } catch (e) {}
       }

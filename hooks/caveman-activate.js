@@ -9,7 +9,7 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
-const { getDefaultMode } = require('./caveman-config');
+const { getDefaultMode, safeWriteFlag } = require('./caveman-config');
 
 const claudeDir = process.env.CLAUDE_CONFIG_DIR || path.join(os.homedir(), '.claude');
 const flagPath = path.join(claudeDir, '.caveman-active');
@@ -24,13 +24,8 @@ if (mode === 'off') {
   process.exit(0);
 }
 
-// 1. Write flag file
-try {
-  fs.mkdirSync(path.dirname(flagPath), { recursive: true });
-  fs.writeFileSync(flagPath, mode);
-} catch (e) {
-  // Silent fail -- flag is best-effort, don't block the hook
-}
+// 1. Write flag file (symlink-safe)
+safeWriteFlag(flagPath, mode);
 
 // 2. Emit full caveman ruleset, filtered to the active intensity level.
 //    The old 2-sentence summary was too weak — models drifted back to verbose
