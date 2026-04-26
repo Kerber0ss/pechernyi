@@ -64,14 +64,14 @@ if [ "$FORCE" -eq 0 ]; then
     if PECHERNYI_SETTINGS="$SETTINGS" node -e "
       const fs = require('fs');
       const settings = JSON.parse(fs.readFileSync(process.env.PECHERNYI_SETTINGS, 'utf8'));
-      const hasCavemanHook = (event) =>
+      const hasPechernyiHook = (event) =>
         Array.isArray(settings.hooks?.[event]) &&
         settings.hooks[event].some(e =>
           e.hooks && e.hooks.some(h => h.command && h.command.includes('pechernyi'))
         );
       process.exit(
-        hasCavemanHook('SessionStart') &&
-        hasCavemanHook('UserPromptSubmit') &&
+        hasPechernyiHook('SessionStart') &&
+        hasPechernyiHook('UserPromptSubmit') &&
         !!settings.statusLine
           ? 0
           : 1
@@ -84,7 +84,7 @@ if [ "$FORCE" -eq 0 ]; then
 
   if [ "$ALL_FILES_PRESENT" -eq 1 ] && [ "$HOOKS_WIRED" -eq 1 ] && [ "$HAS_STATUSLINE" -eq 1 ]; then
     ALREADY_INSTALLED=1
-    echo "Caveman hooks already installed in $HOOKS_DIR"
+    echo "Pechernyi hooks already installed in $HOOKS_DIR"
     echo "  Re-run with --force to overwrite: bash hooks/install.sh --force"
     echo ""
   fi

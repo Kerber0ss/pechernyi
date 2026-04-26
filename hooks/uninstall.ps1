@@ -23,7 +23,7 @@ if (Test-Path $PluginsDir) {
 }
 
 if ($PluginInstalled) {
-    Write-Host "Caveman appears to be installed as a Claude Code plugin." -ForegroundColor Yellow
+    Write-Host "Pechernyi appears to be installed as a Claude Code plugin." -ForegroundColor Yellow
     Write-Host "To uninstall the plugin, run:"
     Write-Host ""
     Write-Host "  claude plugin disable pechernyi" -ForegroundColor Cyan
@@ -72,7 +72,7 @@ const hooksDir = process.env.PECHERNYI_HOOKS_DIR;
 const managedStatusLinePath = hooksDir + '/pechernyi-statusline.ps1';
 const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
 
-const isCavemanEntry = (entry) =>
+const isPechernyiEntry = (entry) =>
   entry && entry.hooks && entry.hooks.some(h =>
     h.command && h.command.includes('pechernyi')
   );
@@ -82,7 +82,7 @@ if (settings.hooks) {
   for (const event of ['SessionStart', 'UserPromptSubmit']) {
     if (Array.isArray(settings.hooks[event])) {
       const before = settings.hooks[event].length;
-      settings.hooks[event] = settings.hooks[event].filter(e => !isCavemanEntry(e));
+      settings.hooks[event] = settings.hooks[event].filter(e => !isPechernyiEntry(e));
       removed += before - settings.hooks[event].length;
       if (settings.hooks[event].length === 0) {
         delete settings.hooks[event];

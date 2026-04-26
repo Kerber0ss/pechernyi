@@ -12,7 +12,7 @@
 
 A Claude Code skill that compresses your project memory files (`CLAUDE.md`, todos, preferences) into pechernyi format — so every session loads fewer tokens automatically.
 
-Claude read `CLAUDE.md` on every session start. If file big, cost big. Caveman make file small. Cost go down forever.
+Claude read `CLAUDE.md` on every session start. If file big, cost big. Pechernyi make file small. Cost go down forever.
 
 ## What It Do
 
@@ -55,7 +55,7 @@ All validations passed ✅ — headings, code blocks, URLs, file paths preserved
 </td>
 <td width="50%">
 
-### 🪨 Caveman (285 tokens)
+### 🪨 Pechernyi (285 tokens)
 
 > "Prefer TypeScript strict mode always. No `any` unless unavoidable — comment why if used. Proper types catch bugs early."
 
@@ -128,7 +128,7 @@ Only two things use tokens: initial compression + targeted fix if validation fai
 
 ## What Is Preserved
 
-Caveman compress natural language. It never touch:
+Pechernyi compress natural language. It never touch:
 
 - Code blocks (` ``` ` fenced or indented)
 - Inline code (`` `backtick content` ``)
@@ -144,7 +144,7 @@ Caveman compress natural language. It never touch:
 
 `CLAUDE.md` loads on **every session start**. A 1000-token project memory file costs tokens every single time you open a project. Over 100 sessions that's 100,000 tokens of overhead — just for context you already wrote.
 
-Caveman cut that by ~46% on average. Same instructions. Same accuracy. Less waste.
+Pechernyi cut that by ~46% on average. Same instructions. Same accuracy. Less waste.
 
 ```
 ┌────────────────────────────────────────────┐
@@ -155,7 +155,7 @@ Caveman cut that by ~46% on average. Same instructions. Same accuracy. Less wast
 └────────────────────────────────────────────┘
 ```
 
-## Part of Caveman
+## Part of Pechernyi
 
 This skill is part of the [pechernyi](https://github.com/Kerber0ss/pechernyi) toolkit — making Claude use fewer tokens without losing accuracy.
 

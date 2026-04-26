@@ -47,9 +47,9 @@ process.stdin.on('end', () => {
       } else if (cmd === '/pechernyi' || cmd === '/pechernyi:pechernyi') {
         if (arg === 'lite') mode = 'lite';
         else if (arg === 'ultra') mode = 'ultra';
-        else if (arg === 'wenyan-lite') mode = 'wenyan-lite';
-        else if (arg === 'wenyan' || arg === 'wenyan-full') mode = 'wenyan';
-        else if (arg === 'wenyan-ultra') mode = 'wenyan-ultra';
+        else if (arg === 'pechernyi-lite') mode = 'pechernyi-lite';
+        else if (arg === 'pechernyi' || arg === 'pechernyi-full') mode = 'pechernyi';
+        else if (arg === 'pechernyi-ultra') mode = 'pechernyi-ultra';
         else mode = getDefaultMode();
       }
 

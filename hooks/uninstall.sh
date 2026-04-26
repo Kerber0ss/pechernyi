@@ -21,7 +21,7 @@ if [ -d "$CLAUDE_DIR/plugins" ]; then
 fi
 
 if [ "$PLUGIN_INSTALLED" -eq 1 ]; then
-  echo "Caveman appears to be installed as a Claude Code plugin."
+  echo "Pechernyi appears to be installed as a Claude Code plugin."
   echo "To uninstall the plugin, run:"
   echo ""
   echo "  claude plugin disable pechernyi"
@@ -66,7 +66,7 @@ if [ -f "$SETTINGS" ]; then
       const managedStatusLinePath = hooksDir + '/pechernyi-statusline.sh';
       const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
 
-      const isCavemanEntry = (entry) =>
+      const isPechernyiEntry = (entry) =>
         entry && entry.hooks && entry.hooks.some(h =>
           h.command && h.command.includes('pechernyi')
         );
@@ -76,7 +76,7 @@ if [ -f "$SETTINGS" ]; then
         for (const event of ['SessionStart', 'UserPromptSubmit']) {
           if (Array.isArray(settings.hooks[event])) {
             const before = settings.hooks[event].length;
-            settings.hooks[event] = settings.hooks[event].filter(e => !isCavemanEntry(e));
+            settings.hooks[event] = settings.hooks[event].filter(e => !isPechernyiEntry(e));
             removed += before - settings.hooks[event].length;
             // Drop the event key if it's now empty (keeps settings.json tidy)
             if (settings.hooks[event].length === 0) {

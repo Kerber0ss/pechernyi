@@ -6,7 +6,7 @@ description: >
   "pechernyi help", "what pechernyi commands", "how do I use pechernyi".
 ---
 
-# Caveman Help
+# Pechernyi Help
 
 Display this reference card when invoked. One-shot — do NOT change mode, write flag files, or persist anything. Output in pechernyi style.
 
@@ -17,9 +17,9 @@ Display this reference card when invoked. One-shot — do NOT change mode, write
 | **Lite** | `/pechernyi lite` | Drop filler. Keep sentence structure. |
 | **Full** | `/pechernyi` | Drop articles, filler, pleasantries, hedging. Fragments OK. Default. |
 | **Ultra** | `/pechernyi ultra` | Extreme compression. Bare fragments. Tables over prose. |
-| **Wenyan-Lite** | `/pechernyi wenyan-lite` | Classical Chinese style, light compression. |
-| **Wenyan-Full** | `/pechernyi wenyan` | Full 文言文. Maximum classical terseness. |
-| **Wenyan-Ultra** | `/pechernyi wenyan-ultra` | Extreme. Ancient scholar on a budget. |
+| **Pechernyi-Lite** | `/pechernyi pechernyi-lite` | Classical Chinese style, light compression. |
+| **Pechernyi-Full** | `/pechernyi pechernyi` | Full 文言文. Maximum classical terseness. |
+| **Pechernyi-Ultra** | `/pechernyi pechernyi-ultra` | Extreme. Ancient scholar on a budget. |
 
 Mode stick until changed or session end.
 

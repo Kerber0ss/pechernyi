@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Caveman Memory Compression Orchestrator
+Pechernyi Memory Compression Orchestrator
 
 Usage:
     python scripts/compress.py <filepath>
@@ -80,7 +80,7 @@ def call_claude(prompt: str) -> str:
 
             client = anthropic.Anthropic(api_key=api_key)
             msg = client.messages.create(
-                model=os.environ.get("CAVEMAN_MODEL", "claude-sonnet-4-5"),
+                model=os.environ.get("PECHERNYI_MODEL", "claude-sonnet-4-5"),
                 max_tokens=8192,
                 messages=[{"role": "user", "content": prompt}],
             )
@@ -103,7 +103,7 @@ def call_claude(prompt: str) -> str:
 
 def build_compress_prompt(original: str) -> str:
     return f"""
-Compress this markdown into caveman format.
+Compress this markdown into pechernyi format.
 
 STRICT RULES:
 - Do NOT modify anything inside ``` code blocks
@@ -122,13 +122,13 @@ TEXT:
 
 def build_fix_prompt(original: str, compressed: str, errors: List[str]) -> str:
     errors_str = "\n".join(f"- {e}" for e in errors)
-    return f"""You are fixing a caveman-compressed markdown file. Specific validation errors were found.
+    return f"""You are fixing a pechernyi-compressed markdown file. Specific validation errors were found.
 
 CRITICAL RULES:
 - DO NOT recompress or rephrase the file
 - ONLY fix the listed errors — leave everything else exactly as-is
 - The ORIGINAL is provided as reference only (to restore missing content)
-- Preserve caveman style in all untouched sections
+- Preserve pechernyi style in all untouched sections
 
 ERRORS TO FIX:
 {errors_str}

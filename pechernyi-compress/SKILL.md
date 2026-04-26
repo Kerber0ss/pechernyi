@@ -7,7 +7,7 @@ description: >
   Trigger: /pechernyi:compress <filepath> or "compress memory file"
 ---
 
-# Caveman Compress
+# Pechernyi Compress
 
 ## Purpose
 

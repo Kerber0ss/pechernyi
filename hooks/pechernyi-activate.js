@@ -44,8 +44,8 @@ if (INDEPENDENT_MODES.has(mode)) {
   process.exit(0);
 }
 
-// Resolve the canonical label for wenyan alias
-const modeLabel = mode === 'wenyan' ? 'wenyan-full' : mode;
+// Resolve the canonical label for pechernyi alias
+const modeLabel = mode === 'pechernyi' ? 'pechernyi-full' : mode;
 
 // Read SKILL.md — the single source of truth for pechernyi behavior.
 // Plugin installs: __dirname = <plugin_root>/hooks/, SKILL.md at <plugin_root>/skills/pechernyi/SKILL.md

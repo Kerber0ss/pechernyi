@@ -46,7 +46,7 @@ if (-not $Force) {
     if ($AllFilesPresent -and (Test-Path $Settings)) {
         try {
             $settingsObj = Get-Content $Settings -Raw | ConvertFrom-Json
-            $hasCavemanHook = {
+            $hasPechernyiHook = {
                 param([string]$eventName)
                 if (-not $settingsObj.hooks) { return $false }
                 $entries = $settingsObj.hooks.$eventName
@@ -62,7 +62,7 @@ if (-not $Force) {
                 }
                 return $false
             }
-            $HooksWired = (& $hasCavemanHook "SessionStart") -and (& $hasCavemanHook "UserPromptSubmit")
+            $HooksWired = (& $hasPechernyiHook "SessionStart") -and (& $hasPechernyiHook "UserPromptSubmit")
             $HasStatusLine = $null -ne $settingsObj.statusLine
         } catch {
             $HooksWired = $false
@@ -71,7 +71,7 @@ if (-not $Force) {
     }
 
     if ($AllFilesPresent -and $HooksWired -and $HasStatusLine) {
-        Write-Host "Caveman hooks already installed in $HooksDir"
+        Write-Host "Pechernyi hooks already installed in $HooksDir"
         Write-Host "  Re-run with -Force to overwrite: powershell -File hooks\install.ps1 -Force"
         Write-Host ""
         Write-Host "Nothing to do. Hooks are already in place."

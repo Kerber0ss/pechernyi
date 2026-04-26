@@ -1,4 +1,4 @@
-# Caveman Hooks
+# Pechernyi Hooks
 
 These hooks are **bundled with the pechernyi plugin** and activate automatically when the plugin is installed. No manual setup required.
 
@@ -17,12 +17,12 @@ If you installed pechernyi standalone (without the plugin), you can use `bash ho
 
 - Fires on every user prompt, checks for `/pechernyi` commands
 - Writes the active mode to the flag file when a pechernyi command is detected
-- Supports: `full`, `lite`, `ultra`, `wenyan`, `wenyan-lite`, `wenyan-ultra`, `commit`, `review`, `compress`
+- Supports: `full`, `lite`, `ultra`, `pechernyi`, `pechernyi-lite`, `pechernyi-ultra`, `commit`, `review`, `compress`
 
 ### `pechernyi-statusline.sh` / `pechernyi-statusline.ps1` — Statusline badge script
 
 - Reads `~/.claude/.pechernyi-active` and outputs a colored badge
-- Shows `[ПЕЧЕРНИЙ]`, `[ПЕЧЕРНИЙ:УЛЬТРА]`, `[PECHERNYI:WENYAN]`, etc.
+- Shows `[ПЕЧЕРНИЙ]`, `[ПЕЧЕРНИЙ:УЛЬТРА]`, `[ПЕЧЕРНИЙ]`, etc.
 
 ## Statusline Badge
 
@@ -75,7 +75,7 @@ fi
 Badge examples:
 - `/pechernyi` → `[ПЕЧЕРНИЙ]`
 - `/pechernyi ultra` → `[ПЕЧЕРНИЙ:УЛЬТРА]`
-- `/pechernyi wenyan` → `[PECHERNYI:WENYAN]`
+- `/pechernyi pechernyi` → `[ПЕЧЕРНИЙ]`
 - `/pechernyi-commit` → `[PECHERNYI:COMMIT]`
 - `/pechernyi-review` → `[PECHERNYI:REVIEW]`
 
