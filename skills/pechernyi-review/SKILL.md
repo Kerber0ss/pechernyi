@@ -1,55 +1,60 @@
 ---
 name: pechernyi-review
 description: >
-  Ultra-compressed code review comments. Cuts noise from PR feedback while preserving
-  the actionable signal. Each comment is one line: location, problem, fix. Use when user
-  says "review this PR", "code review", "review the diff", "/review", or invokes
-  /pechernyi-review. Auto-triggers when reviewing pull requests.
+  Ультра-стиснуті коментарі до PR. Формат: Л<рядок>: проблема. виправлення.
+  Чіткі префікси серйозності. Без «я помітив що» та інших заповнювачів.
+  Активується: /pechernyi-review
 ---
 
-Write code review comments terse and actionable. One line per finding. Location, problem, fix. No throat-clearing.
+Пишіть коментарі до коду стисло та дієво. Один рядок на одне зауваження. Локація, проблема, виправлення. Без вступних фраз.
 
-## Rules
+## Правила
 
-**Format:** `L<line>: <problem>. <fix>.` — or `<file>:L<line>: ...` when reviewing multi-file diffs.
+**Формат:** `Л<рядок>: <проблема>. <виправлення>.` — або `<файл>:Л<рядок>: ...` при рев'ю дифу з багатьох файлів.
 
-**Severity prefix (optional, when mixed):**
-- `🔴 bug:` — broken behavior, will cause incident
-- `🟡 risk:` — works but fragile (race, missing null check, swallowed error)
-- `🔵 nit:` — style, naming, micro-optim. Author can ignore
-- `❓ q:` — genuine question, not a suggestion
+**Префікси серйозності:**
+- `🔴 баг:` — критична помилка, призведе до інциденту
+- `🟡 ризик:` — працює, але крихко (race condition, відсутня перевірка на null, проковтнута помилка)
+- `🔵 нюанс:` — стиль, іменування, мікро-оптимізація. Автор може ігнорувати
+- `❓ запит:` — щире запитання, а не пропозиція
 
-**Drop:**
-- "I noticed that...", "It seems like...", "You might want to consider..."
-- "This is just a suggestion but..." — use `nit:` instead
-- "Great work!", "Looks good overall but..." — say it once at the top, not per comment
-- Restating what the line does — the reviewer can read the diff
-- Hedging ("perhaps", "maybe", "I think") — if unsure use `q:`
+**Викинути:**
+- "Я помітив що...", "Схоже що...", "Варто розглянути можливість..."
+- "Це просто пропозиція, але..." — використовуйте `🔵 нюанс:`
+- "Чудова робота!", "Загалом виглядає добре, але..." — скажіть це один раз вгорі, а не в кожному коментарі
+- Переказування того, що робить рядок — рев'юер може прочитати диф
+- Невпевненість ("можливо", "мабуть", "я думаю") — якщо не впевнені, використовуйте `❓ запит:`
 
-**Keep:**
-- Exact line numbers
-- Exact symbol/function/variable names in backticks
-- Concrete fix, not "consider refactoring this"
-- The *why* if the fix isn't obvious from the problem statement
+**Залишити:**
+- Точні номери рядків
+- Точні назви символів/функцій/змінних у зворотних лапках `` ` ``
+- Конкретне виправлення, а не "варто рефакторити це"
+- Пояснення "чому", якщо виправлення не є очевидним із опису проблеми
 
-## Examples
+## Приклади
 
-❌ "I noticed that on line 42 you're not checking if the user object is null before accessing the email property. This could potentially cause a crash if the user is not found in the database. You might want to add a null check here."
+# Погано ❌
+Я помітив, що на рядку 42 об'єкт user може бути не визначений перед доступом до властивості email. Це потенційно може призвести до помилки, якщо користувача не знайдено в базі. Можливо, варто додати перевірку на null тут?
 
-✅ `L42: 🔴 bug: user can be null after .find(). Add guard before .email.`
+# Добре ✅
+Л42: 🔴 баг: user null після .find(). Додати guard перед .email.
 
-❌ "It looks like this function is doing a lot of things and might benefit from being broken up into smaller functions for readability."
+# Погано ❌
+Схоже, ця функція робить занадто багато речей одночасно, було б добре розбити її на менші частини для кращої читаємості.
 
-✅ `L88-140: 🔵 nit: 50-line fn does 4 things. Extract validate/normalize/persist.`
+# Добре ✅
+Л88-140: 🔵 нюанс: функція на 50 рядків робить 4 речі. Винести validate/normalize/persist.
 
-❌ "Have you considered what happens if the API returns a 429? I think we should probably handle that case."
+# Погано ❌
+Ви не думали про те, що станеться, якщо API поверне помилку 429? Я гадаю, нам слід обробити цей випадок.
 
-✅ `L23: 🟡 risk: no retry on 429. Wrap in withBackoff(3).`
+# Добре ✅
+Л23: 🟡 ризик: немає повторів при 429. Огорнути у withBackoff(3).
 
-## Auto-Clarity
+## Авто-чіткість (Auto-Clarity)
 
-Drop terse mode for: security findings (CVE-class bugs need full explanation + reference), architectural disagreements (need rationale, not just a one-liner), and onboarding contexts where the author is new and needs the "why". In those cases write a normal paragraph, then resume terse for the rest.
+Відмовляйтеся від стислого режиму для: знахідок з безпеки (баги класу CVE потребують повного пояснення + посилання), архітектурних розбіжностей (потрібне обґрунтування, а не просто один рядок) та контекстів онбордингу, де автор новачок і потребує пояснення "чому". У цих випадках пишіть нормальний абзац, а потім повертайтеся до стислого стилю для решти.
 
-## Boundaries
+## Межі
 
-Reviews only — does not write the code fix, does not approve/request-changes, does not run linters. Output the comment(s) ready to paste into the PR. "stop pechernyi-review" or "normal mode": revert to verbose review style.
+Тільки рев'ю — не пише код виправлення (крім однорядкових прикладів у коментарі), не затверджує/відхиляє PR, не запускає лінтери. Результат — коментарі, готові до вставки в PR. "stop pechernyi-review" або "normal mode": повернення до розлогого стилю рев'ю.
