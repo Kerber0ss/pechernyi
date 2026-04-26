@@ -2,39 +2,39 @@
   <img src="https://em-content.zobj.net/source/apple/391/rock_1faa8.png" width="120" />
 </p>
 
-<h1 align="center">caveman</h1>
+<h1 align="center">pechernyi</h1>
 
 <p align="center">
   <strong>why use many token when few do trick</strong>
 </p>
 
 <p align="center">
-  <a href="https://github.com/JuliusBrussee/caveman/stargazers"><img src="https://img.shields.io/github/stars/JuliusBrussee/caveman?style=flat&color=yellow" alt="Stars"></a>
-  <a href="https://github.com/JuliusBrussee/caveman/commits/main"><img src="https://img.shields.io/github/last-commit/JuliusBrussee/caveman?style=flat" alt="Last Commit"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/JuliusBrussee/caveman?style=flat" alt="License"></a>
+  <a href="https://github.com/Kerber0ss/pechernyi/stargazers"><img src="https://img.shields.io/github/stars/Kerber0ss/pechernyi?style=flat&color=yellow" alt="Stars"></a>
+  <a href="https://github.com/Kerber0ss/pechernyi/commits/main"><img src="https://img.shields.io/github/last-commit/Kerber0ss/pechernyi?style=flat" alt="Last Commit"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/Kerber0ss/pechernyi?style=flat" alt="License"></a>
 </p>
 
 <p align="center">
   <a href="#before--after">Before/After</a> •
   <a href="#install">Install</a> •
   <a href="#intensity-levels">Levels</a> •
-  <a href="#caveman-skills">Skills</a> •
+  <a href="#pechernyi-skills">Skills</a> •
   <a href="#benchmarks">Benchmarks</a> •
   <a href="#evals">Evals</a>
 </p>
 
 <p align="center">
   <strong>🪨 Caveman Ecosystem</strong> &nbsp;·&nbsp;
-  <strong>caveman</strong> <em>talk less</em> <sub>(you are here)</sub> &nbsp;·&nbsp;
-  <a href="https://github.com/JuliusBrussee/cavemem">cavemem</a> <em>remember more</em> &nbsp;·&nbsp;
-  <a href="https://github.com/JuliusBrussee/cavekit">cavekit</a> <em>build better</em>
+  <strong>pechernyi</strong> <em>talk less</em> <sub>(you are here)</sub> &nbsp;·&nbsp;
+  <a href="https://github.com/Kerber0ss/cavemem">cavemem</a> <em>remember more</em> &nbsp;·&nbsp;
+  <a href="https://github.com/Kerber0ss/cavekit">cavekit</a> <em>build better</em>
 </p>
 
 ---
 
-A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill/plugin and Codex plugin that makes agent talk like caveman — cutting **~75% of output tokens** while keeping full technical accuracy. Now with [文言文 mode](#文言文-wenyan-mode), [terse commits](#caveman-commit), [one-line code reviews](#caveman-review), and a [compression tool](#caveman-compress) that cuts **~46% of input tokens** every session.
+A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill/plugin and Codex plugin that makes agent talk like pechernyi — cutting **~75% of output tokens** while keeping full technical accuracy. Now with [文言文 mode](#文言文-wenyan-mode), [terse commits](#pechernyi-commit), [one-line code reviews](#pechernyi-review), and a [compression tool](#pechernyi-compress) that cuts **~46% of input tokens** every session.
 
-Based on the viral observation that caveman-speak dramatically reduces LLM token usage without losing technical substance. So we made it a one-line install.
+Based on the viral observation that pechernyi-speak dramatically reduces LLM token usage without losing technical substance. So we made it a one-line install.
 
 ## Before / After
 
@@ -133,14 +133,14 @@ Pick your agent. One command. Done.
 
 | Agent | Install |
 |-------|---------|
-| **Claude Code** | `claude plugin marketplace add JuliusBrussee/caveman && claude plugin install caveman@caveman` |
+| **Claude Code** | `claude plugin marketplace add Kerber0ss/pechernyi && claude plugin install pechernyi@pechernyi` |
 | **Codex** | Clone repo → `/plugins` → Search "Caveman" → Install |
-| **Gemini CLI** | `gemini extensions install https://github.com/JuliusBrussee/caveman` |
-| **Cursor** | `npx skills add JuliusBrussee/caveman -a cursor` |
-| **Windsurf** | `npx skills add JuliusBrussee/caveman -a windsurf` |
-| **Copilot** | `npx skills add JuliusBrussee/caveman -a github-copilot` |
-| **Cline** | `npx skills add JuliusBrussee/caveman -a cline` |
-| **Any other** | `npx skills add JuliusBrussee/caveman` |
+| **Gemini CLI** | `gemini extensions install https://github.com/Kerber0ss/pechernyi` |
+| **Cursor** | `npx skills add Kerber0ss/pechernyi -a cursor` |
+| **Windsurf** | `npx skills add Kerber0ss/pechernyi -a windsurf` |
+| **Copilot** | `npx skills add Kerber0ss/pechernyi -a github-copilot` |
+| **Cline** | `npx skills add Kerber0ss/pechernyi -a cline` |
+| **Any other** | `npx skills add Kerber0ss/pechernyi` |
 
 Install once. Use in every session for that install target after that. One rock. That it.
 
@@ -152,18 +152,18 @@ Auto-activation is built in for Claude Code, Gemini CLI, and the repo-local Code
 |---------|:-----------:|:-----:|:----------:|:------:|:--------:|:-----:|:-------:|
 | Caveman mode | Y | Y | Y | Y | Y | Y | Y |
 | Auto-activate every session | Y | Y¹ | Y | —² | —² | —² | —² |
-| `/caveman` command | Y | Y¹ | Y | — | — | — | — |
+| `/pechernyi` command | Y | Y¹ | Y | — | — | — | — |
 | Mode switching (lite/full/ultra) | Y | Y¹ | Y | Y³ | Y³ | — | — |
 | Statusline badge | Y⁴ | — | — | — | — | — | — |
-| caveman-commit | Y | — | Y | Y | Y | Y | Y |
-| caveman-review | Y | — | Y | Y | Y | Y | Y |
-| caveman-compress | Y | Y | Y | Y | Y | Y | Y |
-| caveman-help | Y | — | Y | Y | Y | Y | Y |
+| pechernyi-commit | Y | — | Y | Y | Y | Y | Y |
+| pechernyi-review | Y | — | Y | Y | Y | Y | Y |
+| pechernyi-compress | Y | Y | Y | Y | Y | Y | Y |
+| pechernyi-help | Y | — | Y | Y | Y | Y | Y |
 
 > [!NOTE]
 > Auto-activation works differently per agent: Claude Code uses SessionStart hooks, this repo's Codex dogfood setup uses `.codex/hooks.json`, Gemini uses context files. Cursor/Windsurf/Cline/Copilot can be made always-on, but `npx skills add` installs only the skill, not the repo rule/instruction files.
 >
-> ¹ Codex uses `$caveman` syntax, not `/caveman`. This repo ships `.codex/hooks.json`, so caveman auto-starts when you run Codex inside this repo. The installed plugin itself gives you `$caveman`; copy the same hook into another repo if you want always-on behavior there too. caveman-commit and caveman-review are not in the Codex plugin bundle — use the SKILL.md files directly.
+> ¹ Codex uses `$pechernyi` syntax, not `/pechernyi`. This repo ships `.codex/hooks.json`, so pechernyi auto-starts when you run Codex inside this repo. The installed plugin itself gives you `$pechernyi`; copy the same hook into another repo if you want always-on behavior there too. pechernyi-commit and pechernyi-review are not in the Codex plugin bundle — use the SKILL.md files directly.
 > ² Add the "Want it always on?" snippet below to those agents' system prompt or rule file if you want session-start activation.
 > ³ Cursor and Windsurf receive the full SKILL.md with all intensity levels. Mode switching works on-demand via the skill; no slash command.
 > ⁴ Available in Claude Code, but plugin install only nudges setup. Standalone `install.sh` / `install.ps1` configures it automatically when no custom `statusLine` exists.
@@ -174,24 +174,24 @@ Auto-activation is built in for Claude Code, Gemini CLI, and the repo-local Code
 The plugin install gives you skills + auto-loading hooks. If no custom `statusLine` is configured, Caveman nudges Claude to offer badge setup on first session.
 
 ```bash
-claude plugin marketplace add JuliusBrussee/caveman
-claude plugin install caveman@caveman
+claude plugin marketplace add Kerber0ss/pechernyi
+claude plugin install pechernyi@pechernyi
 ```
 
 **Standalone hooks (without plugin):** If you prefer not to use the plugin system:
 ```bash
 # macOS / Linux / WSL
-bash <(curl -s https://raw.githubusercontent.com/JuliusBrussee/caveman/main/hooks/install.sh)
+bash <(curl -s https://raw.githubusercontent.com/Kerber0ss/pechernyi/main/hooks/install.sh)
 
 # Windows (PowerShell)
-irm https://raw.githubusercontent.com/JuliusBrussee/caveman/main/hooks/install.ps1 | iex
+irm https://raw.githubusercontent.com/Kerber0ss/pechernyi/main/hooks/install.ps1 | iex
 ```
 
 Or from a local clone: `bash hooks/install.sh` / `powershell -File hooks\install.ps1`
 
 Uninstall: `bash hooks/uninstall.sh` or `powershell -File hooks\uninstall.ps1`
 
-**Statusline badge:** Shows `[CAVEMAN]`, `[CAVEMAN:ULTRA]`, etc. in your Claude Code status bar.
+**Statusline badge:** Shows `[ПЕЧЕРНИЙ]`, `[ПЕЧЕРНИЙ:УЛЬТРА]`, etc. in your Claude Code status bar.
 
 - **Plugin install:** If you do not already have a custom `statusLine`, Claude should offer to configure it on first session
 - **Standalone install:** Configured automatically by `install.sh` / `install.ps1` unless you already have a custom statusline
@@ -209,9 +209,9 @@ Uninstall: `bash hooks/uninstall.sh` or `powershell -File hooks\uninstall.ps1`
 **Windows:**
 1. Enable symlinks first: `git config --global core.symlinks true` (requires Developer Mode or admin)
 2. Clone repo → Open VS Code → Codex Settings → Plugins → find "Caveman" under local marketplace → Install → Reload Window
-3. Codex hooks are currently disabled on Windows, so use `$caveman` to start manually
+3. Codex hooks are currently disabled on Windows, so use `$pechernyi` to start manually
 
-This repo also ships `.codex/hooks.json` and enables hooks in `.codex/config.toml`, so caveman auto-activates while you run Codex inside this repo on macOS/Linux. The installed plugin gives you `$caveman`; if you want always-on behavior in other repos too, copy the same `SessionStart` hook there and enable:
+This repo also ships `.codex/hooks.json` and enables hooks in `.codex/config.toml`, so pechernyi auto-activates while you run Codex inside this repo on macOS/Linux. The installed plugin gives you `$pechernyi`; if you want always-on behavior in other repos too, copy the same `SessionStart` hook there and enable:
 
 ```toml
 [features]
@@ -224,31 +224,31 @@ codex_hooks = true
 <summary><strong>Gemini CLI — full details</strong></summary>
 
 ```bash
-gemini extensions install https://github.com/JuliusBrussee/caveman
+gemini extensions install https://github.com/Kerber0ss/pechernyi
 ```
 
-Update: `gemini extensions update caveman` · Uninstall: `gemini extensions uninstall caveman`
+Update: `gemini extensions update pechernyi` · Uninstall: `gemini extensions uninstall pechernyi`
 
 Auto-activates via `GEMINI.md` context file. Also ships custom Gemini commands:
-- `/caveman` — switch intensity level (lite/full/ultra/wenyan)
-- `/caveman-commit` — generate terse commit message
-- `/caveman-review` — one-line code review
+- `/pechernyi` — switch intensity level (lite/full/ultra/wenyan)
+- `/pechernyi-commit` — generate terse commit message
+- `/pechernyi-review` — one-line code review
 
 </details>
 
 <details>
 <summary><strong>Cursor / Windsurf / Cline / Copilot — full details</strong></summary>
 
-`npx skills add` installs the skill file only — it does **not** install the agent's rule/instruction file, so caveman does not auto-start. For always-on, add the "Want it always on?" snippet below to your agent's rules or system prompt.
+`npx skills add` installs the skill file only — it does **not** install the agent's rule/instruction file, so pechernyi does not auto-start. For always-on, add the "Want it always on?" snippet below to your agent's rules or system prompt.
 
 | Agent | Command | Not installed | Mode switching | Always-on location |
 |-------|---------|--------------|:--------------:|--------------------|
-| Cursor | `npx skills add JuliusBrussee/caveman -a cursor` | `.cursor/rules/caveman.mdc` | Y | Cursor rules |
-| Windsurf | `npx skills add JuliusBrussee/caveman -a windsurf` | `.windsurf/rules/caveman.md` | Y | Windsurf rules |
-| Cline | `npx skills add JuliusBrussee/caveman -a cline` | `.clinerules/caveman.md` | — | Cline rules or system prompt |
-| Copilot | `npx skills add JuliusBrussee/caveman -a github-copilot` | `.github/copilot-instructions.md` + `AGENTS.md` | — | Copilot custom instructions |
+| Cursor | `npx skills add Kerber0ss/pechernyi -a cursor` | `.cursor/rules/pechernyi.mdc` | Y | Cursor rules |
+| Windsurf | `npx skills add Kerber0ss/pechernyi -a windsurf` | `.windsurf/rules/pechernyi.md` | Y | Windsurf rules |
+| Cline | `npx skills add Kerber0ss/pechernyi -a cline` | `.clinerules/pechernyi.md` | — | Cline rules or system prompt |
+| Copilot | `npx skills add Kerber0ss/pechernyi -a github-copilot` | `.github/copilot-instructions.md` + `AGENTS.md` | — | Copilot custom instructions |
 
-Uninstall: `npx skills remove caveman`
+Uninstall: `npx skills remove pechernyi`
 
 Copilot works with Chat, Edits, and Coding Agent.
 
@@ -260,37 +260,37 @@ Copilot works with Chat, Edits, and Coding Agent.
 [npx skills](https://github.com/vercel-labs/skills) supports 40+ agents:
 
 ```bash
-npx skills add JuliusBrussee/caveman           # auto-detect agent
-npx skills add JuliusBrussee/caveman -a amp
-npx skills add JuliusBrussee/caveman -a augment
-npx skills add JuliusBrussee/caveman -a goose
-npx skills add JuliusBrussee/caveman -a kiro-cli
-npx skills add JuliusBrussee/caveman -a roo
+npx skills add Kerber0ss/pechernyi           # auto-detect agent
+npx skills add Kerber0ss/pechernyi -a amp
+npx skills add Kerber0ss/pechernyi -a augment
+npx skills add Kerber0ss/pechernyi -a goose
+npx skills add Kerber0ss/pechernyi -a kiro-cli
+npx skills add Kerber0ss/pechernyi -a roo
 # ... and many more
 ```
 
-Uninstall: `npx skills remove caveman`
+Uninstall: `npx skills remove pechernyi`
 
-> **Windows note:** `npx skills` uses symlinks by default. If symlinks fail, add `--copy`: `npx skills add JuliusBrussee/caveman --copy`
+> **Windows note:** `npx skills` uses symlinks by default. If symlinks fail, add `--copy`: `npx skills add Kerber0ss/pechernyi --copy`
 
-**Important:** These agents don't have a hook system, so caveman won't auto-start. Say `/caveman` or "talk like caveman" to activate each session.
+**Important:** These agents don't have a hook system, so pechernyi won't auto-start. Say `/pechernyi` or "talk like pechernyi" to activate each session.
 
-**Want it always on?** Paste this into your agent's system prompt or rules file — caveman will be active from the first message, every session:
+**Want it always on?** Paste this into your agent's system prompt or rules file — pechernyi will be active from the first message, every session:
 
 ```
-Terse like caveman. Technical substance exact. Only fluff die.
+Terse like pechernyi. Technical substance exact. Only fluff die.
 Drop: articles, filler (just/really/basically), pleasantries, hedging.
 Fragments OK. Short synonyms. Code unchanged.
 Pattern: [thing] [action] [reason]. [next step].
 ACTIVE EVERY RESPONSE. No revert after many turns. No filler drift.
-Code/commits/PRs: normal. Off: "stop caveman" / "normal mode".
+Code/commits/PRs: normal. Off: "stop pechernyi" / "normal mode".
 ```
 
 Where to put it:
 | Agent | File |
 |-------|------|
 | opencode | `.config/opencode/AGENTS.md` |
-| Roo | `.roo/rules/caveman.md` |
+| Roo | `.roo/rules/pechernyi.md` |
 | Amp | your workspace system prompt |
 | Others | your agent's system prompt or rules file |
 
@@ -299,20 +299,20 @@ Where to put it:
 ## Usage
 
 Trigger with:
-- `/caveman` or Codex `$caveman`
-- "talk like caveman"
-- "caveman mode"
+- `/pechernyi` or Codex `$pechernyi`
+- "talk like pechernyi"
+- "pechernyi mode"
 - "less tokens please"
 
-Stop with: "stop caveman" or "normal mode"
+Stop with: "stop pechernyi" or "normal mode"
 
 ### Intensity Levels
 
 | Level | Trigger | What it do |
 |-------|---------|------------|
-| **Lite** | `/caveman lite` | Drop filler, keep grammar. Professional but no fluff |
-| **Full** | `/caveman full` | Default caveman. Drop articles, fragments, full grunt |
-| **Ultra** | `/caveman ultra` | Maximum compression. Telegraphic. Abbreviate everything |
+| **Lite** | `/pechernyi lite` | Drop filler, keep grammar. Professional but no fluff |
+| **Full** | `/pechernyi full` | Default pechernyi. Drop articles, fragments, full grunt |
+| **Ultra** | `/pechernyi ultra` | Maximum compression. Telegraphic. Abbreviate everything |
 
 ### 文言文 (Wenyan) Mode
 
@@ -320,34 +320,34 @@ Classical Chinese literary compression — same technical accuracy, but in the m
 
 | Level | Trigger | What it do |
 |-------|---------|------------|
-| **Wenyan-Lite** | `/caveman wenyan-lite` | Semi-classical. Grammar intact, filler gone |
-| **Wenyan-Full** | `/caveman wenyan` | Full 文言文. Maximum classical terseness |
-| **Wenyan-Ultra** | `/caveman wenyan-ultra` | Extreme. Ancient scholar on a budget |
+| **Wenyan-Lite** | `/pechernyi wenyan-lite` | Semi-classical. Grammar intact, filler gone |
+| **Wenyan-Full** | `/pechernyi wenyan` | Full 文言文. Maximum classical terseness |
+| **Wenyan-Ultra** | `/pechernyi wenyan-ultra` | Extreme. Ancient scholar on a budget |
 
 Level stick until you change it or session end.
 
 ## Caveman Skills
 
-### caveman-commit
+### pechernyi-commit
 
-`/caveman-commit` — terse commit messages. Conventional Commits. ≤50 char subject. Why over what.
+`/pechernyi-commit` — terse commit messages. Conventional Commits. ≤50 char subject. Why over what.
 
-### caveman-review
+### pechernyi-review
 
-`/caveman-review` — one-line PR comments: `L42: 🔴 bug: user null. Add guard.` No throat-clearing.
+`/pechernyi-review` — one-line PR comments: `L42: 🔴 bug: user null. Add guard.` No throat-clearing.
 
-### caveman-help
+### pechernyi-help
 
-`/caveman-help` — quick-reference card. All modes, skills, commands, one command away.
+`/pechernyi-help` — quick-reference card. All modes, skills, commands, one command away.
 
-### caveman-compress
+### pechernyi-compress
 
-`/caveman:compress <filepath>` — caveman make Claude *speak* with fewer tokens. **Compress** make Claude *read* fewer tokens.
+`/pechernyi:compress <filepath>` — pechernyi make Claude *speak* with fewer tokens. **Compress** make Claude *read* fewer tokens.
 
-Your `CLAUDE.md` loads on **every session start**. Caveman Compress rewrites memory files into caveman-speak so Claude reads less — without you losing the human-readable original.
+Your `CLAUDE.md` loads on **every session start**. Caveman Compress rewrites memory files into pechernyi-speak so Claude reads less — without you losing the human-readable original.
 
 ```
-/caveman:compress CLAUDE.md
+/pechernyi:compress CLAUDE.md
 ```
 
 ```
@@ -364,7 +364,7 @@ CLAUDE.original.md ← human-readable backup (you read and edit this)
 | `mixed-with-code.md` | 888 | 560 | **36.9%** |
 | **Average** | **898** | **481** | **46%** |
 
-Code blocks, URLs, file paths, commands, headings, dates, version numbers — anything technical passes through untouched. Only prose gets compressed. See the full [caveman-compress README](caveman-compress/README.md) for details. [Security note](./caveman-compress/SECURITY.md): Snyk flags this as High Risk due to subprocess/file patterns — it's a false positive.
+Code blocks, URLs, file paths, commands, headings, dates, version numbers — anything technical passes through untouched. Only prose gets compressed. See the full [pechernyi-compress README](pechernyi-compress/README.md) for details. [Security note](./pechernyi-compress/SECURITY.md): Snyk flags this as High Risk due to subprocess/file patterns — it's a false positive.
 
 ## Benchmarks
 
@@ -397,7 +397,7 @@ A March 2026 paper ["Brevity Constraints Reverse Performance Hierarchies in Lang
 
 Caveman not just claim 75%. Caveman **prove** it.
 
-The `evals/` directory has a three-arm eval harness that measures real token compression against a proper control — not just "verbose vs skill" but "terse vs skill". Because comparing caveman to verbose Claude conflate the skill with generic terseness. That cheating. Caveman not cheat.
+The `evals/` directory has a three-arm eval harness that measures real token compression against a proper control — not just "verbose vs skill" but "terse vs skill". Because comparing pechernyi to verbose Claude conflate the skill with generic terseness. That cheating. Caveman not cheat.
 
 ```bash
 # Run the eval (needs claude CLI)
@@ -409,9 +409,9 @@ uv run --with tiktoken python evals/measure.py
 
 ## Star This Repo
 
-If caveman save you mass token, mass money — leave mass star. ⭐
+If pechernyi save you mass token, mass money — leave mass star. ⭐
 
-[![Star History Chart](https://api.star-history.com/svg?repos=JuliusBrussee/caveman&type=Date)](https://star-history.com/#JuliusBrussee/caveman&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=Kerber0ss/pechernyi&type=Date)](https://star-history.com/#Kerber0ss/pechernyi&Date)
 
 ## 🪨 The Caveman Ecosystem
 
@@ -419,15 +419,15 @@ Three tools. One philosophy: **agent do more with less**.
 
 | Repo | What | One-liner |
 |------|------|-----------|
-| [**caveman**](https://github.com/JuliusBrussee/caveman) *(you are here)* | Output compression skill | *why use many token when few do trick* — ~75% fewer output tokens across Claude Code, Cursor, Gemini, Codex |
-| [**cavemem**](https://github.com/JuliusBrussee/cavemem) | Cross-agent persistent memory | *why agent forget when agent can remember* — compressed SQLite + MCP, local by default |
-| [**cavekit**](https://github.com/JuliusBrussee/cavekit) | Spec-driven autonomous build loop | *why agent guess when agent can know* — natural language → kits → parallel build → verified |
+| [**pechernyi**](https://github.com/Kerber0ss/pechernyi) *(you are here)* | Output compression skill | *why use many token when few do trick* — ~75% fewer output tokens across Claude Code, Cursor, Gemini, Codex |
+| [**cavemem**](https://github.com/Kerber0ss/cavemem) | Cross-agent persistent memory | *why agent forget when agent can remember* — compressed SQLite + MCP, local by default |
+| [**cavekit**](https://github.com/Kerber0ss/cavekit) | Spec-driven autonomous build loop | *why agent guess when agent can know* — natural language → kits → parallel build → verified |
 
-They compose: **cavekit** orchestrates the build, **caveman** compresses what the agent *says*, **cavemem** compresses what the agent *remembers*. Install one, some, or all — each stands alone.
+They compose: **cavekit** orchestrates the build, **pechernyi** compresses what the agent *says*, **cavemem** compresses what the agent *remembers*. Install one, some, or all — each stands alone.
 
-## Also by Julius Brussee
+## Also by Kerber0ss
 
-- **[Revu](https://github.com/JuliusBrussee/revu-swift)** — local-first macOS study app with FSRS spaced repetition, decks, exams, and study guides. [revu.cards](https://revu.cards)
+- **[Revu](https://github.com/Kerber0ss/revu-swift)** — local-first macOS study app with FSRS spaced repetition, decks, exams, and study guides. [revu.cards](https://revu.cards)
 
 ## License
 

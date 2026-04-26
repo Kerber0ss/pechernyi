@@ -5,16 +5,16 @@ labels: bug
 ---
 
 **What happen**
-<!-- What caveman do wrong -->
+<!-- What pechernyi do wrong -->
 
 **Expected**
-<!-- What caveman should do -->
+<!-- What pechernyi should do -->
 
 **Before/after example**
 ```
 Input: [your prompt]
-Got:   [what caveman said]
-Want:  [what caveman should say]
+Got:   [what pechernyi said]
+Want:  [what pechernyi should say]
 ```
 
 **Platform**

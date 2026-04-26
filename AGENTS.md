@@ -1,4 +1,4 @@
-@./skills/caveman/SKILL.md
-@./skills/caveman-commit/SKILL.md
-@./skills/caveman-review/SKILL.md
-@./caveman-compress/SKILL.md
+@./skills/pechernyi/SKILL.md
+@./skills/pechernyi-commit/SKILL.md
+@./skills/pechernyi-review/SKILL.md
+@./pechernyi-compress/SKILL.md
