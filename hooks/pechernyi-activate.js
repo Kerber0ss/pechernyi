@@ -12,20 +12,19 @@ const os = require('os');
 const { getDefaultMode, safeWriteFlag } = require('./pechernyi-config');
 
 const claudeDir = process.env.CLAUDE_CONFIG_DIR || path.join(os.homedir(), '.claude');
-const flagPath = path.join(claudeDir, '.pechernyi-active');
 const settingsPath = path.join(claudeDir, 'settings.json');
 
 const mode = getDefaultMode();
 
 // "off" mode — skip activation entirely, don't write flag or emit rules
 if (mode === 'off') {
-  try { fs.unlinkSync(flagPath); } catch (e) {}
+  safeWriteFlag('off');
   process.stdout.write('OK');
   process.exit(0);
 }
 
-// 1. Write flag file (symlink-safe)
-safeWriteFlag(flagPath, mode);
+// 1. Write flag file
+safeWriteFlag(mode);
 
 // 2. Emit full pechernyi ruleset, filtered to the active intensity level.
 //    The old 2-sentence summary was too weak — models drifted back to verbose
@@ -35,8 +34,6 @@ safeWriteFlag(flagPath, mode);
 //    Reads SKILL.md at runtime so edits to the source of truth propagate
 //    automatically — no hardcoded duplication to go stale.
 
-// Modes that have their own independent skill files — not pechernyi intensity levels.
-// For these, emit a short activation line; the skill itself handles behavior.
 const INDEPENDENT_MODES = new Set(['commit', 'review', 'compress']);
 
 if (INDEPENDENT_MODES.has(mode)) {
@@ -48,13 +45,14 @@ if (INDEPENDENT_MODES.has(mode)) {
 const modeLabel = mode === 'pechernyi' ? 'pechernyi-full' : mode;
 
 // Read SKILL.md — the single source of truth for pechernyi behavior.
-// Plugin installs: __dirname = <plugin_root>/hooks/, SKILL.md at <plugin_root>/skills/pechernyi/SKILL.md
-// Standalone installs: __dirname = $CLAUDE_CONFIG_DIR/hooks/, SKILL.md won't exist — falls back to hardcoded rules.
+// Plugin installs: use CLAUDE_PLUGIN_ROOT if available, fallback to relative path.
 let skillContent = '';
+const skillPath = process.env.CLAUDE_PLUGIN_ROOT
+  ? path.join(process.env.CLAUDE_PLUGIN_ROOT, 'skills', 'pechernyi', 'SKILL.md')
+  : path.join(__dirname, '..', 'skills', 'pechernyi', 'SKILL.md');
+
 try {
-  skillContent = fs.readFileSync(
-    path.join(__dirname, '..', 'skills', 'pechernyi', 'SKILL.md'), 'utf8'
-  );
+  skillContent = fs.readFileSync(skillPath, 'utf8');
 } catch (e) { /* standalone install — will use fallback below */ }
 
 let output;
@@ -91,23 +89,13 @@ if (skillContent) {
   output = 'PECHERNYI MODE ACTIVE — level: ' + modeLabel + '\n\n' + filtered.join('\n');
 } else {
   // Fallback when SKILL.md is not found (standalone hook install without skills dir).
-  // This is the minimum viable ruleset — better than nothing.
+  // Ukrainian fallback string as per instructions.
   output =
     'PECHERNYI MODE ACTIVE — level: ' + modeLabel + '\n\n' +
-    'Respond terse like smart pechernyi. All technical substance stay. Only fluff die.\n\n' +
-    '## Persistence\n\n' +
-    'ACTIVE EVERY RESPONSE. No revert after many turns. No filler drift. Still active if unsure. Off only: "stop pechernyi" / "normal mode".\n\n' +
-    'Current level: **' + modeLabel + '**. Switch: `/pechernyi lite|full|ultra`.\n\n' +
-    '## Rules\n\n' +
-    'Drop: articles (a/an/the), filler (just/really/basically/actually/simply), pleasantries (sure/certainly/of course/happy to), hedging. ' +
-    'Fragments OK. Short synonyms (big not extensive, fix not "implement a solution for"). Technical terms exact. Code blocks unchanged. Errors quoted exact.\n\n' +
-    'Pattern: `[thing] [action] [reason]. [next step].`\n\n' +
-    'Not: "Sure! I\'d be happy to help you with that. The issue you\'re experiencing is likely caused by..."\n' +
-    'Yes: "Bug in auth middleware. Token expiry check use `<` not `<=`. Fix:"\n\n' +
-    '## Auto-Clarity\n\n' +
-    'Drop pechernyi for: security warnings, irreversible action confirmations, multi-step sequences where fragment order risks misread, user asks to clarify or repeats question. Resume pechernyi after clear part done.\n\n' +
-    '## Boundaries\n\n' +
-    'Code/commits/PRs: write normal. "stop pechernyi" or "normal mode": revert. Level persist until changed or session end.';
+    'Відповідати стисло, як розумний печерний. Технічна суть залишається.\n' +
+    'Скидати: вставні слова (ну, взагалі, фактично), люб\'язності (Звісно!, Гаразд!), хеджування (мабуть, здається).\n' +
+    'Фрагменти ок. Інфінітив замість розгорнутих форм. Паттерн: [що] [дія] [причина]. [наступний крок].\n' +
+    'Код-блоки незмінні. /pechernyi lite|full|ultra. Вимкнути: "стоп печерний".';
 }
 
 // 3. Detect missing statusline config — nudge Claude to help set it up
