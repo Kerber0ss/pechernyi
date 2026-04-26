@@ -56,7 +56,7 @@ if [ -f "$SETTINGS" ]; then
     echo "         entries from $SETTINGS manually."
   else
     # Back up before editing, same policy as install.sh
-    cp "$SETTINGS" "$SETTINGS.bak"
+    cp "$SETTINGS" "$SETTINGS.pechernyi-backup"
 
     # Pass paths via env vars — avoids shell injection if $HOME contains single quotes
     PECHERNYI_SETTINGS="$SETTINGS" PECHERNYI_HOOKS_DIR="$HOOKS_DIR" node -e "
@@ -108,9 +108,9 @@ if [ -f "$SETTINGS" ]; then
 fi
 
 # 3. Clean up backup file left by installer
-if [ -f "$SETTINGS.bak" ]; then
-  rm "$SETTINGS.bak"
-  echo "  Removed: $SETTINGS.bak"
+if [ -f "$SETTINGS.pechernyi-backup" ]; then
+  rm "$SETTINGS.pechernyi-backup"
+  echo "  Removed: $SETTINGS.pechernyi-backup"
 fi
 
 # 4. Remove flag file

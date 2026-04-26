@@ -109,7 +109,7 @@ if (-not (Test-Path $Settings)) {
 }
 
 # Back up existing settings.json before touching it
-Copy-Item $Settings "$Settings.bak" -Force
+Copy-Item $Settings "$Settings.pechernyi-backup" -Force
 
 # Use node for safe JSON merging — pass paths via env vars to avoid injection
 # if the username contains a single quote (e.g., O'Brien).

@@ -58,7 +58,7 @@ if (Test-Path $Settings) {
         Write-Host "         entries from $Settings manually."
     } else {
         # Back up before editing
-        Copy-Item $Settings "$Settings.bak" -Force
+        Copy-Item $Settings "$Settings.pechernyi-backup" -Force
 
         # Pass path via env var — avoids injection if username contains a single quote.
         # Use a single-quote here-string so PowerShell does NOT expand $variables inside.
@@ -111,9 +111,9 @@ console.log('  Removed ' + removed + ' pechernyi hook entries from settings.json
         node -e $nodeScript
 
         # Clean up backup file left by installer
-        if (Test-Path "$Settings.bak") {
-            Remove-Item "$Settings.bak" -Force
-            Write-Host "  Removed: $Settings.bak"
+        if (Test-Path "$Settings.pechernyi-backup") {
+            Remove-Item "$Settings.pechernyi-backup" -Force
+            Write-Host "  Removed: $Settings.pechernyi-backup"
         }
     }
 }

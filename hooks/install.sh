@@ -123,7 +123,7 @@ if [ ! -f "$SETTINGS" ]; then
 fi
 
 # Back up existing settings.json before touching it
-cp "$SETTINGS" "$SETTINGS.bak"
+cp "$SETTINGS" "$SETTINGS.pechernyi-backup"
 
 # Pass paths via env vars — avoids shell injection if $HOME contains single quotes
 PECHERNYI_SETTINGS="$SETTINGS" PECHERNYI_HOOKS_DIR="$HOOKS_DIR" node -e "
