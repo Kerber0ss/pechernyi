@@ -23,13 +23,17 @@ MODE=$(printf '%s' "$MODE" | tr -cd 'a-z0-9-')
 
 # Whitelist. Anything else → render nothing rather than echo attacker bytes.
 case "$MODE" in
-  off|lite|full|ultra|pechernyi-lite|pechernyi|pechernyi-full|pechernyi-ultra|commit|review|compress) ;;
+  off|lite|full|ultra|commit|review|compress) ;;
   *) exit 0 ;;
 esac
 
 if [ -z "$MODE" ] || [ "$MODE" = "full" ]; then
   printf '\033[38;5;172m[ПЕЧЕРНИЙ]\033[0m'
+elif [ "$MODE" = "ultra" ]; then
+  printf '\033[38;5;172m[ПЕЧЕРНИЙ:УЛЬТРА]\033[0m'
+elif [ "$MODE" = "lite" ]; then
+  printf '\033[38;5;172m[ПЕЧЕРНИЙ:ЛАЙТ]\033[0m'
 else
   SUFFIX=$(printf '%s' "$MODE" | tr '[:lower:]' '[:upper:]')
-  printf '\033[38;5;172m[PECHERNYI:%s]\033[0m' "$SUFFIX"
+  printf '\033[38;5;172m[ПЕЧЕРНИЙ:%s]\033[0m' "$SUFFIX"
 fi

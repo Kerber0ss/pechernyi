@@ -27,13 +27,17 @@ try {
 $Mode = $Mode.ToLowerInvariant()
 $Mode = ($Mode -replace '[^a-z0-9-]', '')
 
-$Valid = @('off','lite','full','ultra','pechernyi-lite','pechernyi','pechernyi-full','pechernyi-ultra','commit','review','compress')
+$Valid = @('off','lite','full','ultra','commit','review','compress')
 if (-not ($Valid -contains $Mode)) { exit 0 }
 
 $Esc = [char]27
 if ([string]::IsNullOrEmpty($Mode) -or $Mode -eq "full") {
     [Console]::Write("${Esc}[38;5;172m[ПЕЧЕРНИЙ]${Esc}[0m")
+} elseif ($Mode -eq "ultra") {
+    [Console]::Write("${Esc}[38;5;172m[ПЕЧЕРНИЙ:УЛЬТРА]${Esc}[0m")
+} elseif ($Mode -eq "lite") {
+    [Console]::Write("${Esc}[38;5;172m[ПЕЧЕРНИЙ:ЛАЙТ]${Esc}[0m")
 } else {
     $Suffix = $Mode.ToUpperInvariant()
-    [Console]::Write("${Esc}[38;5;172m[PECHERNYI:$Suffix]${Esc}[0m")
+    [Console]::Write("${Esc}[38;5;172m[ПЕЧЕРНИЙ:$Suffix]${Esc}[0m")
 }
