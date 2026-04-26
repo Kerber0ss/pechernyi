@@ -1,65 +1,50 @@
 ---
 name: pechernyi-commit
 description: >
-  Ultra-compressed commit message generator. Cuts noise from commit messages while preserving
-  intent and reasoning. Conventional Commits format. Subject ≤50 chars, body only when "why"
-  isn't obvious. Use when user says "write a commit", "commit message", "generate commit",
-  "/commit", or invokes /pechernyi-commit. Auto-triggers when staging changes.
+  Генератор стислих commit-повідомлень у стилі Conventional Commits.
+  Англійські типи (feat/fix/refactor/...), опис українською мовою.
+  Активується: /pechernyi-commit
 ---
 
-Write commit messages terse and exact. Conventional Commits format. No fluff. Why over what.
+Пиши повідомлення комітів стисло та точно. Формат Conventional Commits. Без води. Чому, а не що.
 
-## Rules
+## Правила
 
-**Subject line:**
-- `<type>(<scope>): <imperative summary>` — `<scope>` optional
-- Types: `feat`, `fix`, `refactor`, `perf`, `docs`, `test`, `chore`, `build`, `ci`, `style`, `revert`
-- Imperative mood: "add", "fix", "remove" — not "added", "adds", "adding"
-- ≤50 chars when possible, hard cap 72
-- No trailing period
-- Match project convention for capitalization after the colon
+**Заголовок (Subject line):**
+- `<тип>[(<scope>)]: <дія-інфінітив укр>` — `<scope>` необов'язково
+- Типи (тільки англійською): `feat`, `fix`, `refactor`, `perf`, `docs`, `test`, `chore`, `build`, `ci`, `style`, `revert`
+- Дієслово в інфінітиві: "додати", "виправити", "видалити", "оновити" — НЕ "додав", "виправлено", "додавання"
+- ≤50 символів (бажано), жорсткий ліміт 72
+- Без крапки в кінці
 
-**Body (only if needed):**
-- Skip entirely when subject is self-explanatory
-- Add body only for: non-obvious *why*, breaking changes, migration notes, linked issues
-- Wrap at 72 chars
-- Bullets `-` not `*`
-- Reference issues/PRs at end: `Closes #42`, `Refs #17`
+**Тіло (Body) — тільки якщо потрібно:**
+- Пропускай, якщо заголовок самодостатній
+- Додавай лише для: пояснення складного *чому*, breaking changes, нотаток про міграцію
+- Перенос рядків на 72 символах
+- Маркери списку `-`, а не `*`
 
-**What NEVER goes in:**
-- "This commit does X", "I", "we", "now", "currently" — the diff says what
-- "As requested by..." — use Co-authored-by trailer
-- "Generated with Claude Code" or any AI attribution
-- Emoji (unless project convention requires)
-- Restating the file name when scope already says it
+**Що НІКОЛИ не писати:**
+- "Цей коміт робить X", "Я", "ми", "зараз" — диф показує, що зроблено
+- "На запит..." — використовуй Co-authored-by
+- "Згенеровано Claude Code" або будь-яка згадка ШІ
+- Переказування назви файлу, якщо вона вже є у scope
 
-## Examples
+## Приклади
 
-Diff: new endpoint for user profile with body explaining the why
-- ❌ "feat: add a new endpoint to get user profile information from the database"
-- ✅
-  ```
-  feat(api): add GET /users/:id/profile
+# Погано ❌
+feat(api): added user endpoint
+fix: I fixed the bug in auth
+feat: додано новий ендпоінт для профілю користувача
 
-  Mobile client needs profile data without the full user payload
-  to reduce LTE bandwidth on cold-launch screens.
+# Добре ✅
+feat(api): додати GET /users/:id/профіль
+fix(auth): виправити перевірку закінчення токена
+chore(deps): оновити залежності до актуальних версій
 
-  Closes #128
-  ```
+## Авто-чіткість (Auto-Clarity)
 
-Diff: breaking API change
-- ✅
-  ```
-  feat(api)!: rename /v1/orders to /v1/checkout
+Завжди додавай тіло для: breaking changes, виправлень безпеки, міграцій даних, ревертів. Ніколи не стискай їх лише до заголовка.
 
-  BREAKING CHANGE: clients on /v1/orders must migrate to /v1/checkout
-  before 2026-06-01. Old route returns 410 after that date.
-  ```
+## Межі (Boundaries)
 
-## Auto-Clarity
-
-Always include body for: breaking changes, security fixes, data migrations, anything reverting a prior commit. Never compress these into subject-only — future debuggers need the context.
-
-## Boundaries
-
-Only generates the commit message. Does not run `git commit`, does not stage files, does not amend. Output the message as a code block ready to paste. "stop pechernyi-commit" or "normal mode": revert to verbose commit style.
+Лише генерує текст повідомлення. Не запускає `git commit`, не додає файли до staging. Виводь повідомлення у блоці коду. "stop pechernyi-commit" або "normal mode": повернення до розлогого стилю.
