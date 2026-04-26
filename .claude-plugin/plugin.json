@@ -1,6 +1,6 @@
 {
   "name": "pechernyi",
-  "description": "Ultra-compressed communication mode. Cuts ~75% of tokens while keeping full technical accuracy by speaking like a pechernyi.",
+  "description": "Ультра-стиснутий режим спілкування. Скорочує ~75% токенів, зберігаючи повну технічну точність, розмовляючи як pechernyi.",
   "author": {
     "name": "Kerber0ss",
     "url": "https://github.com/Kerber0ss"
@@ -13,7 +13,7 @@
             "type": "command",
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/pechernyi-activate.js\"",
             "timeout": 5,
-            "statusMessage": "Loading pechernyi mode..."
+            "statusMessage": "Завантаження pechernyi..."
           }
         ]
       }
@@ -25,7 +25,7 @@
             "type": "command",
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/pechernyi-mode-tracker.js\"",
             "timeout": 5,
-            "statusMessage": "Tracking pechernyi mode..."
+            "statusMessage": "Відстеження режиму pechernyi..."
           }
         ]
       }

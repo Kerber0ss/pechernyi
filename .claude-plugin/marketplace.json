@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "pechernyi",
-  "description": "Ultra-compressed communication mode for Claude Code. Cuts ~75% of tokens while keeping full technical accuracy.",
+  "description": "Ультра-стиснутий режим спілкування для Claude Code. Скорочує ~75% токенів, зберігаючи повну технічну точність.",
   "owner": {
     "name": "Kerber0ss",
     "url": "https://github.com/Kerber0ss"
@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "pechernyi",
-      "description": "Talk like pechernyi. Cut ~75% tokens. Keep all technical accuracy.",
+      "description": "Говорити як печерна людина. -75% токенів. Зберігати технічну точність.",
       "source": "./",
       "category": "productivity"
     }
