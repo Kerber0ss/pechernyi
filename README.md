@@ -2,10 +2,10 @@
   <img src="https://em-content.zobj.net/source/apple/391/rock_1faa8.png" width="120" />
 </p>
 
-<h1 align="center">pechernyi</h1>
+<h1 align="center">печерний</h1>
 
 <p align="center">
-  <strong>why use many token when few do trick</strong>
+  <strong>навіщо багато токен коли мало може</strong>
 </p>
 
 <p align="center">
@@ -15,420 +15,164 @@
 </p>
 
 <p align="center">
-  <a href="#before--after">Before/After</a> •
-  <a href="#install">Install</a> •
-  <a href="#intensity-levels">Levels</a> •
-  <a href="#pechernyi-skills">Skills</a> •
-  <a href="#benchmarks">Benchmarks</a> •
-  <a href="#evals">Evals</a>
-</p>
-
-<p align="center">
-  <strong>🪨 Caveman Ecosystem</strong> &nbsp;·&nbsp;
-  <strong>pechernyi</strong> <em>talk less</em> <sub>(you are here)</sub> &nbsp;·&nbsp;
-  <a href="https://github.com/Kerber0ss/cavemem">cavemem</a> <em>remember more</em> &nbsp;·&nbsp;
-  <a href="https://github.com/Kerber0ss/cavekit">cavekit</a> <em>build better</em>
+  <a href="#до--після">До / Після</a> •
+  <a href="#встановлення">Встановлення</a> •
+  <a href="#рівні-інтенсивності">Рівні</a> •
+  <a href="#скіли-печерного">Скіли</a> •
+  <a href="#ліцензія">Ліцензія</a>
 </p>
 
 ---
 
-A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill/plugin and Codex plugin that makes agent talk like pechernyi — cutting **~75% of output tokens** while keeping full technical accuracy. Now with [文言文 mode](#文言文-wenyan-mode), [terse commits](#pechernyi-commit), [one-line code reviews](#pechernyi-review), and a [compression tool](#pechernyi-compress) that cuts **~46% of input tokens** every session.
+Скіл/плагін для [Claude Code](https://docs.anthropic.com/en/docs/claude-code), що змушує агента говорити як печерна людина — скорочуючи **~75% вихідних токенів** при повній технічній точності. Тепер із [короткими комітами](#pechernyi-commit), [однорядковими рев'ю](#pechernyi-review) та інструментом [стиснення](#pechernyi-compress), що економить **~46% вхідних токенів** кожної сесії.
 
-Based on the viral observation that pechernyi-speak dramatically reduces LLM token usage without losing technical substance. So we made it a one-line install.
+Базується на віральному спостереженні: "печерний" стиль мовлення драматично зменшує витрати токенів LLM без втрати технічної суті. Ми зробили це встановленням в одну команду.
 
-## Before / After
+## До / Після
 
 <table>
 <tr>
 <td width="50%">
 
-### 🗣️ Normal Claude (69 tokens)
+### 🗣️ Звичайний Клод (69 токенів)
 
-> "The reason your React component is re-rendering is likely because you're creating a new object reference on each render cycle. When you pass an inline object as a prop, React's shallow comparison sees it as a different object every time, which triggers a re-render. I'd recommend using useMemo to memoize the object."
+> "Звісно! Радий допомогти. Проблема, яку ви описуєте, швидше за все, пов'язана з тим, що компонент React перемальовується через те, що ви створюєте нове посилання на об'єкт кожного рендеру. Коли ви передаєте інлайн-об'єкт у пропсах, shallow comparison бачить різницю. Я рекомендую використовувати useMemo."
 
 </td>
 <td width="50%">
 
-### 🪨 Caveman Claude (19 tokens)
+### 🪨 Печерний Клод (19 токенів)
 
-> "New object ref each render. Inline object prop = new ref = re-render. Wrap in `useMemo`."
+> "Нове посилання на об'єкт кожен рендер. Інлайн-об'єкт у пропсах = нове посилання = перемальовка. Обгорнути в `useMemo`."
 
 </td>
 </tr>
 <tr>
 <td>
 
-### 🗣️ Normal Claude
+### 🗣️ Звичайний Клод
 
-> "Sure! I'd be happy to help you with that. The issue you're experiencing is most likely caused by your authentication middleware not properly validating the token expiry. Let me take a look and suggest a fix."
+> "Проблема, яку ви описуєте, швидше за все, пов'язана з тим, що middleware авторизації не зовсім коректно перевіряє термін дії токена. Давайте розберемось і запропонуємо рішення."
 
 </td>
 <td>
 
-### 🪨 Caveman Claude
+### 🪨 Печерний Клод
 
-> "Bug in auth middleware. Token expiry check use `<` not `<=`. Fix:"
+> "Помилка в auth middleware. Перевірка закінчення токена: `<` замість `<=`. Виправити:"
 
 </td>
 </tr>
 </table>
 
-**Same fix. 75% less word. Brain still big.**
+**Той самий фікс. На 75% менше слів. Мозок все ще великий.**
 
-**Pick your level of grunt:**
+**Обери свій рівень бурчання:**
 
 <table>
 <tr>
-<td width="25%">
+<td width="33%">
 
 #### 🪶 Lite
 
-> "Your component re-renders because you create a new object reference each render. Inline object props fail shallow comparison every time. Wrap it in `useMemo`."
+> "Компонент перемальовується, бо ви створюєте нове посилання на об'єкт кожного рендеру. Інлайн-об'єкт у пропсах — щоразу нове посилання, shallow comparison бачить різницю. Обгорніть у `useMemo`."
 
 </td>
-<td width="25%">
+<td width="33%">
 
 #### 🪨 Full
 
-> "New object ref each render. Inline object prop = new ref = re-render. Wrap in `useMemo`."
+> "Нове посилання на об'єкт кожен рендер. Інлайн-об'єкт у пропсах = нове посилання = перемальовка. Обгорнути в `useMemo`."
 
 </td>
-<td width="25%">
+<td width="33%">
 
 #### 🔥 Ultra
 
-> "Inline obj prop → new ref → re-render. `useMemo`."
-
-</td>
-<td width="25%">
-
-#### 📜 文言文
-
-> "物出新參照，致重繪。useMemo Wrap之。"
+> "Інлайн об'єкт → нове посилання → перемальовка. `useMemo`."
 
 </td>
 </tr>
 </table>
 
-**Same answer. You pick how many word.**
+**Однакова відповідь. Ти обираєш кількість слів.**
 
 ```
 ┌─────────────────────────────────────┐
-│  TOKENS SAVED          ████████ 75% │
-│  TECHNICAL ACCURACY    ████████ 100%│
-│  SPEED INCREASE        ████████ ~3x │
-│  VIBES                 ████████ OOG │
+│  ЕКОНОМІЯ ТОКЕНІВ      ████████ 75% │
+│  ТЕХНІЧНА ТОЧНІСТЬ     ████████ 100%│
+│  РІСТ ШВИДКОСТІ        ████████ ~3x │
+│  ВАЙБ                  ████████ OOG │
 └─────────────────────────────────────┘
 ```
 
-- **Faster response** — less token to generate = speed go brrr
-- **Easier to read** — no wall of text, just the answer
-- **Same accuracy** — all technical info kept, only fluff removed ([science say so](https://arxiv.org/abs/2604.00025))
-- **Save money** — ~71% less output token = less cost
-- **Fun** — every code review become comedy
+- **Швидші відповіді** — менше токенів генерувати = швидкість go brrr
+- **Легко читати** — жодних стін тексту, тільки суть
+- **Та сама точність** — вся технічна інфо лишається, зникає тільки вода
+- **Економія грошей** — на ~71% менше вихідних токенів = менша вартість
+- **Весело** — кожне рев'ю коду стає комедією
 
-## Install
+## Встановлення
 
-Pick your agent. One command. Done.
+Обери свого агента. Одна команда. Готово.
 
-| Agent | Install |
-|-------|---------|
+| Агент | Встановлення |
+|-------|-------------|
 | **Claude Code** | `claude plugin marketplace add Kerber0ss/pechernyi && claude plugin install pechernyi@pechernyi` |
-| **Codex** | Clone repo → `/plugins` → Search "Caveman" → Install |
-| **Gemini CLI** | `gemini extensions install https://github.com/Kerber0ss/pechernyi` |
-| **Cursor** | `npx skills add Kerber0ss/pechernyi -a cursor` |
-| **Windsurf** | `npx skills add Kerber0ss/pechernyi -a windsurf` |
-| **Copilot** | `npx skills add Kerber0ss/pechernyi -a github-copilot` |
-| **Cline** | `npx skills add Kerber0ss/pechernyi -a cline` |
-| **Any other** | `npx skills add Kerber0ss/pechernyi` |
+| **opencode** | `npx skills add Kerber0ss/pechernyi` |
+| **Інші агенти** | `npx skills add Kerber0ss/pechernyi` |
 
-Install once. Use in every session for that install target after that. One rock. That it.
+Встанови один раз. Використовуй у кожній сесії. Один камінь. Це все.
 
-### What You Get
+## Використання
 
-Auto-activation is built in for Claude Code, Gemini CLI, and the repo-local Codex setup below. `npx skills add` installs the skill for other agents, but does **not** install repo rule/instruction files, so Caveman does not auto-start there unless you add the always-on snippet below.
+Активуй через:
+- `/pechernyi`
+- "печерний режим"
+- "говори як печерний"
+- "менше токенів"
 
-| Feature | Claude Code | Codex | Gemini CLI | Cursor | Windsurf | Cline | Copilot |
-|---------|:-----------:|:-----:|:----------:|:------:|:--------:|:-----:|:-------:|
-| Caveman mode | Y | Y | Y | Y | Y | Y | Y |
-| Auto-activate every session | Y | Y¹ | Y | —² | —² | —² | —² |
-| `/pechernyi` command | Y | Y¹ | Y | — | — | — | — |
-| Mode switching (lite/full/ultra) | Y | Y¹ | Y | Y³ | Y³ | — | — |
-| Statusline badge | Y⁴ | — | — | — | — | — | — |
-| pechernyi-commit | Y | — | Y | Y | Y | Y | Y |
-| pechernyi-review | Y | — | Y | Y | Y | Y | Y |
-| pechernyi-compress | Y | Y | Y | Y | Y | Y | Y |
-| pechernyi-help | Y | — | Y | Y | Y | Y | Y |
+Вимкнути: "стоп печерний" або "звичайний режим"
 
-> [!NOTE]
-> Auto-activation works differently per agent: Claude Code uses SessionStart hooks, this repo's Codex dogfood setup uses `.codex/hooks.json`, Gemini uses context files. Cursor/Windsurf/Cline/Copilot can be made always-on, but `npx skills add` installs only the skill, not the repo rule/instruction files.
->
-> ¹ Codex uses `$pechernyi` syntax, not `/pechernyi`. This repo ships `.codex/hooks.json`, so pechernyi auto-starts when you run Codex inside this repo. The installed plugin itself gives you `$pechernyi`; copy the same hook into another repo if you want always-on behavior there too. pechernyi-commit and pechernyi-review are not in the Codex plugin bundle — use the SKILL.md files directly.
-> ² Add the "Want it always on?" snippet below to those agents' system prompt or rule file if you want session-start activation.
-> ³ Cursor and Windsurf receive the full SKILL.md with all intensity levels. Mode switching works on-demand via the skill; no slash command.
-> ⁴ Available in Claude Code, but plugin install only nudges setup. Standalone `install.sh` / `install.ps1` configures it automatically when no custom `statusLine` exists.
+## Рівні інтенсивності
 
-<details>
-<summary><strong>Claude Code — full details</strong></summary>
+| Рівень | Команда | Що робить |
+|--------|---------|-----------|
+| **Lite** | `/pechernyi lite` | Прибирає воду, лишає граматику. Професійно, але стисло |
+| **Full** | `/pechernyi full` | Дефолтний печерний. Без артиклів, фрагменти, повне бурчання |
+| **Ultra** | `/pechernyi ultra` | Максимальне стиснення. Телеграфний стиль. Скорочує все |
 
-The plugin install gives you skills + auto-loading hooks. If no custom `statusLine` is configured, Caveman nudges Claude to offer badge setup on first session.
+Рівень зберігається до зміни або кінця сесії.
 
-```bash
-claude plugin marketplace add Kerber0ss/pechernyi
-claude plugin install pechernyi@pechernyi
-```
-
-**Standalone hooks (without plugin):** If you prefer not to use the plugin system:
-```bash
-# macOS / Linux / WSL
-bash <(curl -s https://raw.githubusercontent.com/Kerber0ss/pechernyi/main/hooks/install.sh)
-
-# Windows (PowerShell)
-irm https://raw.githubusercontent.com/Kerber0ss/pechernyi/main/hooks/install.ps1 | iex
-```
-
-Or from a local clone: `bash hooks/install.sh` / `powershell -File hooks\install.ps1`
-
-Uninstall: `bash hooks/uninstall.sh` or `powershell -File hooks\uninstall.ps1`
-
-**Statusline badge:** Shows `[ПЕЧЕРНИЙ]`, `[ПЕЧЕРНИЙ:УЛЬТРА]`, etc. in your Claude Code status bar.
-
-- **Plugin install:** If you do not already have a custom `statusLine`, Claude should offer to configure it on first session
-- **Standalone install:** Configured automatically by `install.sh` / `install.ps1` unless you already have a custom statusline
-- **Custom statusline:** Installer leaves your existing statusline alone. See [`hooks/README.md`](hooks/README.md) for the merge snippet
-
-</details>
-
-<details>
-<summary><strong>Codex — full details</strong></summary>
-
-**macOS / Linux:**
-1. Clone repo → Open Codex in the repo directory → `/plugins` → Search "Caveman" → Install
-2. Repo-local auto-start is already wired by `.codex/hooks.json` + `.codex/config.toml`
-
-**Windows:**
-1. Enable symlinks first: `git config --global core.symlinks true` (requires Developer Mode or admin)
-2. Clone repo → Open VS Code → Codex Settings → Plugins → find "Caveman" under local marketplace → Install → Reload Window
-3. Codex hooks are currently disabled on Windows, so use `$pechernyi` to start manually
-
-This repo also ships `.codex/hooks.json` and enables hooks in `.codex/config.toml`, so pechernyi auto-activates while you run Codex inside this repo on macOS/Linux. The installed plugin gives you `$pechernyi`; if you want always-on behavior in other repos too, copy the same `SessionStart` hook there and enable:
-
-```toml
-[features]
-codex_hooks = true
-```
-
-</details>
-
-<details>
-<summary><strong>Gemini CLI — full details</strong></summary>
-
-```bash
-gemini extensions install https://github.com/Kerber0ss/pechernyi
-```
-
-Update: `gemini extensions update pechernyi` · Uninstall: `gemini extensions uninstall pechernyi`
-
-Auto-activates via `GEMINI.md` context file. Also ships custom Gemini commands:
-- `/pechernyi` — switch intensity level (lite/full/ultra/wenyan)
-- `/pechernyi-commit` — generate terse commit message
-- `/pechernyi-review` — one-line code review
-
-</details>
-
-<details>
-<summary><strong>Cursor / Windsurf / Cline / Copilot — full details</strong></summary>
-
-`npx skills add` installs the skill file only — it does **not** install the agent's rule/instruction file, so pechernyi does not auto-start. For always-on, add the "Want it always on?" snippet below to your agent's rules or system prompt.
-
-| Agent | Command | Not installed | Mode switching | Always-on location |
-|-------|---------|--------------|:--------------:|--------------------|
-| Cursor | `npx skills add Kerber0ss/pechernyi -a cursor` | `.cursor/rules/pechernyi.mdc` | Y | Cursor rules |
-| Windsurf | `npx skills add Kerber0ss/pechernyi -a windsurf` | `.windsurf/rules/pechernyi.md` | Y | Windsurf rules |
-| Cline | `npx skills add Kerber0ss/pechernyi -a cline` | `.clinerules/pechernyi.md` | — | Cline rules or system prompt |
-| Copilot | `npx skills add Kerber0ss/pechernyi -a github-copilot` | `.github/copilot-instructions.md` + `AGENTS.md` | — | Copilot custom instructions |
-
-Uninstall: `npx skills remove pechernyi`
-
-Copilot works with Chat, Edits, and Coding Agent.
-
-</details>
-
-<details>
-<summary><strong>Any other agent (opencode, Roo, Amp, Goose, Kiro, and 40+ more)</strong></summary>
-
-[npx skills](https://github.com/vercel-labs/skills) supports 40+ agents:
-
-```bash
-npx skills add Kerber0ss/pechernyi           # auto-detect agent
-npx skills add Kerber0ss/pechernyi -a amp
-npx skills add Kerber0ss/pechernyi -a augment
-npx skills add Kerber0ss/pechernyi -a goose
-npx skills add Kerber0ss/pechernyi -a kiro-cli
-npx skills add Kerber0ss/pechernyi -a roo
-# ... and many more
-```
-
-Uninstall: `npx skills remove pechernyi`
-
-> **Windows note:** `npx skills` uses symlinks by default. If symlinks fail, add `--copy`: `npx skills add Kerber0ss/pechernyi --copy`
-
-**Important:** These agents don't have a hook system, so pechernyi won't auto-start. Say `/pechernyi` or "talk like pechernyi" to activate each session.
-
-**Want it always on?** Paste this into your agent's system prompt or rules file — pechernyi will be active from the first message, every session:
-
-```
-Terse like pechernyi. Technical substance exact. Only fluff die.
-Drop: articles, filler (just/really/basically), pleasantries, hedging.
-Fragments OK. Short synonyms. Code unchanged.
-Pattern: [thing] [action] [reason]. [next step].
-ACTIVE EVERY RESPONSE. No revert after many turns. No filler drift.
-Code/commits/PRs: normal. Off: "stop pechernyi" / "normal mode".
-```
-
-Where to put it:
-| Agent | File |
-|-------|------|
-| opencode | `.config/opencode/AGENTS.md` |
-| Roo | `.roo/rules/pechernyi.md` |
-| Amp | your workspace system prompt |
-| Others | your agent's system prompt or rules file |
-
-</details>
-
-## Usage
-
-Trigger with:
-- `/pechernyi` or Codex `$pechernyi`
-- "talk like pechernyi"
-- "pechernyi mode"
-- "less tokens please"
-
-Stop with: "stop pechernyi" or "normal mode"
-
-### Intensity Levels
-
-| Level | Trigger | What it do |
-|-------|---------|------------|
-| **Lite** | `/pechernyi lite` | Drop filler, keep grammar. Professional but no fluff |
-| **Full** | `/pechernyi full` | Default pechernyi. Drop articles, fragments, full grunt |
-| **Ultra** | `/pechernyi ultra` | Maximum compression. Telegraphic. Abbreviate everything |
-
-### 文言文 (Wenyan) Mode
-
-Classical Chinese literary compression — same technical accuracy, but in the most token-efficient written language humans ever invented.
-
-| Level | Trigger | What it do |
-|-------|---------|------------|
-| **Wenyan-Lite** | `/pechernyi wenyan-lite` | Semi-classical. Grammar intact, filler gone |
-| **Wenyan-Full** | `/pechernyi wenyan` | Full 文言文. Maximum classical terseness |
-| **Wenyan-Ultra** | `/pechernyi wenyan-ultra` | Extreme. Ancient scholar on a budget |
-
-Level stick until you change it or session end.
-
-## Caveman Skills
+## Скіли печерного
 
 ### pechernyi-commit
 
-`/pechernyi-commit` — terse commit messages. Conventional Commits. ≤50 char subject. Why over what.
+`/pechernyi-commit` — стислі повідомлення комітів. Conventional Commits. Заголовок ≤50 символів. Чому замість що.
 
 ### pechernyi-review
 
-`/pechernyi-review` — one-line PR comments: `L42: 🔴 bug: user null. Add guard.` No throat-clearing.
+`/pechernyi-review` — однорядкові коментарі до PR: `L42: 🔴 баг: user null. Додати guard.` Без зайвих вступів.
 
 ### pechernyi-help
 
-`/pechernyi-help` — quick-reference card. All modes, skills, commands, one command away.
+`/pechernyi-help` — швидка довідка. Всі режими, скіли та команди в одному місці.
 
 ### pechernyi-compress
 
-`/pechernyi:compress <filepath>` — pechernyi make Claude *speak* with fewer tokens. **Compress** make Claude *read* fewer tokens.
+`/pechernyi:compress <шлях>` — Печерний змушує Клода *говорити* меншою кількістю токенів. **Compress** змушує Клода *читати* менше токенів.
 
-Your `CLAUDE.md` loads on **every session start**. Caveman Compress rewrites memory files into pechernyi-speak so Claude reads less — without you losing the human-readable original.
+Ваш `CLAUDE.md` завантажується **на початку кожної сесії**. Caveman Compress переписує файли пам'яті "печерною" мовою, щоб Клод читав менше — без втрати оригіналів.
 
-```
+```bash
 /pechernyi:compress CLAUDE.md
 ```
 
-```
-CLAUDE.md          ← compressed (Claude reads this every session — fewer tokens)
-CLAUDE.original.md ← human-readable backup (you read and edit this)
-```
+- `CLAUDE.md` — стиснутий (Клод читає його щосесії — менше токенів)
+- `CLAUDE.original.md` — бекап для людей (ви читаєте та редагуєте його)
 
-| File | Original | Compressed | Saved |
-|------|----------:|----------:|------:|
-| `claude-md-preferences.md` | 706 | 285 | **59.6%** |
-| `project-notes.md` | 1145 | 535 | **53.3%** |
-| `claude-md-project.md` | 1122 | 636 | **43.3%** |
-| `todo-list.md` | 627 | 388 | **38.1%** |
-| `mixed-with-code.md` | 888 | 560 | **36.9%** |
-| **Average** | **898** | **481** | **46%** |
+## Бенчмарки
+Незабаром.
 
-Code blocks, URLs, file paths, commands, headings, dates, version numbers — anything technical passes through untouched. Only prose gets compressed. See the full [pechernyi-compress README](pechernyi-compress/README.md) for details. [Security note](./pechernyi-compress/SECURITY.md): Snyk flags this as High Risk due to subprocess/file patterns — it's a false positive.
-
-## Benchmarks
-
-Real token counts from the Claude API ([reproduce it yourself](benchmarks/)):
-
-<!-- BENCHMARK-TABLE-START -->
-| Task | Normal (tokens) | Caveman (tokens) | Saved |
-|------|---------------:|----------------:|------:|
-| Explain React re-render bug | 1180 | 159 | 87% |
-| Fix auth middleware token expiry | 704 | 121 | 83% |
-| Set up PostgreSQL connection pool | 2347 | 380 | 84% |
-| Explain git rebase vs merge | 702 | 292 | 58% |
-| Refactor callback to async/await | 387 | 301 | 22% |
-| Architecture: microservices vs monolith | 446 | 310 | 30% |
-| Review PR for security issues | 678 | 398 | 41% |
-| Docker multi-stage build | 1042 | 290 | 72% |
-| Debug PostgreSQL race condition | 1200 | 232 | 81% |
-| Implement React error boundary | 3454 | 456 | 87% |
-| **Average** | **1214** | **294** | **65%** |
-
-*Range: 22%–87% savings across prompts.*
-<!-- BENCHMARK-TABLE-END -->
-
-> [!IMPORTANT]
-> Caveman only affects output tokens — thinking/reasoning tokens are untouched. Caveman no make brain smaller. Caveman make *mouth* smaller. Biggest win is **readability and speed**, cost savings are a bonus.
-
-A March 2026 paper ["Brevity Constraints Reverse Performance Hierarchies in Language Models"](https://arxiv.org/abs/2604.00025) found that constraining large models to brief responses **improved accuracy by 26 percentage points** on certain benchmarks and completely reversed performance hierarchies. Verbose not always better. Sometimes less word = more correct.
-
-## Evals
-
-Caveman not just claim 75%. Caveman **prove** it.
-
-The `evals/` directory has a three-arm eval harness that measures real token compression against a proper control — not just "verbose vs skill" but "terse vs skill". Because comparing pechernyi to verbose Claude conflate the skill with generic terseness. That cheating. Caveman not cheat.
-
-```bash
-# Run the eval (needs claude CLI)
-uv run python evals/llm_run.py
-
-# Read results (no API key, runs offline)
-uv run --with tiktoken python evals/measure.py
-```
-
-## Star This Repo
-
-If pechernyi save you mass token, mass money — leave mass star. ⭐
-
-[![Star History Chart](https://api.star-history.com/svg?repos=Kerber0ss/pechernyi&type=Date)](https://star-history.com/#Kerber0ss/pechernyi&Date)
-
-## 🪨 The Caveman Ecosystem
-
-Three tools. One philosophy: **agent do more with less**.
-
-| Repo | What | One-liner |
-|------|------|-----------|
-| [**pechernyi**](https://github.com/Kerber0ss/pechernyi) *(you are here)* | Output compression skill | *why use many token when few do trick* — ~75% fewer output tokens across Claude Code, Cursor, Gemini, Codex |
-| [**cavemem**](https://github.com/Kerber0ss/cavemem) | Cross-agent persistent memory | *why agent forget when agent can remember* — compressed SQLite + MCP, local by default |
-| [**cavekit**](https://github.com/Kerber0ss/cavekit) | Spec-driven autonomous build loop | *why agent guess when agent can know* — natural language → kits → parallel build → verified |
-
-They compose: **cavekit** orchestrates the build, **pechernyi** compresses what the agent *says*, **cavemem** compresses what the agent *remembers*. Install one, some, or all — each stands alone.
-
-## Also by Kerber0ss
-
-- **[Revu](https://github.com/Kerber0ss/revu-swift)** — local-first macOS study app with FSRS spaced repetition, decks, exams, and study guides. [revu.cards](https://revu.cards)
-
-## License
-
-MIT — free like mass mammoth on open plain.
+## Ліцензія
+MIT — вільна як мамонт у відкритому степу.
