@@ -102,50 +102,49 @@ def call_claude(prompt: str) -> str:
 
 
 def build_compress_prompt(original: str) -> str:
-    return f"""
-Compress this markdown into pechernyi format.
+    return f"""Стисніть цей markdown у форматі pechernyi — стисло, без вставних слів, зберігаючи технічну точність.
 
-STRICT RULES:
-- Do NOT modify anything inside ``` code blocks
-- Do NOT modify anything inside inline backticks
-- Preserve ALL URLs exactly
-- Preserve ALL headings exactly
-- Preserve file paths and commands
-- Return ONLY the compressed markdown body — do NOT wrap the entire output in a ```markdown fence or any other fence. Inner code blocks from the original stay as-is; do not add a new outer fence around the whole file.
+ПРАВИЛА:
+- НЕ змінюйте нічого всередині блоків коду ```
+- НЕ змінюйте нічого всередині вбудованих зворотних лапок (backticks)
+- Зберігайте ВСІ URL-адреси точно
+- Зберігайте ВСІ заголовки точно
+- Зберігайте шляхи до файлів та команди
+- Повертайте ТІЛЬКИ стиснений текст markdown — НЕ загортайте весь вивід у блок ```markdown або будь-яку іншу огорожу. Внутрішні блоки коду з оригіналу залишаються як є; не додавайте нову зовнішню огорожу навколо всього файлу.
 
-Only compress natural language.
+Стискайте лише природну мову.
 
-TEXT:
+ТЕКСТ:
 {original}
 """
 
 
 def build_fix_prompt(original: str, compressed: str, errors: List[str]) -> str:
     errors_str = "\n".join(f"- {e}" for e in errors)
-    return f"""You are fixing a pechernyi-compressed markdown file. Specific validation errors were found.
+    return f"""Ви виправляєте стиснутий у форматі pechernyi markdown-файл. Було виявлено помилки валідації.
 
-CRITICAL RULES:
-- DO NOT recompress or rephrase the file
-- ONLY fix the listed errors — leave everything else exactly as-is
-- The ORIGINAL is provided as reference only (to restore missing content)
-- Preserve pechernyi style in all untouched sections
+КРИТИЧНІ ПРАВИЛА:
+- НЕ стискайте і НЕ перефразуйте файл повторно
+- Виправляйте ТІЛЬКИ перелічені помилки — залиште все інше точно так, як воно є
+- ОРИГІНАЛ надається лише для довідки (для відновлення відсутнього вмісту)
+- Зберігайте стиль pechernyi у всіх незмінених розділах
 
-ERRORS TO FIX:
+ПОМИЛКИ ДЛЯ ВИПРАВЛЕННЯ:
 {errors_str}
 
-HOW TO FIX:
-- Missing URL: find it in ORIGINAL, restore it exactly where it belongs in COMPRESSED
-- Code block mismatch: find the exact code block in ORIGINAL, restore it in COMPRESSED
-- Heading mismatch: restore the exact heading text from ORIGINAL into COMPRESSED
-- Do not touch any section not mentioned in the errors
+ЯК ВИПРАВИТИ:
+- Відсутній URL: знайдіть його в ОРИГІНАЛІ, відновіть його точно там, де він має бути в СТИСНУТОМУ файлі
+- Невідповідність блоку коду: знайдіть точний блок коду в ОРИГІНАЛІ, відновіть його в СТИСНУТОМУ файлі
+- Невідповідність заголовка: відновіть точний текст заголовка з ОРИГІНАЛУ в СТИСНУТИЙ файл
+- Не торкайтеся жодного розділу, не згаданого в помилках
 
-ORIGINAL (reference only):
+ОРИГІНАЛ (лише для довідки):
 {original}
 
-COMPRESSED (fix this):
+СТИСНУТИЙ (виправте це):
 {compressed}
 
-Return ONLY the fixed compressed file. No explanation.
+Повертайте ТІЛЬКИ виправлений стиснутий файл. Без пояснень.
 """
 
 
@@ -173,10 +172,10 @@ def compress_file(filepath: Path) -> bool:
             "Rename the file if this is a false positive."
         )
 
-    print(f"Processing: {filepath}")
+    print(f"Обробка: {filepath}")
 
     if not should_compress(filepath):
-        print("Skipping (not natural language)")
+        print("Пропуск (не природна мова)")
         return False
 
     original_text = filepath.read_text(errors="ignore")
@@ -184,13 +183,13 @@ def compress_file(filepath: Path) -> bool:
 
     # Check if backup already exists to prevent accidental overwriting
     if backup_path.exists():
-        print(f"⚠️ Backup file already exists: {backup_path}")
-        print("The original backup may contain important content.")
-        print("Aborting to prevent data loss. Please remove or rename the backup file if you want to proceed.")
+        print(f"⚠️ Резервна копія вже існує: {backup_path}")
+        print("Резервна копія може містити важливий вміст.")
+        print("Переривання для запобігання втраті даних. Будь ласка, видаліть або перейменуйте резервну копію, якщо хочете продовжити.")
         return False
 
     # Step 1: Compress
-    print("Compressing with Claude...")
+    print("Стиснення за допомогою Claude...")
     compressed = call_claude(build_compress_prompt(original_text))
 
     # Save original as backup, write compressed to original path
@@ -199,15 +198,15 @@ def compress_file(filepath: Path) -> bool:
 
     # Step 2: Validate + Retry
     for attempt in range(MAX_RETRIES):
-        print(f"\nValidation attempt {attempt + 1}")
+        print(f"\nСпроба валідації {attempt + 1}")
 
         result = validate(backup_path, filepath)
 
         if result.is_valid:
-            print("Validation passed")
+            print("Валідація пройдена")
             break
 
-        print("❌ Validation failed:")
+        print("❌ Валідація не вдалася:")
         for err in result.errors:
             print(f"   - {err}")
 
@@ -215,10 +214,10 @@ def compress_file(filepath: Path) -> bool:
             # Restore original on failure
             filepath.write_text(original_text)
             backup_path.unlink(missing_ok=True)
-            print("❌ Failed after retries — original restored")
+            print("❌ Не вдалося після повторних спроб — оригінал відновлено")
             return False
 
-        print("Fixing with Claude...")
+        print("Виправлення за допомогою Claude...")
         compressed = call_claude(
             build_fix_prompt(original_text, compressed, result.errors)
         )

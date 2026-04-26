@@ -1,111 +1,102 @@
 ---
 name: pechernyi-compress
 description: >
-  Compress natural language memory files (CLAUDE.md, todos, preferences) into pechernyi format
-  to save input tokens. Preserves all technical substance, code, URLs, and structure.
-  Compressed version overwrites the original file. Human-readable backup saved as FILE.original.md.
-  Trigger: /pechernyi:compress <filepath> or "compress memory file"
+  Стискайте файли пам'яті (CLAUDE.md, todos, налаштування) у формат pechernyi
+  для заощадження вхідних токенів. Зберігає всю технічну суть, код, URL та структуру.
+  Стиснута версія перезаписує оригінальний файл. Резервна копія зберігається як FILE.original.md.
+  Тригер: /pechernyi:compress <filepath> або "стисни файл пам'яті"
 ---
 
 # Pechernyi Compress
 
-## Purpose
+## Призначення
 
-Compress natural language files (CLAUDE.md, todos, preferences) into pechernyi-speak to reduce input tokens. Compressed version overwrites original. Human-readable backup saved as `<filename>.original.md`.
+Стискання файлів природною мовою (CLAUDE.md, todos, налаштування) у формат pechernyi для зменшення кількості вхідних токенів. Стиснута версія перезаписує оригінал. Резервна копія зберігається як `<filename>.original.md`.
 
-## Trigger
+## Тригер
 
-`/pechernyi:compress <filepath>` or when user asks to compress a memory file.
+`/pechernyi:compress <filepath>` або коли користувач просить стиснути файл пам'яті.
 
-## Process
+## Процес
 
-1. The compression scripts live in `pechernyi-compress/scripts/` (adjacent to this SKILL.md). If the path is not immediately available, search for `pechernyi-compress/scripts/__main__.py`.
+1. Скрипти стиснення знаходяться в `pechernyi-compress/scripts/`. Якщо шлях недоступний, знайдіть `pechernyi-compress/scripts/__main__.py`.
 
-2. Run:
+2. Запуск:
 
 cd pechernyi-compress && python3 -m scripts <absolute_filepath>
 
-3. The CLI will:
-- detect file type (no tokens)
-- call Claude to compress
-- validate output (no tokens)
-- if errors: cherry-pick fix with Claude (targeted fixes only, no recompression)
-- retry up to 2 times
-- if still failing after 2 retries: report error to user, leave original file untouched
+3. CLI виконає:
+- визначення типу файлу (без токенів)
+- виклик Claude для стиснення
+- валідація виводу (без токенів)
+- якщо є помилки: точкове виправлення за допомогою Claude (тільки цільові виправлення, без повторного стиснення)
+- до 2 повторних спроб
+- якщо після 2 спроб все ще не вдається: повідомити користувача про помилку, залишити оригінальний файл недоторканим
 
-4. Return result to user
+4. Повернення результату користувачеві
 
-## Compression Rules
+## Правила стиснення
 
-### Remove
-- Articles: a, an, the
-- Filler: just, really, basically, actually, simply, essentially, generally
-- Pleasantries: "sure", "certainly", "of course", "happy to", "I'd recommend"
-- Hedging: "it might be worth", "you could consider", "it would be good to"
-- Redundant phrasing: "in order to" → "to", "make sure to" → "ensure", "the reason is because" → "because"
-- Connective fluff: "however", "furthermore", "additionally", "in addition"
+### Видалити
+- Артиклі (для англійської), зайві сполучники та частки
+- Слова-паразити: просто, дійсно, в основному, фактично, суттєво, загалом
+- Ввічливі фрази: "звичайно", "безумовно", "радий допомогти", "я б рекомендував"
+- Невпевнені фрази: "можливо варто", "ви могли б розглянути", "було б добре"
+- Надлишкові фрази: "для того, щоб" → "щоб", "переконайтеся, що" → "забезпечте"
+- Сполучний "флафф": "проте", "крім того", "додатково"
 
-### Preserve EXACTLY (never modify)
-- Code blocks (fenced ``` and indented)
-- Inline code (`backtick content`)
-- URLs and links (full URLs, markdown links)
-- File paths (`/src/components/...`, `./config.yaml`)
-- Commands (`npm install`, `git commit`, `docker build`)
-- Technical terms (library names, API names, protocols, algorithms)
-- Proper nouns (project names, people, companies)
-- Dates, version numbers, numeric values
-- Environment variables (`$HOME`, `NODE_ENV`)
+### Зберігати ТОЧНО (ніколи не змінювати)
+- Блоки коду (огороджені ``` та з відступом)
+- Вбудований код (`вміст у лапках`)
+- URL-адреси та посилання (повні URL, markdown посилання)
+- Шляхи до файлів (`/src/components/...`, `./config.yaml`)
+- Команди (`npm install`, `git commit`, `docker build`)
+- Технічні терміни (назви бібліотек, API, протоколи, алгоритми)
+- Власні назви (назви проектів, людей, компаній)
+- Дати, номери версій, числові значення
+- Змінні оточення (`$HOME`, `NODE_ENV`)
 
-### Preserve Structure
-- All markdown headings (keep exact heading text, compress body below)
-- Bullet point hierarchy (keep nesting level)
-- Numbered lists (keep numbering)
-- Tables (compress cell text, keep structure)
-- Frontmatter/YAML headers in markdown files
+### Зберігати структуру
+- Усі заголовки markdown (зберігати точний текст заголовка, стискати текст під ним)
+- Ієрархію списків (зберігати рівень вкладеності)
+- Нумеровані списки (зберігати нумерацію)
+- Таблиці (стискати текст комірок, зберігати структуру)
+- Frontmatter/YAML заголовки в markdown файлах
 
-### Compress
-- Use short synonyms: "big" not "extensive", "fix" not "implement a solution for", "use" not "utilize"
-- Fragments OK: "Run tests before commit" not "You should always run tests before committing"
-- Drop "you should", "make sure to", "remember to" — just state the action
-- Merge redundant bullets that say the same thing differently
-- Keep one example where multiple examples show the same pattern
+### Стискати
+- Використовуйте короткі синоніми: "великий" замість "об'ємний", "виправити" замість "реалізувати рішення для", "використовувати" замість "утилізувати"
+- Фрагменти замість повних речень: "Запустити тести перед комітом" замість "Вам слід завжди запускати тести перед тим, як робити коміт"
+- Опускайте "вам слід", "переконайтеся", "пам'ятайте" — просто вказуйте дію
+- Об'єднуйте повторювані пункти, що говорять про одне й те саме різними словами
 
-CRITICAL RULE:
-Anything inside ``` ... ``` must be copied EXACTLY.
-Do not:
-- remove comments
-- remove spacing
-- reorder lines
-- shorten commands
-- simplify anything
+КРИТИЧНЕ ПРАВИЛО:
+Все всередині ``` ... ``` має бути скопійовано ТОЧНО.
+Не можна:
+- видаляти коментарі
+- видаляти пробіли
+- змінювати порядок рядків
+- скорочувати команди
+- спрощувати будь-що
 
-Inline code (`...`) must be preserved EXACTLY.
-Do not modify anything inside backticks.
+Вбудований код (`...`) має бути збережений ТОЧНО.
 
-If file contains code blocks:
-- Treat code blocks as read-only regions
-- Only compress text outside them
-- Do not merge sections around code
+Якщо файл містить блоки коду:
+- Ставтеся до блоків коду як до регіонів лише для читання
+- Стискайте лише текст поза ними
+- Не об'єднуйте розділи навколо коду
 
-## Pattern
+## Приклад
 
-Original:
-> You should always make sure to run the test suite before pushing any changes to the main branch. This is important because it helps catch bugs early and prevents broken builds from being deployed to production.
+Оригінал:
+> Ви завжди повинні переконатися, що запустили набір тестів перед тим, як надсилати будь-які зміни до головної гілки. Це важливо, оскільки допомагає вчасно виявити помилки та запобігає розгортанню зламаних збірок у продуктивному середовищі.
 
-Compressed:
-> Run tests before push to main. Catch bugs early, prevent broken prod deploys.
+Стиснуто:
+> Запустіть тести перед push у main. Виявляйте помилки вчасно, запобігайте зламаним деплоям.
 
-Original:
-> The application uses a microservices architecture with the following components. The API gateway handles all incoming requests and routes them to the appropriate service. The authentication service is responsible for managing user sessions and JWT tokens.
+## Межі
 
-Compressed:
-> Microservices architecture. API gateway route all requests to services. Auth service manage user sessions + JWT tokens.
-
-## Boundaries
-
-- ONLY compress natural language files (.md, .txt, extensionless)
-- NEVER modify: .py, .js, .ts, .json, .yaml, .yml, .toml, .env, .lock, .css, .html, .xml, .sql, .sh
-- If file has mixed content (prose + code), compress ONLY the prose sections
-- If unsure whether something is code or prose, leave it unchanged
-- Original file is backed up as FILE.original.md before overwriting
-- Never compress FILE.original.md (skip it)
+- Стискайте ТІЛЬКИ файли природною мовою (.md, .txt, без розширення)
+- НІКОЛИ не змінюйте: .py, .js, .ts, .json, .yaml, .yml, .toml, .env, .lock, .css, .html, .xml, .sql, .sh
+- Якщо файл має змішаний вміст, стискайте ТІЛЬКИ прозові розділи
+- Резервна копія створюється як FILE.original.md перед перезаписом
+- Ніколи не стискайте FILE.original.md (пропускайте його)
