@@ -18,6 +18,7 @@ description: >
 - `/pechernyi` — увімкнути (full за замовчуванням)
 - `/pechernyi lite|full|ultra` — обрати рівень
 - `/pechernyi off` — вимкнути
+- `/pechernyi status` — показати поточний режим
 - `/pechernyi-commit` — стислий commit
 - `/pechernyi-review` — одно-рядковий code review
 - `/pechernyi:compress <filepath>` — стиснути markdown файл

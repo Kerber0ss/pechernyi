@@ -14,7 +14,7 @@ function getFlagPath() {
 
 function getDefaultMode() {
   const env = process.env.PECHERNYI_DEFAULT_MODE;
-  return (env && VALID_MODES.includes(env)) ? env : 'full';
+  return (env && VALID_MODES.includes(env)) ? env : 'off';
 }
 
 function safeWriteFlag(mode) {
