@@ -14,12 +14,10 @@ const { getDefaultMode, safeWriteFlag, readFlag } = require('./pechernyi-config'
 const claudeDir = process.env.CLAUDE_CONFIG_DIR || path.join(os.homedir(), '.claude');
 const settingsPath = path.join(claudeDir, 'settings.json');
 
-// Respect existing flag state: if user explicitly set "off", don't re-activate.
-// Only use getDefaultMode() when no flag file exists yet (first run).
-const existingFlag = readFlag();
-const mode = existingFlag || getDefaultMode();
+// PECHERNYI_DEFAULT_MODE env var allows power users to auto-activate.
+// Without it, default is 'off' — user must explicitly /pechernyi to activate.
+const mode = getDefaultMode();
 
-// "off" mode — skip activation entirely, don't write flag or emit rules
 if (mode === 'off') {
   safeWriteFlag('off');
   process.stdout.write('OK');
