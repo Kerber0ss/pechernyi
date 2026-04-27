@@ -49,8 +49,8 @@ const modeLabel = mode === 'pechernyi' ? 'pechernyi-full' : mode;
 // Plugin installs: use CLAUDE_PLUGIN_ROOT if available, fallback to relative path.
 let skillContent = '';
 const skillPath = process.env.CLAUDE_PLUGIN_ROOT
-  ? path.join(process.env.CLAUDE_PLUGIN_ROOT, 'skills', 'pechernyi', 'SKILL.md')
-  : path.join(__dirname, '..', 'skills', 'pechernyi', 'SKILL.md');
+  ? path.join(process.env.CLAUDE_PLUGIN_ROOT, 'skills', 'pechernyi', 'RULES.md')
+  : path.join(__dirname, '..', 'skills', 'pechernyi', 'RULES.md');
 
 try {
   skillContent = fs.readFileSync(skillPath, 'utf8');
