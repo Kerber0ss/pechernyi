@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Caveman speak wrong or break
+about: Pechernyi speak wrong or break
 labels: bug
 ---
 
@@ -19,7 +19,7 @@ Want:  [what pechernyi should say]
 
 **Platform**
 - [ ] Claude Code
-- [ ] Codex
+- [ ] opencode
 - [ ] Other: ___
 
 **Version / install method**
