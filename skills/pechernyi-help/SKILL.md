@@ -17,6 +17,7 @@ description: >
 ## Команди
 - `/pechernyi` — увімкнути (full за замовчуванням)
 - `/pechernyi lite|full|ultra` — обрати рівень
+- `/pechernyi off` — вимкнути
 - `/pechernyi-commit` — стислий commit
 - `/pechernyi-review` — одно-рядковий code review
 - `/pechernyi:compress <filepath>` — стиснути markdown файл
@@ -26,7 +27,7 @@ description: >
 - "активуй печерний", "говори як печерний"
 
 ## Деактивація
-- "стоп печерний", "звичайний режим"
+- `/pechernyi off`, "стоп печерний", "звичайний режим"
 
 ## Скіли
 - **pechernyi-commit** — Conventional Commits з українським описом
