@@ -24,13 +24,23 @@ case "$OSTYPE" in
     ;;
 esac
 
-# Require node — we use it to merge the hook config into settings.json
+# Require node — resolve full path so hooks work in Git Bash where PATH is limited
 if ! command -v node >/dev/null 2>&1; then
   echo "ERROR: 'node' is required to install the pechernyi hooks (used to merge"
   echo "       the hook config into ~/.claude/settings.json safely)."
   echo "       Install Node.js from https://nodejs.org and re-run this script."
   exit 1
 fi
+NODE_PATH="$(command -v node)"
+# On Windows (MSYS/Git Bash), convert to a path that survives shell re-invocation
+case "$OSTYPE" in
+  msys*|cygwin*|mingw*)
+    # Try cygpath first (available in Git Bash), fall back to raw path
+    if command -v cygpath >/dev/null 2>&1; then
+      NODE_PATH="$(cygpath -m "$NODE_PATH")"
+    fi
+    ;;
+esac
 
 CLAUDE_DIR="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
 HOOKS_DIR="$CLAUDE_DIR/hooks"
@@ -126,45 +136,42 @@ fi
 cp "$SETTINGS" "$SETTINGS.pechernyi-backup"
 
 # Pass paths via env vars — avoids shell injection if $HOME contains single quotes
-PECHERNYI_SETTINGS="$SETTINGS" PECHERNYI_HOOKS_DIR="$HOOKS_DIR" node -e "
+PECHERNYI_SETTINGS="$SETTINGS" PECHERNYI_HOOKS_DIR="$HOOKS_DIR" PECHERNYI_NODE_PATH="$NODE_PATH" node -e "
   const fs = require('fs');
   const settingsPath = process.env.PECHERNYI_SETTINGS;
   const hooksDir = process.env.PECHERNYI_HOOKS_DIR;
+  const nodePath = process.env.PECHERNYI_NODE_PATH || 'node';
   const managedStatusLinePath = hooksDir + '/pechernyi-statusline.sh';
   const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
   if (!settings.hooks) settings.hooks = {};
 
-  // SessionStart — auto-load pechernyi rules
-  if (!settings.hooks.SessionStart) settings.hooks.SessionStart = [];
-  const hasStart = settings.hooks.SessionStart.some(e =>
-    e.hooks && e.hooks.some(h => h.command && h.command.includes('pechernyi'))
-  );
-  if (!hasStart) {
-    settings.hooks.SessionStart.push({
-      hooks: [{
-        type: 'command',
-        command: 'node \"' + hooksDir + '/pechernyi-activate.js\"',
-        timeout: 5,
-        statusMessage: 'Loading pechernyi mode...'
-      }]
-    });
+  function wireHook(event, scriptFile, statusMsg) {
+    if (!settings.hooks[event]) settings.hooks[event] = [];
+    const fullCommand = '\"' + nodePath + '\" \"' + hooksDir + '/' + scriptFile + '\"';
+    let found = false;
+    for (const entry of settings.hooks[event]) {
+      if (!entry.hooks) continue;
+      for (const h of entry.hooks) {
+        if (h.command && h.command.includes('pechernyi')) {
+          h.command = fullCommand;
+          found = true;
+        }
+      }
+    }
+    if (!found) {
+      settings.hooks[event].push({
+        hooks: [{
+          type: 'command',
+          command: fullCommand,
+          timeout: 5,
+          statusMessage: statusMsg
+        }]
+      });
+    }
   }
 
-  // UserPromptSubmit — track mode changes when user types /pechernyi commands
-  if (!settings.hooks.UserPromptSubmit) settings.hooks.UserPromptSubmit = [];
-  const hasPrompt = settings.hooks.UserPromptSubmit.some(e =>
-    e.hooks && e.hooks.some(h => h.command && h.command.includes('pechernyi'))
-  );
-  if (!hasPrompt) {
-    settings.hooks.UserPromptSubmit.push({
-      hooks: [{
-        type: 'command',
-        command: 'node \"' + hooksDir + '/pechernyi-mode-tracker.js\"',
-        timeout: 5,
-        statusMessage: 'Tracking pechernyi mode...'
-      }]
-    });
-  }
+  wireHook('SessionStart', 'pechernyi-activate.js', 'Loading pechernyi mode...');
+  wireHook('UserPromptSubmit', 'pechernyi-mode-tracker.js', 'Tracking pechernyi mode...');
 
   // Statusline — wire pechernyi badge (report if skipped)
   if (!settings.statusLine) {

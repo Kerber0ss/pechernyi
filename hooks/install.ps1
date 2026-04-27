@@ -11,13 +11,15 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-# Require node
-if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
+# Require node — resolve full path so hooks work in Git Bash where PATH is limited
+$NodeCmd = Get-Command node -ErrorAction SilentlyContinue
+if (-not $NodeCmd) {
     Write-Host "ERROR: 'node' is required to install the pechernyi hooks (used to merge" -ForegroundColor Red
     Write-Host "       the hook config into settings.json safely)." -ForegroundColor Red
     Write-Host "       Install Node.js from https://nodejs.org and re-run this script." -ForegroundColor Red
     exit 1
 }
+$NodePath = $NodeCmd.Source -replace '\\', '/'
 
 $ClaudeDir = if ($env:CLAUDE_CONFIG_DIR) { $env:CLAUDE_CONFIG_DIR } else { Join-Path $env:USERPROFILE ".claude" }
 $HooksDir = Join-Path $ClaudeDir "hooks"
@@ -116,46 +118,46 @@ Copy-Item $Settings "$Settings.pechernyi-backup" -Force
 # Use a single-quote here-string so PowerShell does NOT expand $variables inside.
 $env:PECHERNYI_SETTINGS = $Settings -replace '\\', '/'
 $env:PECHERNYI_HOOKS_DIR = $HooksDir -replace '\\', '/'
+$env:PECHERNYI_NODE_PATH = $NodePath
 
 $nodeScript = @'
 const fs = require('fs');
 const settingsPath = process.env.PECHERNYI_SETTINGS;
 const hooksDir = process.env.PECHERNYI_HOOKS_DIR;
+const nodePath = process.env.PECHERNYI_NODE_PATH || 'node';
 const managedStatusLinePath = hooksDir + '/pechernyi-statusline.ps1';
 const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
 if (!settings.hooks) settings.hooks = {};
 
-// SessionStart
-if (!settings.hooks.SessionStart) settings.hooks.SessionStart = [];
-const hasStart = settings.hooks.SessionStart.some(e =>
-  e.hooks && e.hooks.some(h => h.command && h.command.includes('pechernyi'))
-);
-if (!hasStart) {
-  settings.hooks.SessionStart.push({
-    hooks: [{
-      type: 'command',
-      command: 'node "' + hooksDir + '/pechernyi-activate.js"',
-      timeout: 5,
-      statusMessage: 'Loading pechernyi mode...'
-    }]
-  });
+// Helper: update existing pechernyi hook commands to use full node path,
+// or add a new entry if none exists.
+function wireHook(event, scriptFile, statusMsg) {
+  if (!settings.hooks[event]) settings.hooks[event] = [];
+  const fullCommand = '"' + nodePath + '" "' + hooksDir + '/' + scriptFile + '"';
+  let found = false;
+  for (const entry of settings.hooks[event]) {
+    if (!entry.hooks) continue;
+    for (const h of entry.hooks) {
+      if (h.command && h.command.includes('pechernyi')) {
+        h.command = fullCommand;
+        found = true;
+      }
+    }
+  }
+  if (!found) {
+    settings.hooks[event].push({
+      hooks: [{
+        type: 'command',
+        command: fullCommand,
+        timeout: 5,
+        statusMessage: statusMsg
+      }]
+    });
+  }
 }
 
-// UserPromptSubmit
-if (!settings.hooks.UserPromptSubmit) settings.hooks.UserPromptSubmit = [];
-const hasPrompt = settings.hooks.UserPromptSubmit.some(e =>
-  e.hooks && e.hooks.some(h => h.command && h.command.includes('pechernyi'))
-);
-if (!hasPrompt) {
-  settings.hooks.UserPromptSubmit.push({
-    hooks: [{
-      type: 'command',
-      command: 'node "' + hooksDir + '/pechernyi-mode-tracker.js"',
-      timeout: 5,
-      statusMessage: 'Tracking pechernyi mode...'
-    }]
-  });
-}
+wireHook('SessionStart', 'pechernyi-activate.js', 'Loading pechernyi mode...');
+wireHook('UserPromptSubmit', 'pechernyi-mode-tracker.js', 'Tracking pechernyi mode...');
 
 // Statusline
 if (!settings.statusLine) {

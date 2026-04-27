@@ -9,6 +9,10 @@
 </p>
 
 <p align="center">
+  <em>Форк <a href="https://github.com/JuliusBrussee/caveman">caveman</a> — українською, з додатковими скілами та хуками</em>
+</p>
+
+<p align="center">
   <a href="https://github.com/Kerber0ss/pechernyi/stargazers"><img src="https://img.shields.io/github/stars/Kerber0ss/pechernyi?style=flat&color=yellow" alt="Stars"></a>
   <a href="https://github.com/Kerber0ss/pechernyi/commits/main"><img src="https://img.shields.io/github/last-commit/Kerber0ss/pechernyi?style=flat" alt="Last Commit"></a>
   <a href="LICENSE"><img src="https://img.shields.io/github/license/Kerber0ss/pechernyi?style=flat" alt="License"></a>
