@@ -26,7 +26,13 @@ process.stdin.on('end', () => {
     const promptLower = prompt.toLowerCase();
 
     if (deactivationRegex.test(prompt) || normalModeRegex.test(prompt)) {
-      try { fs.unlinkSync(flagPath); } catch (e) {}
+      safeWriteFlag('off');
+      process.stdout.write(JSON.stringify({
+        hookSpecificOutput: {
+          hookEventName: "UserPromptSubmit",
+          additionalContext: "PECHERNYI MODE DEACTIVATED. Відповідати звичайно. Повні речення, нормальний стиль. Печерний режим вимкнено."
+        }
+      }));
       process.exit(0);
     }
 
@@ -34,7 +40,13 @@ process.stdin.on('end', () => {
     if (slashMatch) {
       const arg = slashMatch[1] || null;
       if (arg === 'off') {
-        try { fs.unlinkSync(flagPath); } catch (e) {}
+        safeWriteFlag('off');
+        process.stdout.write(JSON.stringify({
+          hookSpecificOutput: {
+            hookEventName: "UserPromptSubmit",
+            additionalContext: "PECHERNYI MODE DEACTIVATED. Відповідати звичайно. Повні речення, нормальний стиль. Печерний режим вимкнено."
+          }
+        }));
         process.exit(0);
       }
       let mode;

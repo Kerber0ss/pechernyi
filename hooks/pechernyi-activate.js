@@ -9,12 +9,15 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
-const { getDefaultMode, safeWriteFlag } = require('./pechernyi-config');
+const { getDefaultMode, safeWriteFlag, readFlag } = require('./pechernyi-config');
 
 const claudeDir = process.env.CLAUDE_CONFIG_DIR || path.join(os.homedir(), '.claude');
 const settingsPath = path.join(claudeDir, 'settings.json');
 
-const mode = getDefaultMode();
+// Respect existing flag state: if user explicitly set "off", don't re-activate.
+// Only use getDefaultMode() when no flag file exists yet (first run).
+const existingFlag = readFlag();
+const mode = existingFlag || getDefaultMode();
 
 // "off" mode — skip activation entirely, don't write flag or emit rules
 if (mode === 'off') {
